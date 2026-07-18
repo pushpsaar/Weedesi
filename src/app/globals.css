@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: #FAF7F2;
+  --color-white: #FFFFFF;
+  --color-gold: #C8A96A;
+  --color-gold-dark: #A8895A;
+  --color-dark: #2B2B2B;
+  --color-border: #E8E2D9;
+}
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-white: var(--color-white);
+  --color-gold: var(--color-gold);
+  --color-gold-dark: var(--color-gold-dark);
+  --color-dark: var(--color-dark);
+  --color-border: var(--color-border);
+  --font-heading: var(--font-cormorant);
+  --font-body: var(--font-inter);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-dark);
+  font-family: var(--font-body), sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-dark {
+  background: rgba(43, 43, 43, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Dark theme overrides: apply by adding `dark` class to <html> */
+html.dark {
+  --color-bg: #120606;
+  --color-white: #1f0a0a;
+  --color-gold: #f87171;
+  --color-gold-dark: #b91c1c;
+  --color-dark: #f7edea;
+  --color-border: rgba(247, 237, 234, 0.12);
+}
+
+html.dark body {
+  background: var(--color-bg);
+  color: var(--color-dark);
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-gold-dark);
+}
+
+html.dark .glass {
+  background: rgba(31, 8, 8, 0.80);
+}
+
+html.dark .glass-dark {
+  background: rgba(19, 5, 5, 0.85);
+}
+
+html.dark .bg-dark {
+  background-color: #1a0707 !important;
+}
+
+html.dark [class~="bg-white"] {
+  background-color: #1f0a0a !important;
+}
+
+html.dark [class~="bg-bg"] {
+  background-color: #140505 !important;
+}
+
+html.dark [class~="border-border"] {
+  border-color: rgba(247, 237, 234, 0.16) !important;
+}
+
+html.dark [class~="text-dark"] {
+  color: #f7edea !important;
+}
+
+html.dark [class*="text-dark/"] {
+  color: rgba(247, 237, 234, 0.75) !important;
+}
+
+html.dark [class~="text-white"] {
+  color: #FFFFFF !important;
+}
+
+html.dark [class*="bg-white/"] {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark [class*="border-dark"] {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
