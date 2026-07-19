@@ -14,29 +14,28 @@ export default function Hero() {
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-gold-dark">
-            The Autumn Edit
+            WEदेसी Kurtis
           </p>
           <h1 className="font-heading text-5xl leading-[1.1] text-dark md:text-6xl">
-            Heritage, worn
+            Elegant kurtis
             <br />
-            <span className="italic text-gold-dark">lightly.</span>
+            <span className="italic text-[#7a1f1f]">for every day.</span>
           </h1>
           <p className="mt-6 max-w-md text-[15px] leading-relaxed text-dark/60">
-            Hand-finished silhouettes rooted in Indian craft, made for a
-            wardrobe that moves at your pace.
+            Explore handcrafted kurtis designed for comfort, beauty, and effortless style.
           </p>
           <div className="mt-9 flex gap-4">
             <Link
-              href="/shop"
+              href="/shop?category=kurtis"
               className="rounded-full bg-dark px-8 py-3.5 text-sm font-medium text-white transition-transform hover:scale-[1.03]"
             >
-              Shop the Edit
+              Shop Kurtis
             </Link>
             <Link
-              href="/collections"
+              href="/shop?category=kurtis"
               className="rounded-full border border-dark/20 px-8 py-3.5 text-sm font-medium text-dark transition-colors hover:border-dark"
             >
-              View Collections
+              Explore Kurtis
             </Link>
           </div>
         </motion.div>
