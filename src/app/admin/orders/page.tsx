@@ -2,8 +2,8 @@ import Link from "next/link";
 import { getOrders } from "@/lib/data";
 
 const STATUS_COLORS: Record<string, string> = {
-  paid: "bg-green-100 text-green-700",
   pending: "bg-amber-100 text-amber-700",
+  confirmed: "bg-green-100 text-green-700",
   delivered: "bg-blue-100 text-blue-700",
   cancelled: "bg-red-100 text-red-700",
   refunded: "bg-dark/10 text-dark/60",

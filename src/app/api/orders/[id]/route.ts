@@ -29,9 +29,23 @@ export async function PATCH(
   if (!order) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const body = await req.json();
+  const nextStatus = body.status ?? order.status;
+  const nextPaymentStatus =
+    nextStatus === "pending"
+      ? "pending"
+      : nextStatus === "confirmed" || nextStatus === "delivered"
+        ? "paid"
+        : nextStatus === "cancelled" || nextStatus === "refunded"
+          ? "refunded"
+          : order.payment.status;
+
   const updated = {
     ...order,
-    status: body.status ?? order.status,
+    status: nextStatus,
+    payment: {
+      ...order.payment,
+      status: nextPaymentStatus,
+    },
     updatedAt: new Date().toISOString(),
   };
   await saveOrder(updated);

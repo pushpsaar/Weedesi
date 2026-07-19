@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { OrderStatus } from "@/lib/types";
 
-const OPTIONS: OrderStatus[] = ["pending", "paid", "delivered", "cancelled", "refunded"];
+const OPTIONS: OrderStatus[] = ["pending", "confirmed", "delivered", "cancelled", "refunded"];
 
 export default function OrderStatusSelect({
   orderId,

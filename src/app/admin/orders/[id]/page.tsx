@@ -20,6 +20,11 @@ export default async function AdminOrderDetailPage({
       <p className="mt-1 text-sm text-dark/50">
         Placed {new Date(order.createdAt).toLocaleString("en-IN")}
       </p>
+      {order.status === "pending" && (
+        <p className="mt-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700">
+          Awaiting Admin Confirmation
+        </p>
+      )}
 
       <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
         <div className="rounded-xl border border-border bg-white p-5">
@@ -39,7 +44,14 @@ export default async function AdminOrderDetailPage({
           <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-dark/50">
             Payment
           </h2>
-          <p className="text-sm capitalize">Status: {order.payment.status}</p>
+          <p className="text-sm capitalize">Payment Status: {order.payment.status}</p>
+          <p className="mt-1 text-sm capitalize">Order Status: {order.status}</p>
+          {order.payment.method && (
+            <p className="mt-1 text-xs text-dark/50">Method: {order.payment.method}</p>
+          )}
+          {order.payment.upiId && (
+            <p className="mt-1 text-xs text-dark/50">UPI ID: {order.payment.upiId}</p>
+          )}
           {order.payment.razorpayOrderId && (
             <p className="mt-1 text-xs text-dark/50">
               Razorpay Order: {order.payment.razorpayOrderId}
@@ -49,6 +61,16 @@ export default async function AdminOrderDetailPage({
             <p className="text-xs text-dark/50">
               Payment ID: {order.payment.razorpayPaymentId}
             </p>
+          )}
+          {order.payment.paymentScreenshot && (
+            <div className="mt-4">
+              <p className="mb-2 text-xs font-medium text-dark/60">Payment Screenshot</p>
+              <img
+                src={order.payment.paymentScreenshot}
+                alt="Payment proof"
+                className="max-h-64 rounded-lg border border-border object-cover"
+              />
+            </div>
           )}
         </div>
       </div>

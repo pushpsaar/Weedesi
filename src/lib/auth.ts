@@ -13,6 +13,8 @@ interface AdminCreds {
   hash: string;
 }
 
+const DEFAULT_ADMIN_USERNAME = "wedesi";
+
 function getSessionSecret(): string {
   const secret = process.env.SESSION_SECRET;
   if (!secret) {
@@ -28,17 +30,55 @@ async function getAdminCreds(): Promise<AdminCreds> {
   return JSON.parse(raw) as AdminCreds;
 }
 
+async function writeAdminCreds(creds: AdminCreds): Promise<void> {
+  await fs.writeFile(
+    path.join(DATA_DIR, "admin.json"),
+    JSON.stringify(creds, null, 2),
+    "utf-8"
+  );
+}
+
+function hashPassword(password: string, salt: string): string {
+  return crypto.scryptSync(password, salt, 64).toString("hex");
+}
+
 export async function verifyAdminPassword(
-  username: string,
+  _username: string,
   password: string
 ): Promise<boolean> {
   const creds = await getAdminCreds();
-  if (username !== creds.username) return false;
-  const hash = crypto.scryptSync(password, creds.salt, 64).toString("hex");
+  const hash = hashPassword(password, creds.salt);
   const a = Buffer.from(hash, "hex");
   const b = Buffer.from(creds.hash, "hex");
   if (a.length !== b.length) return false;
   return crypto.timingSafeEqual(a, b);
+}
+
+export async function changeAdminPassword(
+  currentPassword: string,
+  newPassword: string
+): Promise<boolean> {
+  if (!currentPassword || !newPassword || newPassword.trim().length < 6) {
+    return false;
+  }
+
+  const creds = await getAdminCreds();
+  const currentHash = hashPassword(currentPassword, creds.salt);
+  const a = Buffer.from(currentHash, "hex");
+  const b = Buffer.from(creds.hash, "hex");
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+    return false;
+  }
+
+  const salt = crypto.randomBytes(16).toString("hex");
+  const nextCreds: AdminCreds = {
+    username: creds.username || DEFAULT_ADMIN_USERNAME,
+    salt,
+    hash: hashPassword(newPassword, salt),
+  };
+
+  await writeAdminCreds(nextCreds);
+  return true;
 }
 
 function sign(value: string): string {
@@ -65,7 +105,7 @@ function unsign(signed: string): string | null {
 
 export async function createAdminSession(username: string): Promise<void> {
   const payload = JSON.stringify({
-    username,
+    username: username || DEFAULT_ADMIN_USERNAME,
     exp: Date.now() + SESSION_MAX_AGE * 1000,
   });
   const token = sign(Buffer.from(payload).toString("base64url"));

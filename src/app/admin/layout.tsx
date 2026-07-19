@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AdminLogoutButton from "@/components/admin/AdminLogoutButton";
+import AdminPasswordChangeForm from "@/components/admin/AdminPasswordChangeForm";
 
 const NAV = [
   { href: "/admin", label: "Dashboard" },
@@ -33,7 +34,10 @@ export default function AdminLayout({
           ))}
         </nav>
         <div className="mt-8 border-t border-border pt-4">
-          <AdminLogoutButton />
+          <AdminPasswordChangeForm />
+          <div className="mt-3">
+            <AdminLogoutButton />
+          </div>
         </div>
       </aside>
       <div className="min-w-0 flex-1">{children}</div>

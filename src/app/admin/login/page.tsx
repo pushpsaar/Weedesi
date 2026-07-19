@@ -14,7 +14,6 @@ export default function AdminLoginPage() {
 function AdminLoginInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,7 +26,7 @@ function AdminLoginInner() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ password }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -50,17 +49,6 @@ function AdminLoginInner() {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-dark/60">
-              Username
-            </label>
-            <input
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full rounded-lg border border-border bg-bg px-4 py-2.5 text-sm focus:border-gold focus:outline-none"
-            />
-          </div>
           <div>
             <label className="mb-1.5 block text-xs font-medium text-dark/60">
               Password

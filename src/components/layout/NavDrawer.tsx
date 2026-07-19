@@ -7,13 +7,8 @@ import { useStore } from "@/context/store-context";
 
 const LINKS = [
   { href: "/", label: "Home" },
-  { href: "/shop", label: "Shop" },
-  { href: "/collections", label: "Collections" },
-  { href: "/shop?tag=new-arrival", label: "New Arrivals" },
-  { href: "/shop?tag=best-seller", label: "Best Sellers" },
-  { href: "/shop?tag=sale", label: "Sale" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/shop?category=kurtis", label: "Explore Kurtis" },
+  { href: "/shop", label: "Shop All Kurtis" },
   { href: "/track-order", label: "Track Order" },
   { href: "/wishlist", label: "Wishlist" },
   { href: "/cart", label: "Cart" },
@@ -41,48 +36,50 @@ export default function NavDrawer() {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", stiffness: 260, damping: 32 }}
-            className="glass fixed left-0 top-0 z-50 h-full w-[85%] max-w-sm border-r border-border shadow-2xl"
+            className="glass fixed left-0 top-0 z-50 h-[92vh] w-[85%] max-w-sm overflow-hidden rounded-r-3xl border-r border-border shadow-2xl"
           >
-            <div className="flex items-center justify-between px-6 py-6 border-b border-border">
+            <div className="flex items-center justify-between border-b border-border px-6 py-6">
               <span className="font-heading text-2xl tracking-wide text-dark">
                 WEदेसी
               </span>
               <button
                 aria-label="Close menu"
                 onClick={() => setDrawerOpen(false)}
-                className="p-2 rounded-full hover:bg-white/70 transition-colors"
+                className="rounded-full p-2 transition-colors hover:bg-white/70"
               >
                 <X size={20} />
               </button>
             </div>
 
-            <nav className="flex flex-col px-2 py-4">
-              {LINKS.map((link, i) => (
-                <motion.div
-                  key={link.href + link.label}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.05 * i, duration: 0.3 }}
-                >
-                  <Link
-                    href={link.href}
-                    onClick={() => setDrawerOpen(false)}
-                    className="block px-4 py-3 rounded-lg font-body text-[15px] tracking-wide text-dark/80 hover:text-dark hover:bg-white/70 transition-colors"
+            <div className="flex h-[calc(92vh-88px)] flex-col overflow-y-auto">
+              <nav className="flex flex-col px-2 py-4">
+                {LINKS.map((link, i) => (
+                  <motion.div
+                    key={link.href + link.label}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 * i, duration: 0.3 }}
                   >
-                    {link.label}
-                  </Link>
-                </motion.div>
-              ))}
-            </nav>
+                    <Link
+                      href={link.href}
+                      onClick={() => setDrawerOpen(false)}
+                      className="block rounded-lg px-4 py-3 font-body text-[15px] tracking-wide text-dark/80 transition-colors hover:bg-white/70 hover:text-dark"
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+              </nav>
 
-            <div className="absolute bottom-0 left-0 right-0 px-6 py-5 border-t border-border">
-              <Link
-                href="/admin/login"
-                onClick={() => setDrawerOpen(false)}
-                className="text-xs tracking-[0.2em] uppercase text-gold-dark hover:text-dark transition-colors"
-              >
-                Admin Login
-              </Link>
+              <div className="mt-auto border-t border-border px-6 py-5">
+                <Link
+                  href="/admin/login"
+                  onClick={() => setDrawerOpen(false)}
+                  className="text-xs uppercase tracking-[0.2em] text-gold-dark transition-colors hover:text-dark"
+                >
+                  Admin Login
+                </Link>
+              </div>
             </div>
           </motion.aside>
         </>

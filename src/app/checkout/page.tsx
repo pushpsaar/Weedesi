@@ -1,19 +1,11 @@
 "use client";
 
-import Script from "next/script";
-import { Suspense, useState } from "react";
+import { ChangeEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useStore } from "@/context/store-context";
 
 const GST_RATE = 0.05;
-
-declare global {
-  interface Window {
-    Razorpay: new (options: Record<string, unknown>) => {
-      open: () => void;
-    };
-  }
-}
+const UPI_ID = "soniroshni410-1@okaxis";
 
 export default function CheckoutPage() {
   return (
@@ -41,6 +33,7 @@ function CheckoutPageInner() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [paymentScreenshot, setPaymentScreenshot] = useState("");
 
   const gst = Math.round(cartTotal * GST_RATE);
   const total = cartTotal + gst;
@@ -49,62 +42,42 @@ function CheckoutPageInner() {
     setForm((f) => ({ ...f, [field]: value }));
   }
 
+  async function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPaymentScreenshot(String(reader.result ?? ""));
+    };
+    reader.readAsDataURL(file);
+  }
+
   async function handlePlaceOrder() {
     setError("");
     setLoading(true);
+
     try {
-      const createRes = await fetch("/api/razorpay/create-order", {
+      const createRes = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: cart, customer: form, couponCode }),
+        body: JSON.stringify({
+          items: cart,
+          customer: form,
+          couponCode,
+          paymentScreenshot,
+        }),
       });
       const orderData = await createRes.json();
+
       if (!createRes.ok) {
-        setError(orderData.error ?? "Could not start payment.");
+        setError(orderData.error ?? "Could not place order.");
+        setLoading(false);
         return;
       }
 
-      const rzp = new window.Razorpay({
-        key: orderData.keyId,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: "WEदेसी",
-        description: "Order Payment",
-        order_id: orderData.razorpayOrderId,
-        prefill: {
-          name: form.name,
-          email: form.email,
-          contact: form.phone,
-        },
-        theme: { color: "#C8A96A" },
-        handler: async function (response: {
-          razorpay_order_id: string;
-          razorpay_payment_id: string;
-          razorpay_signature: string;
-        }) {
-          const verifyRes = await fetch("/api/razorpay/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              orderId: orderData.orderId,
-              ...response,
-            }),
-          });
-          const verifyData = await verifyRes.json();
-          if (verifyData.verified) {
-            clearCart();
-            router.push(`/order/success?orderId=${orderData.orderId}`);
-          } else {
-            router.push(`/order/failure?orderId=${orderData.orderId}`);
-          }
-        },
-        modal: {
-          ondismiss: function () {
-            setLoading(false);
-          },
-        },
-      });
-      rzp.open();
+      clearCart();
+      router.push(`/order/success?orderId=${orderData.orderId}`);
     } catch {
       setError("Something went wrong. Please try again.");
       setLoading(false);
@@ -122,7 +95,6 @@ function CheckoutPageInner() {
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-12 md:px-8">
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       <h1 className="font-heading text-3xl text-dark">Checkout</h1>
 
       <div className="mt-8 grid grid-cols-1 gap-10 md:grid-cols-3">
@@ -146,6 +118,29 @@ function CheckoutPageInner() {
           </div>
           <Input label="Country" value={form.country} onChange={(v) => handleChange("country", v)} required />
 
+          <div className="rounded-xl border border-border bg-white p-4">
+            <h2 className="font-heading text-lg text-dark">Pay by UPI</h2>
+            <p className="mt-2 text-sm text-dark/60">
+              Please pay to <span className="font-semibold text-dark">{UPI_ID}</span>
+            </p>
+            <p className="mt-1 text-xs text-dark/40">After payment, upload a screenshot of the transaction below.</p>
+            <label className="mt-4 block text-xs font-medium text-dark/60">Payment Screenshot</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="mt-1 w-full rounded-lg border border-border bg-white px-4 py-2.5 text-sm file:mr-3 file:rounded-full file:border-0 file:bg-gold/20 file:px-3 file:py-1 file:text-xs file:font-medium file:text-gold-dark"
+              required
+            />
+            {paymentScreenshot && (
+              <img
+                src={paymentScreenshot}
+                alt="Payment proof preview"
+                className="mt-3 max-h-56 rounded-lg border border-border object-cover"
+              />
+            )}
+          </div>
+
           {error && (
             <p className="mt-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
               {error}
@@ -157,7 +152,7 @@ function CheckoutPageInner() {
             disabled={loading}
             className="mt-4 w-full rounded-full bg-dark px-6 py-3.5 text-sm font-medium text-white transition-transform hover:scale-[1.01] disabled:opacity-50"
           >
-            {loading ? "Processing…" : `Pay ₹${total.toLocaleString("en-IN")}`}
+            {loading ? "Placing Order…" : `Place Order • ₹${total.toLocaleString("en-IN")}`}
           </button>
         </form>
 

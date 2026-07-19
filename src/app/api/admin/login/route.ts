@@ -2,23 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyAdminPassword, createAdminSession } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
-  const { username, password } = await req.json();
+  const { password } = await req.json();
 
-  if (!username || !password) {
+  if (!password) {
     return NextResponse.json(
-      { error: "Username and password are required." },
+      { error: "Password is required." },
       { status: 400 }
     );
   }
 
-  const valid = await verifyAdminPassword(username, password);
+  const valid = await verifyAdminPassword("wedesi", password);
   if (!valid) {
     return NextResponse.json(
-      { error: "Invalid username or password." },
+      { error: "Invalid password." },
       { status: 401 }
     );
   }
 
-  await createAdminSession(username);
+  await createAdminSession("wedesi");
   return NextResponse.json({ ok: true });
 }

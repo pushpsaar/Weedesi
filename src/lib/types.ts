@@ -41,8 +41,8 @@ export interface OrderItem {
   price: number;
 }
 
-export type OrderStatus = "pending" | "paid" | "delivered" | "cancelled" | "refunded";
-export type PaymentStatus = "created" | "paid" | "failed" | "refunded";
+export type OrderStatus = "pending" | "confirmed" | "delivered" | "cancelled" | "refunded";
+export type PaymentStatus = "created" | "pending" | "paid" | "failed" | "refunded";
 
 export interface Order {
   id: string;
@@ -66,10 +66,12 @@ export interface Order {
   status: OrderStatus;
   payment: {
     status: PaymentStatus;
+    method?: "upi" | "razorpay";
+    upiId?: string;
     razorpayOrderId?: string;
     razorpayPaymentId?: string;
     razorpaySignature?: string;
-    method?: string;
+    paymentScreenshot?: string;
   };
   createdAt: string;
   updatedAt: string;

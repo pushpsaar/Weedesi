@@ -4,16 +4,16 @@ import { getProducts, getOrders } from "@/lib/data";
 export default async function AdminDashboardPage() {
   const [products, orders] = await Promise.all([getProducts(), getOrders()]);
 
-  const paidOrders = orders.filter((o) => o.payment.status === "paid");
-  const revenue = paidOrders.reduce((sum, o) => sum + o.total, 0);
+  const confirmedOrders = orders.filter((o) => o.status === "confirmed" || o.payment.status === "paid");
+  const revenue = confirmedOrders.reduce((sum, o) => sum + o.total, 0);
   const pendingOrders = orders.filter((o) => o.status === "pending").length;
 
   const stats = [
     { label: "Total Products", value: products.length },
     { label: "Total Orders", value: orders.length },
-    { label: "Paid Orders", value: paidOrders.length },
+    { label: "Confirmed Orders", value: confirmedOrders.length },
     { label: "Pending Orders", value: pendingOrders },
-    { label: "Revenue (Paid)", value: `₹${revenue.toLocaleString("en-IN")}` },
+    { label: "Revenue (Confirmed)", value: `₹${revenue.toLocaleString("en-IN")}` },
   ];
 
   const recentOrders = [...orders]
