@@ -16,12 +16,17 @@ interface AdminCreds {
 const DEFAULT_ADMIN_USERNAME = "wedesi";
 
 function getSessionSecret(): string {
-  const secret = process.env.SESSION_SECRET;
+  const secret =
+    process.env.SESSION_SECRET ||
+    process.env.JWT_SECRET ||
+    process.env.NEXTAUTH_SECRET;
+
   if (!secret) {
     throw new Error(
-      "SESSION_SECRET is not set. Add it to your .env.local file."
+      "Missing auth secret. Set SESSION_SECRET (or JWT_SECRET / NEXTAUTH_SECRET) in Vercel Environment Variables."
     );
   }
+
   return secret;
 }
 
