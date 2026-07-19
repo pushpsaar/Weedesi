@@ -14,7 +14,9 @@ interface Props {
 export default function ProductForm({ initial }: Props) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
   const [error, setError] = useState("");
+  const [uploadMessage, setUploadMessage] = useState("");
 
   const [name, setName] = useState(initial?.name ?? "");
   const [sku, setSku] = useState(initial?.sku ?? "");
@@ -44,6 +46,46 @@ export default function ProductForm({ initial }: Props) {
 
   function toggleTag(t: string) {
     setTags((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploadingImages(true);
+    setError("");
+    setUploadMessage("");
+
+    try {
+      const fd = new FormData();
+      Array.from(files).forEach((file) => fd.append("files", file));
+
+      const res = await fetch("/api/admin/upload-image", {
+        method: "POST",
+        body: fd,
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error ?? "Image upload failed.");
+        return;
+      }
+
+      const uploaded = data.images ?? [];
+      const existing = images
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+      const merged = Array.from(new Set([...existing, ...uploaded]));
+      setImages(merged.join(", "));
+      setUploadMessage(`${uploaded.length} image${uploaded.length > 1 ? "s" : ""} added to the product.`);
+    } catch {
+      setError("Image upload failed. Please try again.");
+    } finally {
+      setUploadingImages(false);
+      e.target.value = "";
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -160,12 +202,28 @@ export default function ProductForm({ initial }: Props) {
         </Field>
       </div>
 
-      <Field label="Image paths (comma-separated, e.g. /products/saree-1.jpg, /products/saree-2.jpg)">
-        <input value={images} onChange={(e) => setImages(e.target.value)} className={inputClass} placeholder="/products/..." />
+      <Field label="Product Showcase Images">
+        <div className="space-y-3">
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm file:mr-3 file:rounded-full file:border-0 file:bg-dark file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
+          />
+          <input
+            value={images}
+            onChange={(e) => setImages(e.target.value)}
+            className={inputClass}
+            placeholder="/products/hero.jpg, /products/hero-2.jpg"
+          />
+        </div>
       </Field>
       <p className="-mt-4 text-xs text-dark/40">
-        Upload the actual image files into <code>/public/products/</code> in the project, then reference their paths here.
+        Upload images directly from this admin form. They will be saved under <code>/public/products/</code> and added to the product gallery paths.
       </p>
+      {uploadingImages && <p className="-mt-4 text-xs text-gold-dark">Uploading images…</p>}
+      {uploadMessage && <p className="-mt-4 text-xs text-gold-dark">{uploadMessage}</p>}
 
       <Field label="Available Sizes">
         <div className="flex flex-wrap gap-2">

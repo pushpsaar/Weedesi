@@ -23,7 +23,7 @@ export default function Navbar() {
 
         <Link
           href="/"
-          className="justify-self-center truncate text-center font-heading text-lg leading-none tracking-wide text-[#7a1f1f] sm:text-3xl"
+          className="justify-self-center whitespace-nowrap text-center font-heading text-lg leading-[1.15] tracking-wide text-[#7a1f1f] sm:text-3xl"
         >
           Weदेसी
         </Link>
