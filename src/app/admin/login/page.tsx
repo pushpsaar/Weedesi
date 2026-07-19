@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function AdminLoginPage() {
   return (
@@ -12,7 +12,6 @@ export default function AdminLoginPage() {
 }
 
 function AdminLoginInner() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -33,8 +32,9 @@ function AdminLoginInner() {
         setError(data.error ?? "Login failed.");
         return;
       }
-      router.push(searchParams.get("next") || "/admin");
-      router.refresh();
+
+      const next = searchParams.get("next") || "/admin";
+      window.location.assign(next);
     } finally {
       setLoading(false);
     }
