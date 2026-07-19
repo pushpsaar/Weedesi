@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     if (order) {
       if (event.event === "payment.captured") {
         order.payment.status = "paid";
-        order.status = "paid";
+        order.status = "confirmed";
       } else if (event.event === "payment.failed") {
         order.payment.status = "failed";
         order.status = "cancelled";

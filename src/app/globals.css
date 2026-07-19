@@ -63,12 +63,12 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Dark theme overrides: apply by adding `dark` class to <html> */
 html.dark {
-  --color-bg: #120606;
-  --color-white: #1f0a0a;
-  --color-gold: #f87171;
-  --color-gold-dark: #b91c1c;
-  --color-dark: #f7edea;
-  --color-border: rgba(247, 237, 234, 0.12);
+  --color-bg: #470000;
+  --color-white: #5a0a0a;
+  --color-gold: #d89c72;
+  --color-gold-dark: #f4b07a;
+  --color-dark: #fff1ee;
+  --color-border: rgba(255, 241, 238, 0.16);
 }
 
 html.dark body {

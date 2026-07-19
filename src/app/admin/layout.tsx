@@ -17,7 +17,7 @@ export default function AdminLayout({
     <div className="mx-auto flex max-w-7xl gap-8 px-6 py-10 md:px-8">
       <aside className="w-52 shrink-0">
         <div className="mb-8">
-          <p className="font-heading text-xl text-dark">WEदेसी</p>
+          <p className="font-heading text-xl text-dark">Weदेसी</p>
           <p className="text-[11px] uppercase tracking-[0.2em] text-dark/40">
             Admin
           </p>

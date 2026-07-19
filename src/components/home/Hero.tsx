@@ -14,7 +14,7 @@ export default function Hero() {
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-gold-dark">
-            WEदेसी Kurtis
+            Weदेसी Kurtis
           </p>
           <h1 className="font-heading text-5xl leading-[1.1] text-dark md:text-6xl">
             Elegant kurtis

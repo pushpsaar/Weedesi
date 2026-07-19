@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16 md:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
           <div>
-            <span className="font-heading text-2xl text-dark">WEदेसी</span>
+            <span className="font-heading text-2xl text-dark">Weदेसी</span>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-dark/60">
               Timeless Indian craftsmanship, made modern. Considered pieces
               for a considered life.
@@ -48,7 +48,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-xs text-dark/50 md:flex-row">
-          <p>&copy; {new Date().getFullYear()} WEदेसी. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Weदेसी. All rights reserved.</p>
           <p>Crafted with care, in India.</p>
         </div>
       </div>

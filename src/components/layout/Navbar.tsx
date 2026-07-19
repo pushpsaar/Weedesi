@@ -25,7 +25,7 @@ export default function Navbar() {
           href="/"
           className="justify-self-center truncate text-center font-heading text-lg leading-none tracking-wide text-[#7a1f1f] sm:text-3xl"
         >
-          WEदेसी
+          Weदेसी
         </Link>
 
         <div className="flex items-center justify-end gap-1 md:gap-2">

@@ -41,7 +41,13 @@ export interface OrderItem {
   price: number;
 }
 
-export type OrderStatus = "pending" | "confirmed" | "delivered" | "cancelled" | "refunded";
+export type OrderStatus =
+  | "pending"
+  | "confirmed"
+  | "paid"
+  | "delivered"
+  | "cancelled"
+  | "refunded"; 
 export type PaymentStatus = "created" | "pending" | "paid" | "failed" | "refunded";
 
 export interface Order {

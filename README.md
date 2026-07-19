@@ -1,4 +1,4 @@
-# WEदेसी — Luxury Indian Fashion E-commerce
+# Weदेसी — Luxury Indian Fashion E-commerce
 
 ## Getting started
 

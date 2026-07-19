@@ -24,23 +24,23 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vedesi.example.com"
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "WEदेसी — Timeless Indian Craftsmanship",
-    template: "%s | WEदेसी",
+    default: "Weदेसी — Timeless Indian Craftsmanship",
+    template: "%s | Weदेसी",
   },
   description:
-    "WEदेसी is a luxury Indian fashion house offering considered, handcrafted pieces for the modern wardrobe.",
+    "Weदेसी is a luxury Indian fashion house offering considered, handcrafted pieces for the modern wardrobe.",
   openGraph: {
-    title: "WEदेसी — Timeless Indian Craftsmanship",
+    title: "Weदेसी — Timeless Indian Craftsmanship",
     description:
       "Luxury, minimal, Indian. Considered pieces for a considered life.",
     url: siteUrl,
-    siteName: "WEदेसी",
+    siteName: "Weदेसी",
     locale: "en_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "WEदेसी — Timeless Indian Craftsmanship",
+    title: "Weदेसी — Timeless Indian Craftsmanship",
     description:
       "Luxury, minimal, Indian. Considered pieces for a considered life.",
   },

@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
   order.payment.status = "paid";
   order.payment.razorpayPaymentId = razorpay_payment_id;
   order.payment.razorpaySignature = razorpay_signature;
-  order.status = "paid";
+  order.status = "confirmed";
   order.updatedAt = new Date().toISOString();
   await saveOrder(order);
 
