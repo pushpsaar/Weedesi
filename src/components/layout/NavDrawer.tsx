@@ -6,7 +6,6 @@ import { X } from "lucide-react";
 import { useStore } from "@/context/store-context";
 
 const LINKS = [
-  { href: "/", label: "Home" },
   { href: "/shop?category=kurtis", label: "Explore Kurtis" },
   { href: "/shop", label: "Shop All Kurtis" },
   { href: "/track-order", label: "Track Order" },
@@ -51,8 +50,8 @@ export default function NavDrawer() {
               </button>
             </div>
 
-            <div className="flex h-[calc(92vh-88px)] flex-col overflow-y-auto">
-              <nav className="flex flex-col px-2 py-4">
+            <div className="flex h-[calc(92vh-88px)] min-h-0 flex-col">
+              <nav className="flex-1 overflow-y-auto overscroll-contain px-2 py-4">
                 {LINKS.map((link, i) => (
                   <motion.div
                     key={link.href + link.label}
