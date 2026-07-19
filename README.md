@@ -21,7 +21,7 @@ npm run dev
 
 - URL: `/admin/login`
 - Default username: `admin`
-- Default password: `vedesi@admin123`
+- Default password: `wedesi@123`
 - **Change this immediately** — the hash lives in `data/admin.json`. To generate a new one:
   ```bash
   node -e "
