@@ -48,7 +48,7 @@ function OrderSuccessInner() {
         href="/shop"
         className="mt-10 rounded-full bg-dark px-8 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
       >
-        Continue Shopping
+        Continue to Shop
       </Link>
     </div>
   );
