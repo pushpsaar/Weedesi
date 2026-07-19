@@ -39,7 +39,7 @@ export default function NavDrawer() {
             className="glass fixed left-0 top-0 z-50 h-[92vh] w-[85%] max-w-sm overflow-hidden rounded-r-3xl border-r border-border shadow-2xl"
           >
             <div className="flex items-center justify-between border-b border-border px-6 py-6">
-              <span className="font-heading text-2xl tracking-wide text-dark">
+              <span className="font-heading text-2xl tracking-wide text-[#7a1f1f]">
                 WEदेसी
               </span>
               <button
