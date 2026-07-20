@@ -57,14 +57,11 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     try {
       const c = localStorage.getItem(CART_KEY);
       const w = localStorage.getItem(WISHLIST_KEY);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (c) setCart(JSON.parse(c));
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (w) setWishlist(JSON.parse(w));
     } catch {
       // ignore corrupt storage
     }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHydrated(true);
   }, []);
 

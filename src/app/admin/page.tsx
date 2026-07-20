@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getProducts, getOrders } from "@/lib/data";
+import SiteMediaManager from "@/components/admin/SiteMediaManager";
 
 export default async function AdminDashboardPage() {
   const [products, orders] = await Promise.all([getProducts(), getOrders()]);
@@ -94,6 +95,10 @@ export default async function AdminDashboardPage() {
         >
           View Orders
         </Link>
+      </div>
+
+      <div className="mt-10">
+        <SiteMediaManager />
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { getActiveProducts } from "@/lib/data";
+import { getSiteContent } from "@/lib/site-content";
 import Hero from "@/components/home/Hero";
 import ProductRail from "@/components/home/ProductRail";
 import Categories from "@/components/home/Categories";
@@ -7,14 +8,14 @@ import InstagramGallery from "@/components/home/InstagramGallery";
 import Newsletter from "@/components/home/Newsletter";
 
 export default async function HomePage() {
-  const products = await getActiveProducts();
+  const [products, siteContent] = await Promise.all([getActiveProducts(), getSiteContent()]);
   const newArrivals = products.filter((p) => p.tags.includes("new-arrival"));
   const bestSellers = products.filter((p) => p.tags.includes("best-seller"));
   const trending = products.slice(0, 8);
 
   return (
     <>
-      <Hero />
+      <Hero content={siteContent} />
       <Categories />
       <ProductRail
         title="New Arrivals"

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const SLIDES = [
+const DEFAULT_SLIDES = [
   "/slider/Slider image 1.jpeg",
   "/slider/Slider image 2.jpeg",
   "/slider/Slider image 3.jpeg",
@@ -12,32 +12,33 @@ const SLIDES = [
   "/slider/Slider image 5.jpeg",
 ];
 
-export default function HeroSlider() {
+export default function HeroSlider({ featuredImage }: { featuredImage?: string }) {
+  const slides = featuredImage ? [featuredImage, ...DEFAULT_SLIDES.filter((slide) => slide !== featuredImage)] : DEFAULT_SLIDES;
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % SLIDES.length);
+      setActiveIndex((current) => (current + 1) % slides.length);
     }, 4500);
 
     return () => window.clearInterval(interval);
-  }, []);
+  }, [slides.length]);
 
   function goTo(index: number) {
     setActiveIndex(index);
   }
 
   function previousSlide() {
-    setActiveIndex((current) => (current - 1 + SLIDES.length) % SLIDES.length);
+    setActiveIndex((current) => (current - 1 + slides.length) % slides.length);
   }
 
   function nextSlide() {
-    setActiveIndex((current) => (current + 1) % SLIDES.length);
+    setActiveIndex((current) => (current + 1) % slides.length);
   }
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-[2rem] border border-border bg-bg shadow-[0_18px_80px_rgba(0,0,0,0.08)]">
-      {SLIDES.map((src, index) => (
+      {slides.map((src, index) => (
         <div
           key={src}
           className={`absolute inset-0 transition-opacity duration-700 ${
@@ -66,7 +67,7 @@ export default function HeroSlider() {
         </button>
 
         <div className="hidden items-center gap-2 rounded-full bg-black/30 px-3 py-2 text-xs text-white backdrop-blur-sm md:flex">
-          {SLIDES.map((_, index) => (
+          {slides.map((_, index) => (
             <button
               key={index}
               type="button"
@@ -90,7 +91,7 @@ export default function HeroSlider() {
       </div>
 
       <div className="absolute left-4 top-4 rounded-full bg-white/80 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-dark shadow-sm backdrop-blur-sm sm:left-6 sm:top-6">
-        01 / {SLIDES.length}
+        {String(activeIndex + 1).padStart(2, "0")} / {slides.length}
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getOrderById } from "@/lib/data";
 import OrderStatusSelect from "@/components/admin/OrderStatusSelect";
@@ -65,11 +66,16 @@ export default async function AdminOrderDetailPage({
           {order.payment.paymentScreenshot && (
             <div className="mt-4">
               <p className="mb-2 text-xs font-medium text-dark/60">Payment Screenshot</p>
-              <img
-                src={order.payment.paymentScreenshot}
-                alt="Payment proof"
-                className="max-h-64 rounded-lg border border-border object-cover"
-              />
+              <div className="relative max-h-64 overflow-hidden rounded-lg border border-border">
+                <Image
+                  src={order.payment.paymentScreenshot}
+                  alt="Payment proof"
+                  width={800}
+                  height={600}
+                  unoptimized
+                  className="h-auto w-full object-cover"
+                />
+              </div>
             </div>
           )}
         </div>

@@ -8,7 +8,7 @@ import { useStore } from "@/context/store-context";
 
 export default function ProductBuyBox({ product }: { product: Product }) {
   const router = useRouter();
-  const { addToCart, toggleWishlist, wishlist, setDrawerOpen } = useStore();
+  const { addToCart, toggleWishlist, wishlist } = useStore();
   const [variantIdx] = useState(0);
   const [size, setSize] = useState<Size | null>(null);
   const [qty, setQty] = useState(1);

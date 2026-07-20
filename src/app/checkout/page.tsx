@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ChangeEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useStore } from "@/context/store-context";
@@ -133,11 +134,16 @@ function CheckoutPageInner() {
               required
             />
             {paymentScreenshot && (
-              <img
-                src={paymentScreenshot}
-                alt="Payment proof preview"
-                className="mt-3 max-h-56 rounded-lg border border-border object-cover"
-              />
+              <div className="mt-3 overflow-hidden rounded-lg border border-border">
+                <Image
+                  src={paymentScreenshot}
+                  alt="Payment proof preview"
+                  width={800}
+                  height={600}
+                  unoptimized
+                  className="max-h-56 w-full object-cover"
+                />
+              </div>
             )}
           </div>
 
