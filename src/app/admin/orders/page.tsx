@@ -19,7 +19,8 @@ export default async function AdminOrdersPage() {
       <h1 className="font-heading text-3xl text-dark">Orders</h1>
 
       <div className="mt-6 overflow-hidden rounded-xl border border-border bg-white">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[900px] text-sm">
           <thead>
             <tr className="border-b border-border bg-bg text-left text-xs uppercase tracking-wide text-dark/50">
               <th className="px-4 py-3">Order</th>
@@ -66,6 +67,7 @@ export default async function AdminOrdersPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );
