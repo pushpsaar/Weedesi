@@ -19,7 +19,13 @@ async function readJson(): Promise<SiteContent> {
   try {
     const parsed = JSON.parse(raw) as Partial<SiteContent>;
     return {
+      ...DEFAULT_SITE_CONTENT,
+      ...parsed,
       hero: { ...DEFAULT_SITE_CONTENT.hero, ...parsed.hero },
+      banners: parsed.banners ?? DEFAULT_SITE_CONTENT.banners,
+      collections: parsed.collections ?? DEFAULT_SITE_CONTENT.collections,
+      categoryImages: parsed.categoryImages ?? DEFAULT_SITE_CONTENT.categoryImages,
+      promoSections: parsed.promoSections ?? DEFAULT_SITE_CONTENT.promoSections,
       footer: { ...DEFAULT_SITE_CONTENT.footer, ...parsed.footer },
     };
   } catch {

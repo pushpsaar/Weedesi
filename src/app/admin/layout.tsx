@@ -19,7 +19,7 @@ export default function AdminLayout({
       <aside className="glass rounded-[24px] border border-border p-4 shadow-sm md:w-72 md:shrink-0 md:p-5">
         <div className="flex items-center justify-between gap-3 md:block">
           <div>
-            <p className="font-heading text-2xl text-dark">Weदेसी</p>
+            <p className="font-heading text-2xl text-dark">WEदेसी</p>
             <p className="text-[11px] uppercase tracking-[0.25em] text-dark/40">
               Admin
             </p>

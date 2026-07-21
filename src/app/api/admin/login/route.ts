@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const valid = await verifyAdminPassword("wedesi", password);
+    const valid = await verifyAdminPassword("WEदेसी", password);
     if (!valid) {
       return NextResponse.json(
         { success: false, error: "Invalid password." },
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await createAdminSession("wedesi");
+    await createAdminSession("WEदेसी");
     return NextResponse.json({ success: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";

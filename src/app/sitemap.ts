@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { getActiveProducts } from "@/lib/data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vedesi.example.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wedesi.example.com";
   const products = await getActiveProducts();
 
   const staticPages = [

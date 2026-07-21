@@ -37,8 +37,8 @@ interface StoreState {
 
 const StoreContext = createContext<StoreState | null>(null);
 
-const CART_KEY = "vedesi_cart";
-const WISHLIST_KEY = "vedesi_wishlist";
+const CART_KEY = "wedesi_cart";
+const WISHLIST_KEY = "wedesi_wishlist";
 
 function lineKey(l: { productId: string; size: Size; color: string }) {
   return `${l.productId}__${l.size}__${l.color}`;

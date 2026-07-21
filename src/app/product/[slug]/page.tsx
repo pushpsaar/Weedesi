@@ -3,6 +3,7 @@ import { getActiveProducts, getProductBySlug } from "@/lib/data";
 import ProductCard from "@/components/ui/ProductCard";
 import ProductGallery from "@/components/product/ProductGallery";
 import ProductBuyBox from "@/components/product/ProductBuyBox";
+import ProductJsonLd from "@/components/seo/ProductJsonLd";
 
 export async function generateMetadata({
   params,
@@ -54,10 +55,7 @@ export default async function ProductPage({
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-10 md:px-8">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <ProductJsonLd data={jsonLd} />
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         <ProductGallery product={product} />
         <ProductBuyBox product={product} />

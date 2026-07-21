@@ -4,7 +4,7 @@ import path from "path";
 import { cookies } from "next/headers";
 
 const DATA_DIR = path.join(process.cwd(), "data");
-const SESSION_COOKIE = "vedesi_admin_session";
+const SESSION_COOKIE = "wedesi_admin_session";
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 interface AdminCreds {
@@ -13,7 +13,7 @@ interface AdminCreds {
   hash: string;
 }
 
-const DEFAULT_ADMIN_USERNAME = "wedesi";
+const DEFAULT_ADMIN_USERNAME = "WEदेसी";
 
 function getSessionSecret(): string {
   const secret =

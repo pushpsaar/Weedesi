@@ -25,7 +25,7 @@ export default function Navbar() {
           href="/"
           className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-center font-heading text-[1.15rem] leading-[1.15] tracking-wide text-[#7a1f1f] sm:text-3xl"
         >
-          Weदेसी
+          WEदेसी
         </Link>
 
         <div className="flex min-w-12 items-center justify-end">

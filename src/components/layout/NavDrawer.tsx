@@ -43,7 +43,7 @@ export default function NavDrawer() {
           >
             <div className="flex items-center justify-between border-b border-border px-6 py-5">
               <span className="font-heading text-2xl tracking-wide text-[#7a1f1f]">
-                Weदेसी
+                WEदेसी
               </span>
               <button
                 aria-label="Close menu"

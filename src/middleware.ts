@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const SESSION_COOKIE = "vedesi_admin_session";
+const SESSION_COOKIE = "wedesi_admin_session";
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

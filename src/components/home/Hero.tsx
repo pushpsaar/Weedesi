@@ -6,6 +6,8 @@ import HeroSlider from "@/components/home/HeroSlider";
 import type { SiteContent } from "@/lib/site-content-config";
 
 export default function Hero({ content }: { content: SiteContent }) {
+  const slides = content.hero.images?.length ? content.hero.images : ["/slider/Slider image 1.jpeg"];
+
   return (
     <section className="relative overflow-hidden bg-white">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-20 md:grid-cols-2 md:py-32 md:px-8 lg:h-screen lg:py-0">
@@ -15,7 +17,7 @@ export default function Hero({ content }: { content: SiteContent }) {
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-gold-dark">
-            Weदेसी Kurtis
+            WEदेसी Kurtis
           </p>
           <h1 className="font-heading text-5xl leading-[1.1] text-dark md:text-6xl">
             {content.hero.title}
@@ -45,7 +47,7 @@ export default function Hero({ content }: { content: SiteContent }) {
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
           className="relative h-full w-full"
         >
-          <HeroSlider featuredImage={content.hero.image} />
+          <HeroSlider slides={slides} primaryImage={content.hero.primaryImage} />
         </motion.div>
       </div>
     </section>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
-import Script from "next/script";
 import { StoreProvider } from "@/context/store-context";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -19,7 +18,7 @@ const inter = Inter({
   weight: ["300", "400", "500", "600"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vedesi.example.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wedesi.example.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -56,14 +55,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable} h-full antialiased`}>
-      <Script
-        id="theme-init"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `(function(){try{var t=localStorage.getItem('theme'); if(t==='dark' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')} else {document.documentElement.classList.remove('dark')}}catch(e){}})()`,
-        }}
-      />
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${cormorant.variable} ${inter.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col bg-bg text-dark">
         <StoreProvider>
           <Navbar />

@@ -12,8 +12,19 @@ const DEFAULT_SLIDES = [
   "/slider/Slider image 5.jpeg",
 ];
 
-export default function HeroSlider({ featuredImage }: { featuredImage?: string }) {
-  const slides = featuredImage ? [featuredImage, ...DEFAULT_SLIDES.filter((slide) => slide !== featuredImage)] : DEFAULT_SLIDES;
+export default function HeroSlider({
+  slides: providedSlides,
+  primaryImage,
+}: {
+  slides?: string[];
+  primaryImage?: string;
+}) {
+  const slides = providedSlides?.length
+    ? [
+        ...(primaryImage ? [primaryImage] : []),
+        ...providedSlides.filter((slide) => slide !== primaryImage),
+      ]
+    : DEFAULT_SLIDES;
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -49,10 +60,12 @@ export default function HeroSlider({ featuredImage }: { featuredImage?: string }
             src={src}
             alt={`Slider image ${index + 1}`}
             fill
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 50vw"
+            priority={index === 0}
+            quality={90}
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/35" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-black/40" />
         </div>
       ))}
 

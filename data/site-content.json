@@ -1,16 +1,105 @@
 {
   "hero": {
-    "image": "/slider/Slider image 1.jpeg",
     "title": "Elegant kurtis for every day.",
     "subtitle": "Explore handcrafted kurtis designed for comfort, beauty, and effortless style.",
     "buttonText": "Shop Kurtis",
-    "buttonLink": "/shop?category=kurtis"
+    "buttonLink": "/shop?category=kurtis",
+    "images": [
+      "/slider/Slider image 1.jpeg",
+      "/slider/Slider image 2.jpeg",
+      "/slider/Slider image 3.jpeg",
+      "/slider/Slider image 4.jpeg",
+      "/slider/Slider image 5.jpeg"
+    ],
+    "primaryImage": "/slider/Slider image 1.jpeg"
   },
+  "banners": [
+    {
+      "id": "banner-1",
+      "title": "New Weekend Edit",
+      "description": "A fresh set of premium kurtis for elevated everyday dressing.",
+      "image": "/slider/collection-1 (1).jpeg",
+      "link": "/shop?tag=new-arrival",
+      "enabled": true
+    },
+    {
+      "id": "banner-2",
+      "title": "Editor’s Picks",
+      "description": "Signature pieces styled for modern Indian wardrobes.",
+      "image": "/slider/collection-1 (2).jpeg",
+      "link": "/shop?tag=best-seller",
+      "enabled": true
+    }
+  ],
+  "collections": [
+    {
+      "id": "collection-1",
+      "image": "/slider/collection-1 (3).jpeg",
+      "name": "Kurtis Edit",
+      "description": "Thoughtfully curated silhouettes for effortless styling.",
+      "link": "/shop?category=kurtis"
+    },
+    {
+      "id": "collection-2",
+      "image": "/slider/collection-1 (4).jpeg",
+      "name": "Festive Forms",
+      "description": "Graceful silhouettes for celebratory moments and polished every day.",
+      "link": "/shop?tag=new-arrival"
+    },
+    {
+      "id": "collection-3",
+      "image": "/slider/collection-1 (5).jpeg",
+      "name": "Minimal Statement",
+      "description": "Quiet luxury, handcrafted neutrals, and wearable elegance.",
+      "link": "/shop?tag=best-seller"
+    }
+  ],
+  "categoryImages": [
+    {
+      "id": "category-1",
+      "name": "Kurtis",
+      "image": "/slider/collection-1 (6).jpeg",
+      "link": "/shop?category=kurtis"
+    },
+    {
+      "id": "category-2",
+      "name": "Festive Essentials",
+      "image": "/slider/collection-1 (7).jpeg",
+      "link": "/shop?tag=new-arrival"
+    },
+    {
+      "id": "category-3",
+      "name": "New Arrivals",
+      "image": "/slider/collection-1 (8).jpeg",
+      "link": "/shop?tag=new-arrival"
+    }
+  ],
+  "promoSections": [
+    {
+      "id": "promo-1",
+      "title": "Minimal, expressive, wearable.",
+      "description": "Browse our newest premium essentials and elevate your everyday wardrobe.",
+      "image": "/slider/Slider image 4.jpeg",
+      "buttonText": "Shop Now",
+      "buttonLink": "/shop",
+      "enabled": true
+    },
+    {
+      "id": "promo-2",
+      "title": "Style with ease.",
+      "description": "Find thoughtful silhouettes that move easily from sunrise to sunset.",
+      "image": "/slider/Slider image 5.jpeg",
+      "buttonText": "Explore Edit",
+      "buttonLink": "/collections",
+      "enabled": true
+    }
+  ],
   "footer": {
-    "logo": "Weदेसी",
-    "text": "Timeless Indian craftsmanship, made modern. Considered pieces for a considered life.",
-    "email": "hello@wedesi.com",
+    "logo": "WEदेसी",
+    "description": "Timeless Indian craftsmanship, made modern. Considered pieces for a considered life.",
+    "email": "hello@WEदेसी.com",
     "phone": "+91 98765 43210",
-    "instagram": "@wedesi"
+    "instagram": "@WEदेसी",
+    "copyright": "© 2026 WEदेसी. All rights reserved."
   }
 }

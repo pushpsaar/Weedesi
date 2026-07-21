@@ -47,7 +47,7 @@ function AdminLoginInner() {
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-dark text-lg font-semibold text-white">
             A
           </div>
-          <h1 className="font-heading text-3xl text-dark">Weदेसी</h1>
+          <h1 className="font-heading text-3xl text-dark">WEदेसी</h1>
           <p className="mt-1 text-[11px] uppercase tracking-[0.28em] text-dark/45">
             Admin Panel
           </p>
