@@ -11,14 +11,15 @@ const galleryImages = [
 
 export default function InstagramGallery() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-16 md:px-8">
+    <section className="section-shell px-4 py-16 sm:px-6 md:px-8 lg:py-20">
       <div className="mb-8 text-center">
-        <h2 className="font-heading text-3xl text-dark">@WEदेसी</h2>
-        <p className="mt-1.5 text-sm text-dark/50">Follow us for daily inspiration</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-gold-dark">Studio notes</p>
+        <h2 className="mt-3 font-heading text-3xl text-dark sm:text-[2rem]">@WEदेसी</h2>
+        <p className="mt-2 text-sm text-dark/55">Follow us for daily inspiration</p>
       </div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
         {galleryImages.map((src, i) => (
-          <div key={src} className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-white">
+          <div key={src} className="group relative aspect-square overflow-hidden rounded-[1rem] border border-border/70 bg-white shadow-[0_10px_30px_rgba(43,43,43,0.06)]">
             <Image
               src={src}
               alt={`Gallery image ${i + 1}`}

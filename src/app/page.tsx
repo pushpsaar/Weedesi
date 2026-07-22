@@ -21,22 +21,22 @@ export default async function HomePage() {
     <>
       <Hero content={siteContent} />
       {enabledBanners.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 py-10 md:px-8">
+        <section className="section-shell py-5 sm:py-6 lg:py-8">
           <div className="grid gap-4 md:grid-cols-2">
             {enabledBanners.map((banner) => (
               <a
                 key={banner.id}
                 href={banner.link}
-                className="group relative flex min-h-[220px] items-end overflow-hidden rounded-2xl border border-border bg-white p-5"
+                className="group relative flex min-h-[240px] items-end overflow-hidden rounded-[1.6rem] border border-border/70 bg-white p-6 shadow-[0_10px_35px_rgba(43,43,43,0.06)]"
                 style={{
-                  backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.18)), url(${banner.image})`,
+                  backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.74), rgba(0,0,0,0.18)), url(${banner.image})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
               >
                 <div className="max-w-sm">
                   <h3 className="font-heading text-2xl text-white">{banner.title}</h3>
-                  <p className="mt-2 text-sm text-white/85">{banner.description}</p>
+                  <p className="mt-2 text-sm leading-7 text-white/85">{banner.description}</p>
                 </div>
               </a>
             ))}
@@ -45,16 +45,16 @@ export default async function HomePage() {
       )}
       <Categories content={siteContent} />
       {enabledPromos.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 py-6 md:px-8">
+        <section className="section-shell py-2 sm:py-3">
           <div className="grid gap-4 md:grid-cols-2">
             {enabledPromos.map((promo) => (
-              <div key={promo.id} className="overflow-hidden rounded-2xl border border-border bg-white">
+              <div key={promo.id} className="overflow-hidden rounded-[1.6rem] border border-border/70 bg-white/80 shadow-[0_12px_42px_rgba(43,43,43,0.06)]">
                 <div className="grid md:grid-cols-[1.1fr_0.9fr]">
                   <div className="min-h-[220px] bg-cover bg-center" style={{ backgroundImage: `url(${promo.image})` }} />
-                  <div className="p-5">
+                  <div className="p-6">
                     <h3 className="font-heading text-2xl text-dark">{promo.title}</h3>
-                    <p className="mt-3 text-sm text-dark/65">{promo.description}</p>
-                    <a href={promo.buttonLink} className="mt-4 inline-flex rounded-full bg-dark px-4 py-2 text-sm font-medium text-white">
+                    <p className="mt-3 text-sm leading-7 text-dark/65">{promo.description}</p>
+                    <a href={promo.buttonLink} className="mt-5 inline-flex rounded-full bg-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1f1a17]">
                       {promo.buttonText}
                     </a>
                   </div>

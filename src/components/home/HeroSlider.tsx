@@ -48,7 +48,7 @@ export default function HeroSlider({
   }
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-[2rem] border border-border bg-bg shadow-[0_18px_80px_rgba(0,0,0,0.08)]">
+    <div className="relative h-[420px] w-full overflow-hidden rounded-[2rem] border border-border/70 bg-bg shadow-[0_24px_90px_rgba(43,43,43,0.14)] sm:h-[500px] lg:h-[600px]">
       {slides.map((src, index) => (
         <div
           key={src}
@@ -66,6 +66,7 @@ export default function HeroSlider({
             className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-black/40" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.16),transparent_45%)]" />
         </div>
       ))}
 
