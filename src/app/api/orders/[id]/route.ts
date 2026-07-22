@@ -33,7 +33,7 @@ export async function PATCH(
   const nextPaymentStatus =
     nextStatus === "pending"
       ? "pending"
-      : nextStatus === "confirmed" || nextStatus === "delivered"
+      : nextStatus === "paid" || nextStatus === "confirmed" || nextStatus === "shipped" || nextStatus === "delivered"
         ? "paid"
         : nextStatus === "cancelled" || nextStatus === "refunded"
           ? "refunded"

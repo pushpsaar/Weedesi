@@ -7,6 +7,8 @@ const NAV = [
   { href: "/admin/content", label: "Website Content" },
   { href: "/admin/products", label: "Products" },
   { href: "/admin/orders", label: "Orders" },
+  { href: "/admin/payments", label: "Payments" },
+  { href: "/admin/users", label: "Users" },
 ];
 
 export default function AdminLayout({

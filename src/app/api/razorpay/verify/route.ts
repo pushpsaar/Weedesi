@@ -4,10 +4,11 @@ import { getOrders, saveOrder } from "@/lib/data";
 
 export async function POST(req: NextRequest) {
   const {
-    orderId, // our internal order id
+    orderId,
     razorpay_order_id,
     razorpay_payment_id,
     razorpay_signature,
+    paymentMethod,
   } = await req.json();
 
   if (!orderId || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
@@ -35,18 +36,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Order not found." }, { status: 404 });
   }
 
+  if (order.payment.razorpayPaymentId && order.payment.razorpayPaymentId === razorpay_payment_id) {
+    return NextResponse.json({ verified: true, orderId: order.id, duplicate: true });
+  }
+
   if (!isValid) {
     order.payment.status = "failed";
     order.status = "cancelled";
     order.updatedAt = new Date().toISOString();
     await saveOrder(order);
-    return NextResponse.json({ verified: false }, { status: 400 });
+    return NextResponse.json({ verified: false, error: "Invalid Razorpay signature." }, { status: 400 });
   }
 
   order.payment.status = "paid";
+  order.payment.method = paymentMethod ?? order.payment.method ?? "razorpay";
   order.payment.razorpayPaymentId = razorpay_payment_id;
   order.payment.razorpaySignature = razorpay_signature;
-  order.status = "confirmed";
+  order.status = "paid";
   order.updatedAt = new Date().toISOString();
   await saveOrder(order);
 

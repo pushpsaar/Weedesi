@@ -23,20 +23,23 @@ export async function POST(req: NextRequest) {
   }
 
   const event = JSON.parse(rawBody);
-  const razorpayOrderId =
-    event.payload?.payment?.entity?.order_id ?? event.payload?.order?.entity?.id;
+  const entity = event.payload?.payment?.entity ?? event.payload?.order?.entity;
+  const razorpayOrderId = entity?.order_id ?? event.payload?.order?.entity?.id;
+  const razorpayPaymentId = entity?.id;
+  const eventType = event.event;
 
   if (razorpayOrderId) {
     const orders = await getOrders();
     const order = orders.find((o) => o.payment.razorpayOrderId === razorpayOrderId);
     if (order) {
-      if (event.event === "payment.captured") {
+      if (eventType === "payment.captured" || eventType === "order.paid") {
         order.payment.status = "paid";
-        order.status = "confirmed";
-      } else if (event.event === "payment.failed") {
+        order.payment.razorpayPaymentId = razorpayPaymentId ?? order.payment.razorpayPaymentId;
+        order.status = "paid";
+      } else if (eventType === "payment.failed") {
         order.payment.status = "failed";
         order.status = "cancelled";
-      } else if (event.event === "refund.processed") {
+      } else if (eventType === "refund.processed") {
         order.payment.status = "refunded";
         order.status = "refunded";
       }

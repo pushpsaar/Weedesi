@@ -4,9 +4,33 @@ import Razorpay from "razorpay";
 import { saveOrder, getCouponByCode } from "@/lib/data";
 import { CartLine } from "@/context/store-context";
 import { Order, OrderItem } from "@/lib/types";
+import { cookies } from "next/headers";
 
-const GST_RATE = 0.05; // 5% — adjust to your actual applicable GST slab
-const SHIPPING_FLAT = 0; // set a flat shipping fee here if you charge one
+const GST_RATE = 0.05;
+const SHIPPING_FLAT = 0;
+const USER_COOKIE = "wedesi_user_session";
+
+function unsign(value: string) {
+  try {
+    return JSON.parse(Buffer.from(value, "base64url").toString("utf-8"));
+  } catch {
+    return null;
+  }
+}
+
+async function getSignedInCustomer() {
+  const store = await cookies();
+  const token = store.get(USER_COOKIE)?.value;
+  if (!token) return null;
+
+  const payload = unsign(token);
+  if (!payload || payload.exp < Date.now()) {
+    store.delete(USER_COOKIE);
+    return null;
+  }
+
+  return { id: payload.userId as string, email: payload.email as string, name: payload.name as string };
+}
 
 export async function POST(req: NextRequest) {
   if (!process.env.RAZORPAY_KEY_ID && !process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID) {
@@ -26,6 +50,11 @@ export async function POST(req: NextRequest) {
   const items: CartLine[] = body.items ?? [];
   const customer = body.customer;
   const couponCode: string | undefined = body.couponCode;
+  const signedInCustomer = await getSignedInCustomer();
+
+  if (!signedInCustomer) {
+    return NextResponse.json({ error: "Please sign in before placing your order." }, { status: 401 });
+  }
 
   if (!items.length || !customer) {
     return NextResponse.json(
@@ -33,6 +62,11 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
+  const normalizedCustomer = {
+    ...customer,
+    email: customer.email?.trim() ? customer.email.trim() : signedInCustomer.email,
+  };
 
   const subtotal = items.reduce((sum, l) => sum + l.qty * l.price, 0);
 
@@ -76,8 +110,9 @@ export async function POST(req: NextRequest) {
 
   const order: Order = {
     id: randomUUID(),
+    userId: signedInCustomer.id,
     items: orderItems,
-    customer,
+    customer: normalizedCustomer,
     subtotal,
     gst,
     shipping: SHIPPING_FLAT,

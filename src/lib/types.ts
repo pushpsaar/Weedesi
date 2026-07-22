@@ -52,6 +52,7 @@ export type PaymentStatus = "created" | "pending" | "paid" | "failed" | "refunde
 
 export interface Order {
   id: string;
+  userId?: string;
   items: OrderItem[];
   customer: {
     name: string;
@@ -72,7 +73,7 @@ export interface Order {
   status: OrderStatus;
   payment: {
     status: PaymentStatus;
-    method?: "upi" | "razorpay";
+    method?: "upi" | "card" | "netbanking" | "wallet" | "emi" | "razorpay";
     upiId?: string;
     razorpayOrderId?: string;
     razorpayPaymentId?: string;

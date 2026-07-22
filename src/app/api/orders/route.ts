@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
+import { cookies } from "next/headers";
 import { getAdminSession } from "@/lib/auth";
 import { getCouponByCode, getOrders, saveOrder } from "@/lib/data";
 import { Order, OrderItem } from "@/lib/types";
@@ -8,6 +9,33 @@ import { CartLine } from "@/context/store-context";
 const GST_RATE = 0.05;
 const SHIPPING_FLAT = 0;
 const UPI_ID = "soniroshni410-1@okaxis";
+const USER_COOKIE = "wedesi_user_session";
+
+function unsign(value: string) {
+  try {
+    return JSON.parse(Buffer.from(value, "base64url").toString("utf-8"));
+  } catch {
+    return null;
+  }
+}
+
+async function getSignedInCustomer() {
+  const store = await cookies();
+  const token = store.get(USER_COOKIE)?.value;
+  if (!token) return null;
+
+  const payload = unsign(token);
+  if (!payload || payload.exp < Date.now()) {
+    store.delete(USER_COOKIE);
+    return null;
+  }
+
+  return {
+    id: payload.userId as string,
+    email: payload.email as string,
+    name: payload.name as string,
+  };
+}
 
 export async function GET() {
   const session = await getAdminSession();
@@ -28,6 +56,14 @@ export async function POST(req: NextRequest) {
   const customer = body.customer;
   const couponCode: string | undefined = body.couponCode;
   const paymentScreenshot: string | undefined = body.paymentScreenshot;
+  const signedInCustomer = await getSignedInCustomer();
+
+  if (!signedInCustomer) {
+    return NextResponse.json(
+      { error: "Please sign in before placing your order." },
+      { status: 401 }
+    );
+  }
 
   if (!items.length || !customer) {
     return NextResponse.json(
@@ -49,6 +85,11 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
+  const normalizedCustomer = {
+    ...customer,
+    email: customer.email?.trim() ? customer.email.trim() : signedInCustomer.email,
+  };
 
   const subtotal = items.reduce((sum, l) => sum + l.qty * l.price, 0);
 
@@ -81,8 +122,9 @@ export async function POST(req: NextRequest) {
 
   const order: Order = {
     id: randomUUID(),
+    userId: signedInCustomer.id,
     items: orderItems,
-    customer,
+    customer: normalizedCustomer,
     subtotal,
     gst,
     shipping: SHIPPING_FLAT,
