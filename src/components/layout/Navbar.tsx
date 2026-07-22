@@ -42,7 +42,7 @@ export default function Navbar() {
           className="absolute left-1/2 -translate-x-1/2"
         >
           <Image 
-            src="/logo1.png"
+            src="/logo.png"
             alt="WEदेसी" 
             width={280} 
             height={140}
