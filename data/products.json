@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "id": "b4186648-6a13-4aee-bfa9-ebdb65a57aa8",
+    "slug": "example",
+    "name": "example",
+    "sku": "example",
+    "category": "example",
+    "description": "fasdgartgfbhrasez segers",
+    "fabric": "gvzerasfgzse",
+    "washCare": "szzs",
+    "mrp": 1,
+    "salePrice": 1,
+    "variants": [
+      {
+        "color": "Default",
+        "colorHex": "#C8A96A",
+        "images": [
+          "/products/1784727417626-hz9pxf.jpeg"
+        ],
+        "sizes": [
+          {
+            "size": "S",
+            "stock": 10
+          },
+          {
+            "size": "M",
+            "stock": 10
+          },
+          {
+            "size": "L",
+            "stock": 10
+          }
+        ]
+      }
+    ],
+    "tags": [],
+    "isActive": true,
+    "createdAt": "2026-07-22T13:37:05.117Z"
+  }
+]

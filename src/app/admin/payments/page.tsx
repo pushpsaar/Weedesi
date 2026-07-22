@@ -1,4 +1,13 @@
+import Link from "next/link";
 import { getOrders } from "@/lib/data";
+
+const STATUS_STYLES: Record<string, string> = {
+  created: "bg-slate-100 text-slate-700",
+  pending: "bg-amber-100 text-amber-700",
+  paid: "bg-emerald-100 text-emerald-700",
+  failed: "bg-red-100 text-red-700",
+  refunded: "bg-purple-100 text-purple-700",
+};
 
 export default async function AdminPaymentsPage({
   searchParams,
@@ -30,6 +39,12 @@ export default async function AdminPaymentsPage({
     return matchesQuery && matchesStatus;
   });
 
+  const stats = [
+    { label: "Total", value: orders.length },
+    { label: "Paid", value: orders.filter((order) => order.payment.status === "paid").length },
+    { label: "Failed", value: orders.filter((order) => order.payment.status === "failed").length },
+  ];
+
   return (
     <div>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -37,6 +52,15 @@ export default async function AdminPaymentsPage({
           <h1 className="font-heading text-3xl text-dark">Payments</h1>
           <p className="mt-1 text-sm text-dark/50">Search and review Razorpay payments and order status.</p>
         </div>
+      </div>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        {stats.map((item) => (
+          <div key={item.label} className="rounded-xl border border-border bg-white p-4">
+            <p className="text-xs uppercase tracking-[0.25em] text-dark/40">{item.label}</p>
+            <p className="mt-2 font-heading text-2xl text-dark">{item.value}</p>
+          </div>
+        ))}
       </div>
 
       <form className="mt-6 flex flex-col gap-3 rounded-xl border border-border bg-white p-4 md:flex-row" method="get">
@@ -100,8 +124,16 @@ export default async function AdminPaymentsPage({
                     </td>
                     <td className="px-4 py-3">₹{order.total.toLocaleString("en-IN")}</td>
                     <td className="px-4 py-3 capitalize">{order.payment.method ?? "razorpay"}</td>
-                    <td className="px-4 py-3 capitalize">{order.payment.status}</td>
-                    <td className="px-4 py-3 capitalize">{order.status}</td>
+                    <td className="px-4 py-3">
+                      <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold capitalize ${STATUS_STYLES[order.payment.status] ?? "bg-slate-100 text-slate-700"}`}>
+                        {order.payment.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link href={`/admin/orders/${order.id}`} className="text-sm font-medium text-gold-dark hover:underline">
+                        {order.status}
+                      </Link>
+                    </td>
                     <td className="px-4 py-3 text-dark/50">
                       {new Date(order.createdAt).toLocaleString("en-IN")}
                     </td>
