@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, Sparkles, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useStore } from "@/context/store-context";
@@ -38,10 +39,16 @@ export default function Navbar() {
 
         <Link
           href="/"
-          className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap text-center font-heading text-[1.05rem] font-semibold tracking-[0.28em] text-[#7a1f1f] sm:text-[1.35rem]"
+          className="absolute left-1/2 -translate-x-1/2"
         >
-          <Sparkles size={16} className="text-gold-dark" />
-          <span>WEदेसी</span>
+          <Image 
+            src="/logo1.png"
+            alt="WEदेसी" 
+            width={280} 
+            height={140}
+            className="h-24 w-auto"
+            priority
+          />
         </Link>
 
         <div className="flex min-w-12 items-center justify-end gap-2">
