@@ -43,11 +43,12 @@ export interface OrderItem {
 
 export type OrderStatus =
   | "pending"
-  | "confirmed"
   | "paid"
+  | "confirmed"
+  | "shipped"
   | "delivered"
   | "cancelled"
-  | "refunded"; 
+  | "refunded";
 export type PaymentStatus = "created" | "pending" | "paid" | "failed" | "refunded";
 
 export interface Order {

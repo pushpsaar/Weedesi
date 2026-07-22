@@ -4,7 +4,7 @@
     "slug": "example",
     "name": "example",
     "sku": "example",
-    "category": "example",
+    "category": "kurtas",
     "description": "fasdgartgfbhrasez segers",
     "fabric": "gvzerasfgzse",
     "washCare": "szzs",
@@ -33,7 +33,9 @@
         ]
       }
     ],
-    "tags": [],
+    "tags": [
+      "sale"
+    ],
     "isActive": true,
     "createdAt": "2026-07-22T13:37:05.117Z"
   }

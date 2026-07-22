@@ -3,7 +3,9 @@ import { getOrders } from "@/lib/data";
 
 const STATUS_COLORS: Record<string, string> = {
   pending: "bg-amber-100 text-amber-700",
+  paid: "bg-emerald-100 text-emerald-700",
   confirmed: "bg-green-100 text-green-700",
+  shipped: "bg-sky-100 text-sky-700",
   delivered: "bg-blue-100 text-blue-700",
   cancelled: "bg-red-100 text-red-700",
   refunded: "bg-dark/10 text-dark/60",

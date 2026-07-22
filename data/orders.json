@@ -1,1 +1,51 @@
-[]
+[
+  {
+    "id": "cc1fd8dd-b275-486b-96db-f224d5efcc46",
+    "userId": "e157e16b-d028-4a62-b6af-2f72e1377205",
+    "items": [
+      {
+        "productId": "b4186648-6a13-4aee-bfa9-ebdb65a57aa8",
+        "name": "example",
+        "slug": "example",
+        "image": "/products/1784727417626-hz9pxf.jpeg",
+        "color": "Default",
+        "size": "M",
+        "qty": 1,
+        "price": 1
+      },
+      {
+        "productId": "b4186648-6a13-4aee-bfa9-ebdb65a57aa8",
+        "name": "example",
+        "slug": "example",
+        "image": "/products/1784727417626-hz9pxf.jpeg",
+        "color": "Default",
+        "size": "L",
+        "qty": 1,
+        "price": 1
+      }
+    ],
+    "customer": {
+      "name": "Tarzan",
+      "phone": "09303892155",
+      "email": "li8ningsupra@gmail.com",
+      "address": "e6 26",
+      "city": "bhopal",
+      "state": "Madhya Pradesh",
+      "pincode": "462016",
+      "country": "India"
+    },
+    "subtotal": 2,
+    "gst": 0,
+    "shipping": 0,
+    "discount": 0,
+    "total": 2,
+    "status": "cancelled",
+    "payment": {
+      "status": "failed",
+      "razorpayOrderId": "order_TGZiZhxUA3uGBY",
+      "razorpaySignature": "Payment cancelled by customer."
+    },
+    "createdAt": "2026-07-22T14:05:40.609Z",
+    "updatedAt": "2026-07-22T14:06:04.725Z"
+  }
+]
