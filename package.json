@@ -2,6 +2,10 @@
   "name": "vedesi",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
+  "packageManager": "npm@9.8.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
