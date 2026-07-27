@@ -10,6 +10,17 @@ const SQLITE_DB_PATH =
     ? path.join(os.tmpdir(), "vedesi.sqlite")
     : path.join(DATA_DIR, "vedesi.sqlite");
 
+export interface UserRow {
+  id: string;
+  name: string;
+  email: string;
+  passwordHash: string;
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt: string | null;
+  isBlocked: number;
+}
+
 export interface UserRecord {
   id: string;
   name: string;
@@ -17,8 +28,8 @@ export interface UserRecord {
   passwordHash: string;
   createdAt: string;
   updatedAt: string;
-  lastLoginAt?: string;
-  isBlocked?: boolean;
+  lastLoginAt?: string | null;
+  isBlocked: boolean;
 }
 
 let db: Database.Database | null = null;
@@ -101,22 +112,24 @@ function normalizeEmail(email: string): string {
 
 export function getUserByEmail(email: string): UserRecord | null {
   const row = getDb()
-    .prepare("SELECT * FROM users WHERE email = ?")
+    .prepare<[string], UserRow>("SELECT * FROM users WHERE email = ?")
     .get(normalizeEmail(email));
   if (!row) return null;
   return {
     ...row,
+    lastLoginAt: row.lastLoginAt ?? undefined,
     isBlocked: Boolean(row.isBlocked),
-  } as UserRecord;
+  };
 }
 
 export function getUserById(id: string): UserRecord | null {
-  const row = getDb().prepare("SELECT * FROM users WHERE id = ?").get(id);
+  const row = getDb().prepare<[string], UserRow>("SELECT * FROM users WHERE id = ?").get(id);
   if (!row) return null;
   return {
     ...row,
+    lastLoginAt: row.lastLoginAt ?? undefined,
     isBlocked: Boolean(row.isBlocked),
-  } as UserRecord;
+  };
 }
 
 export function createUser(user: UserRecord): void {
@@ -135,11 +148,12 @@ export function createUser(user: UserRecord): void {
 }
 
 export function getAllUsers(): UserRecord[] {
-  const rows = getDb().prepare("SELECT * FROM users ORDER BY createdAt DESC").all();
-  return rows.map((row: any) => ({
+  const rows = getDb().prepare<[], UserRow>("SELECT * FROM users ORDER BY createdAt DESC").all();
+  return rows.map((row) => ({
     ...row,
+    lastLoginAt: row.lastLoginAt ?? undefined,
     isBlocked: Boolean(row.isBlocked),
-  })) as UserRecord[];
+  }));
 }
 
 export function deleteUserById(id: string): void {
