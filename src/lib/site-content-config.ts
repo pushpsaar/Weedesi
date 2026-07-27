@@ -35,6 +35,7 @@ export interface PromoSectionItem {
 export interface SiteContent {
   hero: {
     title: string;
+    description: string;
     subtitle: string;
     buttonText: string;
     buttonLink: string;
@@ -58,6 +59,7 @@ export interface SiteContent {
 export const DEFAULT_SITE_CONTENT: SiteContent = {
   hero: {
     title: "Elegant kurtis for every day.",
+    description: "Discover modern Indian elegance with pieces designed for comfort, craftsmanship, and quiet confidence.",
     subtitle:
       "Explore handcrafted kurtis designed for comfort, beauty, and effortless style.",
     buttonText: "Shop Kurtis",
