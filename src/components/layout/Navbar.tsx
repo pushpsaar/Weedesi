@@ -10,6 +10,7 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 export default function Navbar() {
   const { setDrawerOpen } = useStore();
   const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     async function loadUser() {
@@ -21,7 +22,25 @@ export default function Navbar() {
         setUser(null);
       }
     }
+
     loadUser();
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const updateTheme = () => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    };
+
+    updateTheme();
+
+    const observer = new MutationObserver(() => {
+      updateTheme();
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -35,16 +54,27 @@ export default function Navbar() {
           <Menu size={22} strokeWidth={1.7} />
         </button>
 
-        <Link href="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="rounded-xl border border-transparent bg-transparent p-1.5 transition-colors dark:border-white/20 dark:bg-white/95 dark:shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-            <Image
-              src="/logo.png"
-              alt="WEदेसी"
-              width={196}
-              height={72}
-              className="h-13 w-auto object-contain"
-              priority
-            />
+        <Link href="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:-translate-y-1/2">
+          <div className="flex items-center justify-center">
+            {isDarkMode ? (
+              <Image
+                src="/logo%202.png"
+                alt="WEदेसी"
+                width={230}
+                height={85}
+                className="h-16 w-auto object-contain sm:h-18 lg:h-20"
+                priority
+              />
+            ) : (
+              <Image
+                src="/logo.png"
+                alt="WEदेसी"
+                width={230}
+                height={85}
+                className="h-16 w-auto object-contain sm:h-18 lg:h-20"
+                priority
+              />
+            )}
           </div>
         </Link>
 
