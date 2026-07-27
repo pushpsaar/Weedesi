@@ -5,31 +5,23 @@ import { saveOrder, getCouponByCode } from "@/lib/data";
 import { CartLine } from "@/context/store-context";
 import { Order, OrderItem } from "@/lib/types";
 import { cookies } from "next/headers";
+import { verifySessionToken, SESSION_COOKIE } from "@/lib/session";
 
 const GST_RATE = 0.05;
 const SHIPPING_FLAT = 0;
-const USER_COOKIE = "wedesi_user_session";
-
-function unsign(value: string) {
-  try {
-    return JSON.parse(Buffer.from(value, "base64url").toString("utf-8"));
-  } catch {
-    return null;
-  }
-}
 
 async function getSignedInCustomer() {
   const store = await cookies();
-  const token = store.get(USER_COOKIE)?.value;
+  const token = store.get(SESSION_COOKIE)?.value;
   if (!token) return null;
 
-  const payload = unsign(token);
-  if (!payload || payload.exp < Date.now()) {
-    store.delete(USER_COOKIE);
+  const payload = verifySessionToken(token);
+  if (!payload) {
+    store.delete(SESSION_COOKIE);
     return null;
   }
 
-  return { id: payload.userId as string, email: payload.email as string, name: payload.name as string };
+  return { id: payload.userId, email: payload.email, name: payload.name };
 }
 
 export async function POST(req: NextRequest) {

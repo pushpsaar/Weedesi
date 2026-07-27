@@ -1,31 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getOrderById, getOrders } from "@/lib/data";
-
-const USER_COOKIE = "wedesi_user_session";
-
-function unsign(value: string) {
-  try {
-    return JSON.parse(Buffer.from(value, "base64url").toString("utf-8"));
-  } catch {
-    return null;
-  }
-}
+import { verifySessionToken, SESSION_COOKIE } from "@/lib/session";
 
 async function getSignedInCustomer() {
   const store = await cookies();
-  const token = store.get(USER_COOKIE)?.value;
+  const token = store.get(SESSION_COOKIE)?.value;
   if (!token) return null;
 
-  const payload = unsign(token);
-  if (!payload || payload.exp < Date.now()) {
-    store.delete(USER_COOKIE);
+  const payload = verifySessionToken(token);
+  if (!payload) {
+    store.delete(SESSION_COOKIE);
     return null;
   }
 
   return {
-    id: payload.userId as string,
-    email: payload.email as string,
+    id: payload.userId,
+    email: payload.email,
   };
 }
 

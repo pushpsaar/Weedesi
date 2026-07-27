@@ -1,39 +1,11 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import fs from "fs/promises";
-import path from "path";
 import { cookies } from "next/headers";
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const USER_COOKIE = "wedesi_user_session";
-const USER_FILE = path.join(DATA_DIR, "users.json");
-
-interface UserRecord {
-  id: string;
-  name: string;
-  email: string;
-  passwordHash: string;
-  createdAt: string;
-  updatedAt: string;
-  lastLoginAt?: string;
-  isBlocked?: boolean;
-}
+import { getUserByEmail, updateUserLastLogin } from "@/lib/user-db";
+import { createSessionToken, SESSION_COOKIE, SESSION_MAX_AGE } from "@/lib/session";
 
 function isEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-function sign(value: string) {
-  return Buffer.from(value).toString("base64url");
-}
-
-async function readUsers(): Promise<UserRecord[]> {
-  const raw = await fs.readFile(USER_FILE, "utf-8");
-  return JSON.parse(raw) as UserRecord[];
-}
-
-async function writeUsers(users: UserRecord[]) {
-  await fs.writeFile(USER_FILE, JSON.stringify(users, null, 2), "utf-8");
 }
 
 export async function POST(request: Request) {
@@ -50,9 +22,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
     }
 
-    const users = await readUsers();
-    const user = users.find((entry) => entry.email.toLowerCase() === email);
-
+    const user = getUserByEmail(email);
     if (!user) {
       return NextResponse.json({ error: "Account does not exist." }, { status: 404 });
     }
@@ -66,22 +36,28 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Incorrect password." }, { status: 401 });
     }
 
-    const updated = users.map((entry) => entry.id === user.id ? { ...entry, lastLoginAt: new Date().toISOString(), updatedAt: new Date().toISOString() } : entry);
-    await writeUsers(updated);
+    const now = new Date().toISOString();
+    updateUserLastLogin(user.id, now);
 
-    const payload = JSON.stringify({ userId: user.id, email: user.email, name: user.name, exp: Date.now() + 1000 * 60 * 60 * 24 * 7 });
-    const token = sign(payload);
+    const token = createSessionToken({
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+      exp: Date.now() + SESSION_MAX_AGE * 1000,
+    });
+
     const store = await cookies();
-    store.set(USER_COOKIE, token, {
+    store.set(SESSION_COOKIE, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: SESSION_MAX_AGE,
     });
 
     return NextResponse.json({ ok: true, user: { id: user.id, name: user.name, email: user.email } });
-  } catch {
+  } catch (error) {
+    console.error("Login error:", error);
     return NextResponse.json({ error: "Unable to sign in right now." }, { status: 500 });
   }
 }
