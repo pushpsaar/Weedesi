@@ -1,0 +1,9 @@
+node_modules
+.env*
+.next
+build.log
+dist
+.vscode
+.DS_Store
+npm-debug.log
+package-lock.json
