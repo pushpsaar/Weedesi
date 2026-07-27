@@ -134,6 +134,10 @@ html:not(.dark) [class*="text-dark/"] {
   color: rgba(34, 22, 17, 0.72) !important;
 }
 
+html:not(.dark) [class~="text-white"] {
+  color: #221611 !important;
+}
+
 html:not(.dark) [class*="bg-white/"] {
   background-color: rgba(255, 255, 255, 0.96) !important;
 }
