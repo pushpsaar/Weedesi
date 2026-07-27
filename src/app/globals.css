@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --color-bg: #2c090b;
-  --color-surface: #461212;
-  --color-surface-soft: #5d1518;
-  --color-white: #f6e8e1;
+  --color-bg: #fdf7f2;
+  --color-surface: #fff8f2;
+  --color-surface-soft: #f5ebe2;
+  --color-white: #ffffff;
   --color-gold: #c38e68;
   --color-gold-dark: #a26c4b;
-  --color-dark: #f8efe8;
-  --color-muted: #d3b8ae;
-  --color-border: rgba(244, 214, 201, 0.16);
-  --color-shadow: rgba(0, 0, 0, 0.32);
+  --color-dark: #221611;
+  --color-muted: #7b6459;
+  --color-border: rgba(34, 22, 17, 0.11);
+  --color-shadow: rgba(0, 0, 0, 0.08);
   --font-heading: var(--font-cormorant);
   --font-body: var(--font-inter);
 }
@@ -40,8 +40,8 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(195, 102, 96, 0.18), transparent 32%),
-    linear-gradient(135deg, var(--color-bg) 0%, #2c0c0d 100%);
+    radial-gradient(circle at top left, rgba(195, 102, 96, 0.12), transparent 28%),
+    linear-gradient(135deg, var(--color-bg) 0%, #f4e8df 100%);
   color: var(--color-dark);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   text-rendering: optimizeLegibility;
@@ -110,6 +110,32 @@ h6 {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+html:not(.dark) body {
+  background:
+    radial-gradient(circle at top left, rgba(195, 102, 96, 0.12), transparent 28%),
+    linear-gradient(135deg, #fffdf9 0%, #f5e9de 100%);
+}
+
+html:not(.dark) [class*="bg-dark"] {
+  background-color: #ffffff !important;
+}
+
+html:not(.dark) [class*="border-dark"] {
+  border-color: rgba(34, 22, 17, 0.14) !important;
+}
+
+html:not(.dark) [class~="text-dark"] {
+  color: #221611 !important;
+}
+
+html:not(.dark) [class*="text-dark/"] {
+  color: rgba(34, 22, 17, 0.72) !important;
+}
+
+html:not(.dark) [class*="bg-white/"] {
+  background-color: rgba(255, 255, 255, 0.96) !important;
 }
 
 html.dark {

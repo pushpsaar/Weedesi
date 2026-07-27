@@ -31,27 +31,29 @@ export default function Hero({ content }: { content: SiteContent }) {
   const contentOpacity = Math.max(1 - scrollY / 900, 0.6);
 
   return (
-    <section className="relative overflow-hidden bg-transparent py-16 md:py-20">
-      <div className="section-shell grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+    <section className="relative overflow-hidden bg-transparent py-12 sm:py-16 md:py-20">
+      <div className="section-shell grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
+          className="px-4 md:px-0"
+          style={{ transform: `translateY(-${imageTranslate}px)` }}
+        >
+          <HeroSlider slides={slides} primaryImage={content.hero.primaryImage} />
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col gap-8 px-4 text-center md:px-0 md:text-left"
+          className="flex flex-col gap-6 px-4 text-center sm:px-0 md:text-left"
           style={{ transform: `translateY(-${contentTranslate}px)`, opacity: contentOpacity }}
         >
-          <div className="inline-flex items-center gap-3 rounded-full border border-gold/30 bg-white/75 px-4 py-2 text-[11px] uppercase tracking-[0.35em] text-gold-dark shadow-sm backdrop-blur-sm">
-            <Sparkles size={14} />
-            Luxury edit
-          </div>
-          <div className="space-y-5">
-            <p className="max-w-xl text-sm uppercase tracking-[0.35em] text-dark/50">{content.hero.subtitle}</p>
+          <div className="space-y-4">
             <h1 className="font-heading text-5xl leading-[0.96] tracking-[-0.03em] text-dark sm:text-6xl lg:text-[5.2rem]">
-              {content.hero.title}
+              Elegant kurtis for every day.
             </h1>
-            <p className="max-w-2xl text-base leading-8 text-dark/65 sm:text-lg">
-              {content.hero.description || "Discover modern Indian elegance with pieces designed for comfort, craftsmanship, and quiet confidence."}
-            </p>
           </div>
 
           <div className="flex flex-col gap-4 sm:flex-row">
@@ -64,27 +66,11 @@ export default function Hero({ content }: { content: SiteContent }) {
             </Link>
             <Link
               href="/shop?category=kurtis"
-              className="inline-flex items-center justify-center rounded-full border border-dark/20 bg-white px-8 py-4 text-sm font-semibold text-dark transition duration-300 hover:bg-white/90"
+              className="inline-flex items-center justify-center rounded-full border border-dark/20 bg-white px-8 py-4 text-sm font-semibold text-dark transition duration-300 hover:bg-white/90 dark:border-white/15 dark:bg-[#240d0d] dark:text-[#fff1ee]"
             >
               Explore Kurtis
             </Link>
           </div>
-
-          <div className="mt-4 flex flex-wrap gap-3 text-sm text-dark/65">
-            <span className="rounded-full border border-border/70 bg-white/80 px-4 py-2">Hand-finished tailoring</span>
-            <span className="rounded-full border border-border/70 bg-white/80 px-4 py-2">Soft premium fabrics</span>
-            <span className="rounded-full border border-border/70 bg-white/80 px-4 py-2">Effortless everyday luxury</span>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
-          className="px-4 md:px-0"
-          style={{ transform: `translateY(-${imageTranslate}px)` }}
-        >
-          <HeroSlider slides={slides} primaryImage={content.hero.primaryImage} />
         </motion.div>
       </div>
     </section>

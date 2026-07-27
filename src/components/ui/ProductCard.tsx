@@ -55,7 +55,7 @@ export default function ProductCard({ product }: { product: Product }) {
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
             {discount > 0 && (
-              <span className="absolute left-4 top-4 rounded-full bg-dark/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-white">
+              <span className="absolute left-4 top-4 rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-white">
                 -{discount}%
               </span>
             )}
