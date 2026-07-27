@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -9,6 +10,26 @@ import type { SiteContent } from "@/lib/site-content-config";
 export default function Hero({ content }: { content: SiteContent }) {
   const slides = content.hero.images?.length ? content.hero.images : ["/slider/Slider image 1.jpeg"];
 
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    let raf = 0;
+    const handler = () => {
+      const y = window.scrollY || window.pageYOffset;
+      raf = requestAnimationFrame(() => setScrollY(y));
+    };
+    window.addEventListener("scroll", handler, { passive: true });
+    handler();
+    return () => {
+      window.removeEventListener("scroll", handler);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const contentTranslate = Math.min(scrollY * 0.12, 120);
+  const imageTranslate = Math.min(scrollY * 0.08, 80);
+  const contentOpacity = Math.max(1 - scrollY / 900, 0.6);
+
   return (
     <section className="relative overflow-hidden bg-transparent py-16 md:py-20">
       <div className="section-shell grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
@@ -17,6 +38,7 @@ export default function Hero({ content }: { content: SiteContent }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="flex flex-col gap-8 px-4 text-center md:px-0 md:text-left"
+          style={{ transform: `translateY(-${contentTranslate}px)`, opacity: contentOpacity }}
         >
           <div className="inline-flex items-center gap-3 rounded-full border border-gold/30 bg-white/75 px-4 py-2 text-[11px] uppercase tracking-[0.35em] text-gold-dark shadow-sm backdrop-blur-sm">
             <Sparkles size={14} />
@@ -60,6 +82,7 @@ export default function Hero({ content }: { content: SiteContent }) {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
           className="px-4 md:px-0"
+          style={{ transform: `translateY(-${imageTranslate}px)` }}
         >
           <HeroSlider slides={slides} primaryImage={content.hero.primaryImage} />
         </motion.div>
