@@ -25,46 +25,53 @@ export default async function ShopPage({
   const categories = Array.from(new Set((await getActiveProducts()).map((p) => p.category)));
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-12 md:px-8">
-      <h1 className="font-heading text-4xl text-dark">Shop</h1>
-      <p className="mt-2 text-sm text-dark/50">{products.length} pieces</p>
+    <div className="bg-transparent py-20">
+      <div className="section-shell">
+        <div className="max-w-4xl">
+          <p className="text-[11px] uppercase tracking-[0.35em] text-gold-dark">Shop</p>
+          <h1 className="mt-4 font-heading text-5xl leading-tight text-dark sm:text-6xl">The Collection</h1>
+          <p className="mt-4 max-w-2xl text-base leading-8 text-dark/65">
+            Discover refined Indian fashion with effortless silhouettes, mindful fabrics, and distinctive details.
+          </p>
+        </div>
 
-      {categories.length > 0 && (
-        <div className="mt-6 flex flex-wrap gap-2">
-          <a
-            href="/shop"
-            className={`rounded-full border px-4 py-1.5 text-xs font-medium capitalize transition-colors ${
-              !category ? "border-dark bg-dark text-white" : "border-border text-dark/60"
-            }`}
-          >
-            All
-          </a>
-          {categories.map((c) => (
+        {categories.length > 0 && (
+          <div className="mt-10 flex flex-wrap gap-3">
             <a
-              key={c}
-              href={`/shop?category=${c}`}
-              className={`rounded-full border px-4 py-1.5 text-xs font-medium capitalize transition-colors ${
-                category === c ? "border-dark bg-dark text-white" : "border-border text-dark/60"
+              href="/shop"
+              className={`rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] transition ${
+                !category ? "border-dark bg-dark text-white" : "border-border bg-white text-dark/70"
               }`}
             >
-              {c}
+              All
             </a>
-          ))}
-        </div>
-      )}
-
-      <div className="mt-8">
-        {products.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border py-24 text-center text-sm text-dark/40">
-            No products found. Add products from the admin panel.
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-7">
-            {products.map((p) => (
-              <ProductCard key={p.id} product={p} />
+            {categories.map((c) => (
+              <a
+                key={c}
+                href={`/shop?category=${encodeURIComponent(c)}`}
+                className={`rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] transition ${
+                  category === c ? "border-dark bg-dark text-white" : "border-border bg-white text-dark/70"
+                }`}
+              >
+                {c}
+              </a>
             ))}
           </div>
         )}
+
+        <div className="mt-12">
+          {products.length === 0 ? (
+            <div className="rounded-[2rem] border border-dashed border-border/70 bg-surface/80 py-24 text-center text-sm text-dark/45">
+              No products found. Add products from the admin panel.
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-4 xl:gap-7">
+              {products.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

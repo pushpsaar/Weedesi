@@ -1,26 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --color-bg: #FAF7F2;
-  --color-surface: #FFFDF9;
-  --color-surface-strong: #F6EBDD;
-  --color-white: #FFFFFF;
-  --color-gold: #C8A96A;
-  --color-gold-dark: #A8895A;
-  --color-dark: #2B2B2B;
-  --color-muted: #6B6259;
-  --color-border: #E8E2D9;
+  --color-bg: #2c090b;
+  --color-surface: #461212;
+  --color-surface-soft: #5d1518;
+  --color-white: #f6e8e1;
+  --color-gold: #c38e68;
+  --color-gold-dark: #a26c4b;
+  --color-dark: #f8efe8;
+  --color-muted: #d3b8ae;
+  --color-border: rgba(244, 214, 201, 0.16);
+  --color-shadow: rgba(0, 0, 0, 0.32);
+  --font-heading: var(--font-cormorant);
+  --font-body: var(--font-inter);
 }
 
 @theme inline {
   --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
   --color-white: var(--color-white);
   --color-gold: var(--color-gold);
   --color-gold-dark: var(--color-gold-dark);
   --color-dark: var(--color-dark);
   --color-border: var(--color-border);
-  --font-heading: var(--font-cormorant);
-  --font-body: var(--font-inter);
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
 
 * {
@@ -33,72 +37,70 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(200, 169, 106, 0.18), transparent 28%),
-    linear-gradient(135deg, var(--color-bg) 0%, #fdf8ef 100%);
-  color: var(--color-dark);
-  font-family: var(--font-body), sans-serif;
   min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(195, 102, 96, 0.18), transparent 32%),
+    linear-gradient(135deg, var(--color-bg) 0%, #2c0c0d 100%);
+  color: var(--color-dark);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading), serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading), ui-serif, Georgia, serif;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
 }
 
 ::selection {
-  background: rgba(200, 169, 106, 0.3);
+  background: rgba(184, 143, 91, 0.3);
   color: var(--color-dark);
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
   border-radius: 999px;
 }
+
 ::-webkit-scrollbar-track {
-  background: var(--color-bg);
-}
-
-.glass {
-  background: rgba(255, 252, 247, 0.72);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.glass-dark {
-  background: rgba(43, 43, 43, 0.58);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .section-shell {
-  width: 100%;
-  max-width: 1320px;
+  width: min(100%, 1440px);
   margin-inline: auto;
-  padding-inline: clamp(0.75rem, 1.8vw, 1.25rem);
+  padding-inline: clamp(1rem, 2vw, 2.5rem);
 }
 
 .panel-surface {
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.83);
   border: 1px solid var(--color-border);
-  box-shadow: 0 18px 55px rgba(43, 43, 43, 0.06);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 24px 70px var(--color-shadow);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
 }
 
 .soft-shadow {
-  box-shadow: 0 22px 70px rgba(43, 43, 43, 0.07);
+  box-shadow: 0 28px 90px rgba(30, 24, 18, 0.08);
 }
 
 @keyframes float-soft {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-8px); }
 }
 
 .animate-float-soft {
-  animation: float-soft 7s ease-in-out infinite;
+  animation: float-soft 8s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -113,8 +115,8 @@ h1, h2, h3, h4, h5, h6 {
 html.dark {
   --color-bg: #470000;
   --color-surface: #5a0a0a;
-  --color-surface-strong: #2b0b0b;
-  --color-white: #5a0a0a;
+  --color-surface-soft: #2b0b0b;
+  --color-white: #f7ede4;
   --color-gold: #d89c72;
   --color-gold-dark: #f4b07a;
   --color-dark: #fff1ee;
@@ -126,7 +128,6 @@ html.dark body {
   background:
     radial-gradient(circle at top left, rgba(244, 176, 122, 0.17), transparent 26%),
     linear-gradient(135deg, var(--color-bg) 0%, #3d0404 100%);
-  color: var(--color-dark);
 }
 
 html.dark ::-webkit-scrollbar-thumb {
@@ -176,6 +177,10 @@ html.dark [class~="text-white"] {
 
 html.dark [class*="bg-white/"] {
   background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark [class*="border-dark"] {
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
 html.dark [class*="border-dark"] {

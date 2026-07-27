@@ -1,42 +1,176 @@
 [
   {
-    "id": "b4186648-6a13-4aee-bfa9-ebdb65a57aa8",
-    "slug": "example",
-    "name": "example",
-    "sku": "example",
+    "id": "7c0d9a54-5c60-4fbc-9e56-8a33e7c4e9a1",
+    "slug": "crimson-silk-kurta",
+    "name": "Crimson Silk Kurta",
+    "sku": "CRIMSON-01",
     "category": "kurtas",
-    "description": "fasdgartgfbhrasez segers",
-    "fabric": "gvzerasfgzse",
-    "washCare": "szzs",
-    "mrp": 1,
-    "salePrice": 1,
+    "description": "A rich crimson kurta with luxurious silk texture, perfect for evening celebrations.",
+    "fabric": "silk blend",
+    "washCare": "dry clean only",
+    "mrp": 3499,
+    "salePrice": 2199,
     "variants": [
       {
-        "color": "Default",
-        "colorHex": "#C8A96A",
+        "color": "Crimson",
+        "colorHex": "#7b1518",
         "images": [
-          "/products/1784727417626-hz9pxf.jpeg"
+          "/products/product-1.jpeg"
         ],
         "sizes": [
-          {
-            "size": "S",
-            "stock": 10
-          },
-          {
-            "size": "M",
-            "stock": 10
-          },
-          {
-            "size": "L",
-            "stock": 10
-          }
+          { "size": "S", "stock": 8 },
+          { "size": "M", "stock": 10 },
+          { "size": "L", "stock": 7 }
         ]
       }
     ],
-    "tags": [
-      "sale"
-    ],
+    "tags": ["sale"],
     "isActive": true,
-    "createdAt": "2026-07-22T13:37:05.117Z"
+    "createdAt": "2026-07-25T10:00:00.000Z"
+  },
+  {
+    "id": "bb6d6c32-995c-4501-bf09-65a2ea67a4da",
+    "slug": "burgundy-heritage-kurta",
+    "name": "Burgundy Heritage Kurta",
+    "sku": "BURG-02",
+    "category": "kurtas",
+    "description": "A refined burgundy kurta designed with heritage-inspired detailing and modern ease.",
+    "fabric": "cotton slub",
+    "washCare": "gentle wash",
+    "mrp": 2699,
+    "salePrice": 1799,
+    "variants": [
+      {
+        "color": "Burgundy",
+        "colorHex": "#5b1315",
+        "images": [
+          "/products/product-2.jpeg"
+        ],
+        "sizes": [
+          { "size": "S", "stock": 12 },
+          { "size": "M", "stock": 12 },
+          { "size": "L", "stock": 12 }
+        ]
+      }
+    ],
+    "tags": ["sale"],
+    "isActive": true,
+    "createdAt": "2026-07-25T10:10:00.000Z"
+  },
+  {
+    "id": "33f8b6e4-584e-4dc2-8c77-bc8d75d8a747",
+    "slug": "saffron-bloom-kurta",
+    "name": "Saffron Bloom Kurta",
+    "sku": "SAFF-03",
+    "category": "kurtas",
+    "description": "A warm saffron kurta with floral motifs, designed for luxurious daytime charm.",
+    "fabric": "cotton silk",
+    "washCare": "cold wash",
+    "mrp": 2299,
+    "salePrice": 1699,
+    "variants": [
+      {
+        "color": "Saffron",
+        "colorHex": "#b55f2a",
+        "images": [
+          "/products/product-7.jpeg"
+        ],
+        "sizes": [
+          { "size": "S", "stock": 10 },
+          { "size": "M", "stock": 10 },
+          { "size": "L", "stock": 9 }
+        ]
+      }
+    ],
+    "tags": ["new", "sale"],
+    "isActive": true,
+    "createdAt": "2026-07-25T10:20:00.000Z"
+  },
+  {
+    "id": "ef8d1d22-3a4f-4b91-ba7b-7d8e1199b69f",
+    "slug": "verdant-horizon-kurta",
+    "name": "Verdant Horizon Kurta",
+    "sku": "VERD-04",
+    "category": "kurtas",
+    "description": "A fresh green kurta with elegant print work, tailored for serene luxury.",
+    "fabric": "linen blend",
+    "washCare": "gentle wash",
+    "mrp": 2499,
+    "salePrice": 1799,
+    "variants": [
+      {
+        "color": "Verdant",
+        "colorHex": "#4f7a34",
+        "images": [
+          "/products/product-8.jpeg"
+        ],
+        "sizes": [
+          { "size": "S", "stock": 11 },
+          { "size": "M", "stock": 11 },
+          { "size": "L", "stock": 10 }
+        ]
+      }
+    ],
+    "tags": ["new", "sale"],
+    "isActive": true,
+    "createdAt": "2026-07-25T10:30:00.000Z"
+  },
+  {
+    "id": "a3f45e76-6922-4b35-8960-94f446c431e2",
+    "slug": "midnight-echo-kurta",
+    "name": "Midnight Echo Kurta",
+    "sku": "MIDN-05",
+    "category": "kurtas",
+    "description": "A bold black kurta with subtle all-over motifs, perfect for elegant evening wear.",
+    "fabric": "viscose blend",
+    "washCare": "cold wash",
+    "mrp": 2599,
+    "salePrice": 1899,
+    "variants": [
+      {
+        "color": "Midnight",
+        "colorHex": "#1e1e22",
+        "images": [
+          "/products/product-9.jpeg"
+        ],
+        "sizes": [
+          { "size": "S", "stock": 9 },
+          { "size": "M", "stock": 9 },
+          { "size": "L", "stock": 8 }
+        ]
+      }
+    ],
+    "tags": ["new", "sale"],
+    "isActive": true,
+    "createdAt": "2026-07-25T10:40:00.000Z"
+  },
+  {
+    "id": "b6f311c4-8e17-4d93-b28c-49fa05672d48",
+    "slug": "onyx-heritage-kurta",
+    "name": "Onyx Heritage Kurta",
+    "sku": "ONYX-06",
+    "category": "kurtas",
+    "description": "A refined dark kurta with heritage-inspired print, crafted for a premium evening look.",
+    "fabric": "modal cotton",
+    "washCare": "hand wash cold",
+    "mrp": 2799,
+    "salePrice": 1999,
+    "variants": [
+      {
+        "color": "Onyx",
+        "colorHex": "#18131a",
+        "images": [
+          "/products/product-12.jpeg"
+        ],
+        "sizes": [
+          { "size": "S", "stock": 10 },
+          { "size": "M", "stock": 10 },
+          { "size": "L", "stock": 10 }
+        ]
+      }
+    ],
+    "tags": ["new", "sale"],
+    "isActive": true,
+    "createdAt": "2026-07-25T10:50:00.000Z"
   }
 ]

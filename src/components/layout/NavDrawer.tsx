@@ -8,7 +8,7 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 
 const LINKS = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/shop?category=kurtis", label: "Explore Kurtis", icon: ShoppingBag },
+  { href: "/shop?category=kurtis", label: "Kurtis", icon: ShoppingBag },
   { href: "/shop", label: "Shop All", icon: ShoppingCart },
   { href: "/wishlist", label: "Wishlist", icon: Heart },
   { href: "/cart", label: "Cart", icon: ShoppingBag },
@@ -30,7 +30,7 @@ export default function NavDrawer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.24 }}
-            className="fixed inset-0 z-40 bg-dark/45 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-dark/50 backdrop-blur-sm"
             onClick={() => setDrawerOpen(false)}
           />
           <motion.aside
@@ -38,50 +38,51 @@ export default function NavDrawer() {
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
-            transition={{ type: "spring", stiffness: 260, damping: 30 }}
-            className="glass fixed left-0 top-0 z-50 flex h-screen w-[88%] max-w-sm flex-col overflow-hidden rounded-r-[28px] border-r border-border/80 shadow-[0_30px_90px_rgba(0,0,0,0.18)]"
+            transition={{ type: "spring", stiffness: 240, damping: 28 }}
+            className="glass fixed left-0 top-0 z-50 flex h-screen w-[92%] max-w-[420px] flex-col overflow-hidden border-r border-border/80 shadow-[0_30px_90px_rgba(0,0,0,0.24)]"
           >
             <div className="flex items-center justify-between border-b border-border/80 px-6 py-5">
-              <div className="flex items-center gap-2">
-                <div className="rounded-full border border-gold/30 bg-white/70 p-1.5 text-gold-dark">
-                  <Sparkles size={15} />
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/30 bg-white text-gold shadow-sm">
+                  <Sparkles size={18} />
                 </div>
-                <span className="font-heading text-2xl tracking-[0.18em] text-[#7a1f1f]">
-                  WEदेसी
-                </span>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.32em] text-gold-dark">WEदेसी</p>
+                  <p className="text-sm font-semibold text-dark">Luxury Edit</p>
+                </div>
               </div>
               <button
                 aria-label="Close menu"
                 onClick={() => setDrawerOpen(false)}
-                className="rounded-full border border-border/70 bg-white/70 p-2 text-dark transition-colors hover:bg-white"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-border/70 bg-white text-dark transition hover:bg-white/90"
               >
                 <X size={18} />
               </button>
             </div>
 
             <div className="flex min-h-0 flex-1 flex-col">
-              <nav className="flex-1 overflow-y-auto overscroll-contain px-3 py-4">
+              <nav className="flex-1 overflow-y-auto overscroll-contain px-5 py-6">
                 {LINKS.map((link, i) => {
                   const Icon = link.icon;
 
                   return (
                     <motion.div
                       key={link.href + link.label}
-                      initial={{ opacity: 0, x: -12 }}
+                      initial={{ opacity: 0, x: -18 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.04 * i, duration: 0.25 }}
+                      transition={{ delay: 0.05 * i, duration: 0.28 }}
                     >
                       <Link
                         href={link.href}
                         onClick={() => setDrawerOpen(false)}
-                        className="mb-2 flex items-center justify-between rounded-2xl px-4 py-3 text-[15px] tracking-[0.02em] text-dark/80 transition-all duration-200 hover:bg-white/80 hover:text-dark"
+                        className="mb-3 flex items-center justify-between rounded-[1.5rem] border border-border/70 bg-white/90 px-5 py-4 text-sm font-medium tracking-[0.02em] text-dark transition hover:border-gold/40 hover:bg-gold/5"
                       >
                         <span className="flex items-center gap-3">
-                          <Icon size={17} strokeWidth={1.8} />
+                          <Icon size={18} strokeWidth={1.7} />
                           <span>{link.label}</span>
                         </span>
                         {link.label === "Cart" && cartCount > 0 && (
-                          <span className="rounded-full bg-gold px-2.5 py-0.5 text-[10px] font-semibold text-white">
+                          <span className="rounded-full bg-gold px-2.5 py-1 text-[11px] font-semibold text-white">
                             {cartCount}
                           </span>
                         )}
@@ -91,16 +92,15 @@ export default function NavDrawer() {
                 })}
               </nav>
 
-              <div className="border-t border-border/80 px-5 py-4">
-                <div className="mb-4 flex items-center justify-between rounded-2xl border border-border/70 bg-white/70 px-3 py-2.5">
+              <div className="border-t border-border/80 px-6 py-5">
+                <div className="mb-4 flex items-center justify-between rounded-2xl border border-border/70 bg-white/80 px-4 py-3">
                   <span className="text-[10px] uppercase tracking-[0.28em] text-dark/55">Theme</span>
                   <ThemeToggle />
                 </div>
-
                 <Link
                   href="/admin/login"
                   onClick={() => setDrawerOpen(false)}
-                  className="flex items-center gap-2 text-[11px] uppercase tracking-[0.28em] text-gold-dark transition-colors hover:text-dark"
+                  className="flex items-center gap-2 text-sm uppercase tracking-[0.28em] text-gold-dark transition hover:text-dark"
                 >
                   <LogIn size={14} strokeWidth={1.8} />
                   Admin Login
