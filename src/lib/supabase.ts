@@ -11,6 +11,13 @@ export type SupabaseRelationship = {
   referencedColumns: string[];
 };
 
+type SupabaseTable<Row> = {
+  Row: Row;
+  Insert: Row;
+  Update: Partial<Row>;
+  Relationships: SupabaseRelationship[];
+};
+
 export interface ProductRow {
   id: string;
   slug: string;
@@ -80,42 +87,12 @@ export interface SiteContentRow {
 export interface Database {
   public: {
     Tables: {
-      users: {
-        Row: UserRow;
-        Insert: UserRow;
-        Update: Partial<UserRow>;
-        Relationships: [];
-      };
-      products: {
-        Row: ProductRow;
-        Insert: ProductRow;
-        Update: Partial<ProductRow>;
-        Relationships: [];
-      };
-      orders: {
-        Row: OrderRow;
-        Insert: OrderRow;
-        Update: Partial<OrderRow>;
-        Relationships: [];
-      };
-      coupons: {
-        Row: CouponRow;
-        Insert: CouponRow;
-        Update: Partial<CouponRow>;
-        Relationships: [];
-      };
-      admin_credentials: {
-        Row: AdminCredsRow;
-        Insert: AdminCredsRow;
-        Update: Partial<AdminCredsRow>;
-        Relationships: [];
-      };
-      site_content: {
-        Row: SiteContentRow;
-        Insert: SiteContentRow;
-        Update: Partial<SiteContentRow>;
-        Relationships: [];
-      };
+      users: SupabaseTable<UserRow>;
+      products: SupabaseTable<ProductRow>;
+      orders: SupabaseTable<OrderRow>;
+      coupons: SupabaseTable<CouponRow>;
+      admin_credentials: SupabaseTable<AdminCredsRow>;
+      site_content: SupabaseTable<SiteContentRow>;
     };
     Views: {};
     Functions: {};
