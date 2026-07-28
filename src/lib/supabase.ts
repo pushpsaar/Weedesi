@@ -1,29 +1,138 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { Pool } from "pg";
 
-let supabaseAdminClient: ReturnType<typeof createClient> | null = null;
+export type Json = string | number | boolean | null | { [key: string]: Json } | Json[];
+
+export type SupabaseRelationship = {
+  foreignKeyName: string;
+  columns: string[];
+  isOneToOne?: boolean;
+  referencedRelation: string;
+  referencedColumns: string[];
+};
+
+export interface ProductRow {
+  id: string;
+  slug: string;
+  name: string;
+  sku: string;
+  category: string;
+  collection: string | null;
+  description: string;
+  fabric: string | null;
+  wash_care: string | null;
+  mrp: number;
+  sale_price: number;
+  variants: Json;
+  tags: string[];
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface OrderRow {
+  id: string;
+  user_id: string | null;
+  items: Json;
+  customer: Json;
+  subtotal: number;
+  gst: number;
+  shipping: number;
+  discount: number;
+  total: number;
+  coupon_code: string | null;
+  status: string;
+  payment: Json;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CouponRow {
+  code: string;
+  type: string;
+  value: number;
+  active: boolean;
+  min_order_value: number | null;
+}
+
+export interface UserRow {
+  id: string;
+  name: string;
+  email: string;
+  password_hash: string;
+  created_at: string;
+  updated_at: string;
+  last_login_at: string | null;
+  is_blocked: boolean;
+}
+
+export interface AdminCredsRow {
+  id: string;
+  username: string;
+  salt: string;
+  hash: string;
+}
+
+export interface SiteContentRow {
+  id: string;
+  content: Json;
+}
+
+export interface Database {
+  public: {
+    Tables: {
+      users: {
+        Row: UserRow;
+        Insert: UserRow;
+        Update: Partial<UserRow>;
+        Relationships: [];
+      };
+      products: {
+        Row: ProductRow;
+        Insert: ProductRow;
+        Update: Partial<ProductRow>;
+        Relationships: [];
+      };
+      orders: {
+        Row: OrderRow;
+        Insert: OrderRow;
+        Update: Partial<OrderRow>;
+        Relationships: [];
+      };
+      coupons: {
+        Row: CouponRow;
+        Insert: CouponRow;
+        Update: Partial<CouponRow>;
+        Relationships: [];
+      };
+      admin_credentials: {
+        Row: AdminCredsRow;
+        Insert: AdminCredsRow;
+        Update: Partial<AdminCredsRow>;
+        Relationships: [];
+      };
+      site_content: {
+        Row: SiteContentRow;
+        Insert: SiteContentRow;
+        Update: Partial<SiteContentRow>;
+        Relationships: [];
+      };
+    };
+    Views: {};
+    Functions: {};
+  };
+}
+
 let pool: Pool | null = null;
 let schemaInitialized = false;
 
-function getSupabaseAdmin() {
-  if (supabaseAdminClient) return supabaseAdminClient;
-
-  const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error(
-      "Missing Supabase environment variables. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY."
-    );
-  }
-
-  supabaseAdminClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+export const supabaseAdmin: SupabaseClient<Database> = createClient<Database, "public">(
+  process.env.SUPABASE_URL ?? "",
+  process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
+  {
     auth: { persistSession: false },
     global: { fetch },
-  });
-
-  return supabaseAdminClient;
-}
+  }
+);
 
 function getDatabaseUrl(): string {
   const DATABASE_URL = process.env.DATABASE_URL ?? process.env.SUPABASE_DATABASE_URL;
@@ -147,7 +256,6 @@ export async function ensureSupabaseSchema(): Promise<void> {
 }
 
 async function migrateAdminCredentials(): Promise<void> {
-  const supabaseAdmin = getSupabaseAdmin();
   const { data, error } = await supabaseAdmin
     .from("admin_credentials")
     .select("id")
@@ -165,7 +273,6 @@ async function migrateAdminCredentials(): Promise<void> {
 }
 
 async function migrateSiteContent(): Promise<void> {
-  const supabaseAdmin = getSupabaseAdmin();
   const { data, error } = await supabaseAdmin
     .from("site_content")
     .select("id")
@@ -182,7 +289,6 @@ async function migrateSiteContent(): Promise<void> {
 }
 
 async function migrateJsonUsers(): Promise<void> {
-  const supabaseAdmin = getSupabaseAdmin();
   const { data, error } = await supabaseAdmin.from("users").select("id").limit(1);
   if (error) {
     console.error("Supabase users check failed:", error);
@@ -197,7 +303,6 @@ async function migrateJsonUsers(): Promise<void> {
 }
 
 async function ensureStorageBucket(): Promise<void> {
-  const supabaseAdmin = getSupabaseAdmin();
   const bucket = getStorageBucket();
 
   const { data, error } = await supabaseAdmin.storage.listBuckets();
@@ -213,14 +318,12 @@ async function ensureStorageBucket(): Promise<void> {
 }
 
 export async function getSupabaseStorageBucketUrl(path: string): Promise<string> {
-  const supabaseAdmin = getSupabaseAdmin();
   const bucket = getStorageBucket();
   const { data } = supabaseAdmin.storage.from(bucket).getPublicUrl(path);
   return data.publicUrl;
 }
 
 export async function uploadSupabaseStorageFile(filePath: string, data: Buffer, contentType: string) {
-  const supabaseAdmin = getSupabaseAdmin();
   const bucket = getStorageBucket();
   await ensureStorageBucket();
   const { error } = await supabaseAdmin.storage.from(bucket).upload(filePath, data, {
@@ -237,7 +340,6 @@ export async function uploadSupabaseStorageFile(filePath: string, data: Buffer, 
 }
 
 export async function listSupabaseStorageFiles(prefix = ""): Promise<string[]> {
-  const supabaseAdmin = getSupabaseAdmin();
   const bucket = getStorageBucket();
   await ensureStorageBucket();
 
@@ -268,4 +370,3 @@ export async function listSupabaseStorageFiles(prefix = ""): Promise<string[]> {
   return result;
 }
 
-export { getSupabaseAdmin as supabaseAdmin };

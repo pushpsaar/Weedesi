@@ -31,7 +31,7 @@ function getSessionSecret(): string {
 async function getAdminCreds(): Promise<AdminCreds> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<AdminCreds>("admin_credentials")
+    .from("admin_credentials")
     .select("username, salt, hash")
     .eq("id", "default")
     .maybeSingle();

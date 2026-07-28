@@ -147,7 +147,7 @@ function serializeCoupon(coupon: Coupon) {
 export async function getProducts(): Promise<Product[]> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<ProductRow>("products")
+    .from("products")
     .select("*")
     .order("created_at", { ascending: false });
 
@@ -158,7 +158,7 @@ export async function getProducts(): Promise<Product[]> {
 export async function getActiveProducts(): Promise<Product[]> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<ProductRow>("products")
+    .from("products")
     .select("*")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
@@ -170,7 +170,7 @@ export async function getActiveProducts(): Promise<Product[]> {
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<ProductRow>("products")
+    .from("products")
     .select("*")
     .ilike("slug", slug)
     .maybeSingle();
@@ -182,7 +182,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function getProductById(id: string): Promise<Product | null> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<ProductRow>("products")
+    .from("products")
     .select("*")
     .eq("id", id)
     .maybeSingle();
@@ -193,7 +193,7 @@ export async function getProductById(id: string): Promise<Product | null> {
 
 export async function saveProduct(product: Product): Promise<void> {
   await ensureSupabaseSchema();
-  const serialized = serializeProduct(product);
+  const serialized: ProductRow = serializeProduct(product);
   const { error } = await supabaseAdmin.from("products").upsert(serialized);
   if (error) throw error;
 }
@@ -209,7 +209,7 @@ export async function deleteProduct(id: string): Promise<void> {
 export async function getOrders(): Promise<Order[]> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<OrderRow>("orders")
+    .from("orders")
     .select("*")
     .order("created_at", { ascending: false });
 
@@ -220,7 +220,7 @@ export async function getOrders(): Promise<Order[]> {
 export async function getOrderById(id: string): Promise<Order | null> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<OrderRow>("orders")
+    .from("orders")
     .select("*")
     .eq("id", id)
     .maybeSingle();
@@ -231,7 +231,7 @@ export async function getOrderById(id: string): Promise<Order | null> {
 
 export async function saveOrder(order: Order): Promise<void> {
   await ensureSupabaseSchema();
-  const serialized = serializeOrder(order);
+  const serialized: OrderRow = serializeOrder(order);
   const { error } = await supabaseAdmin.from("orders").upsert(serialized);
   if (error) throw error;
 }
@@ -241,7 +241,7 @@ export async function saveOrder(order: Order): Promise<void> {
 export async function getCoupons(): Promise<Coupon[]> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<CouponRow>("coupons")
+    .from("coupons")
     .select("*")
     .order("code", { ascending: true });
 
@@ -252,7 +252,7 @@ export async function getCoupons(): Promise<Coupon[]> {
 export async function getCouponByCode(code: string): Promise<Coupon | null> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<CouponRow>("coupons")
+    .from("coupons")
     .select("*")
     .ilike("code", code)
     .maybeSingle();
@@ -263,7 +263,7 @@ export async function getCouponByCode(code: string): Promise<Coupon | null> {
 
 export async function saveCoupon(coupon: Coupon): Promise<void> {
   await ensureSupabaseSchema();
-  const serialized = serializeCoupon(coupon);
+  const serialized: CouponRow = serializeCoupon(coupon);
   const { error } = await supabaseAdmin.from("coupons").upsert(serialized);
   if (error) throw error;
 }

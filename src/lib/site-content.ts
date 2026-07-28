@@ -3,8 +3,7 @@ import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content-confi
 
 export async function getSiteContent(): Promise<SiteContent> {
   await ensureSupabaseSchema();
-  const supabase = supabaseAdmin();
-  const { data, error } = await supabase.from("site_content").select("content").eq("id", "default").maybeSingle();
+  const { data, error } = await supabaseAdmin.from("site_content").select("content").eq("id", "default").maybeSingle();
   if (error) throw error;
   if (!data || !data.content) return DEFAULT_SITE_CONTENT;
   const parsed = data.content as Partial<SiteContent>;
@@ -22,8 +21,7 @@ export async function getSiteContent(): Promise<SiteContent> {
 
 export async function saveSiteContent(content: SiteContent): Promise<SiteContent> {
   await ensureSupabaseSchema();
-  const supabase = supabaseAdmin();
-  const { error } = await supabase.from("site_content").upsert({ id: "default", content });
+  const { error } = await supabaseAdmin.from("site_content").upsert({ id: "default", content });
   if (error) throw error;
   return content;
 }

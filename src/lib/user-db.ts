@@ -42,7 +42,7 @@ function mapRowToUser(row: UserRow): UserRecord {
 export async function getUserByEmail(email: string): Promise<UserRecord | null> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<UserRow>("users")
+    .from("users")
     .select("*")
     .eq("email", normalizeEmail(email))
     .maybeSingle();
@@ -54,7 +54,7 @@ export async function getUserByEmail(email: string): Promise<UserRecord | null> 
 export async function getUserById(id: string): Promise<UserRecord | null> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<UserRow>("users")
+    .from("users")
     .select("*")
     .eq("id", id)
     .maybeSingle();
@@ -82,7 +82,7 @@ export async function createUser(user: UserRecord): Promise<void> {
 export async function getAllUsers(): Promise<UserRecord[]> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin
-    .from<UserRow>("users")
+    .from("users")
     .select("*")
     .order("created_at", { ascending: false });
 
@@ -99,7 +99,7 @@ export async function deleteUserById(id: string): Promise<void> {
 export async function updateUserIsBlocked(id: string, isBlocked: boolean): Promise<void> {
   await ensureSupabaseSchema();
   const { error } = await supabaseAdmin
-    .from("users")
+    .from<UserRow, UserRow>("users")
     .update({ is_blocked: isBlocked, updated_at: new Date().toISOString() })
     .eq("id", id);
 
