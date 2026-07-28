@@ -4,6 +4,7 @@ import "./globals.css";
 import { StoreProvider } from "@/context/store-context";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import Faq from "@/components/layout/Faq";
 import NavDrawer from "@/components/layout/NavDrawer";
 
 const cormorant = Cormorant_Garamond({
@@ -65,6 +66,7 @@ export default function RootLayout({
           <Navbar />
           <NavDrawer />
           <main className="flex-1">{children}</main>
+          <Faq />
           <Footer />
         </StoreProvider>
       </body>
