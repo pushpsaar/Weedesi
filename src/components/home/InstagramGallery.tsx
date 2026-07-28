@@ -1,6 +1,7 @@
 import Image from "next/image";
+import type { SiteContent } from "@/lib/site-content-config";
 
-const galleryImages = [
+const DEFAULT_GALLERY_IMAGES = [
   "/slider/Slider image 1.jpeg",
   "/slider/Slider image 2.jpeg",
   "/slider/Slider image 3.jpeg",
@@ -9,7 +10,20 @@ const galleryImages = [
   "/slider/collection-1 (1).jpeg",
 ];
 
-export default function InstagramGallery() {
+export default function InstagramGallery({ content }: { content?: SiteContent }) {
+  const galleryImages = content
+    ? Array.from(
+        new Set([
+          ...(content.hero?.images ?? []),
+          ...(content.banners ?? []).map((item) => item.image),
+          ...(content.collections ?? []).map((item) => item.image),
+          ...(content.promoSections ?? []).map((item) => item.image),
+          ...(content.categoryImages ?? []).map((item) => item.image),
+          ...DEFAULT_GALLERY_IMAGES,
+        ])
+      )
+    : DEFAULT_GALLERY_IMAGES;
+
   return (
     <section className="section-shell px-4 py-16 sm:px-6 md:px-8 lg:py-20">
       <div className="mb-8 text-center">
@@ -19,7 +33,10 @@ export default function InstagramGallery() {
       </div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
         {galleryImages.map((src, i) => (
-          <div key={src} className="group relative aspect-square overflow-hidden rounded-[1rem] border border-border/70 bg-white shadow-[0_10px_30px_rgba(43,43,43,0.06)]">
+          <div
+            key={src}
+            className="group relative aspect-square overflow-hidden rounded-[1rem] border border-border/70 bg-white shadow-[0_10px_30px_rgba(43,43,43,0.06)]"
+          >
             <Image
               src={src}
               alt={`Gallery image ${i + 1}`}

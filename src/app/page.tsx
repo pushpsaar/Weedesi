@@ -76,13 +76,44 @@ export default async function HomePage() {
         products={bestSellers}
         viewAllHref="/shop?tag=best-seller"
       />
+      <section className="section-shell px-4 py-10 sm:px-6 md:px-8 lg:py-14">
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-gold-dark">Best seller styling</p>
+            <h2 className="mt-3 font-heading text-4xl leading-tight text-dark sm:text-5xl">Shop the imagery</h2>
+            <p className="mt-3 max-w-2xl text-base leading-8 text-dark/65">
+              A rich visual mix from our slider, collection and promo images to inspire the way you wear WEदेसी.
+            </p>
+          </div>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {Array.from(
+            new Set([
+              ...siteContent.hero.images,
+              ...siteContent.banners.map((item) => item.image),
+              ...siteContent.collections.map((item) => item.image),
+              ...siteContent.promoSections.map((item) => item.image),
+              ...siteContent.categoryImages.map((item) => item.image),
+            ])
+          ).map((src) => (
+            <div key={src} className="relative overflow-hidden rounded-[1.75rem] border border-border/70 bg-white shadow-[0_16px_45px_rgba(43,43,43,0.08)]">
+              <img
+                src={src}
+                alt="Decorative product image"
+                className="h-64 w-full object-cover transition duration-500 hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+            </div>
+          ))}
+        </div>
+      </section>
       <ProductRail
         title="Trending Now"
         products={trending}
         viewAllHref="/shop"
       />
       <Testimonials />
-      <InstagramGallery />
+      <InstagramGallery content={siteContent} />
       <Newsletter />
     </>
   );

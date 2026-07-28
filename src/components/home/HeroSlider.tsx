@@ -48,7 +48,7 @@ export default function HeroSlider({
   }
 
   return (
-    <div className="relative h-[420px] w-full overflow-hidden rounded-[2rem] border border-border/70 bg-bg shadow-[0_24px_90px_rgba(43,43,43,0.14)] sm:h-[500px] lg:h-[600px]">
+    <div className="relative h-screen w-full overflow-hidden rounded-[2rem] border border-border/70 bg-bg shadow-[0_24px_90px_rgba(43,43,43,0.14)] md:h-[500px] lg:h-[600px] xl:h-[650px]">
       {slides.map((src, index) => (
         <div
           key={src}
