@@ -116,7 +116,7 @@ export default function ProductBuyBox({ product }: { product: Product }) {
         </button>
         <button
           onClick={() => handleAdd(true)}
-          className="flex-1 rounded-full bg-dark px-6 py-3.5 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
+          className="flex-1 rounded-full bg-[#7a0f0f] dark:bg-dark px-6 py-3.5 text-sm font-medium text-white transition-transform hover:scale-[1.02] hover:bg-[#8f1a1a] dark:hover:bg-[#2a1212]"
         >
           Buy Now
         </button>

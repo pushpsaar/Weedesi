@@ -25,15 +25,38 @@ export default async function ShopPage({
   const categories = Array.from(new Set((await getActiveProducts()).map((p) => p.category)));
 
   return (
-    <div className="bg-transparent py-20">
-      <div className="section-shell">
-        <div className="max-w-4xl">
-          <p className="text-[11px] uppercase tracking-[0.35em] text-gold-dark">Shop</p>
-          <h1 className="mt-4 font-heading text-5xl leading-tight text-dark sm:text-6xl">The Collection</h1>
-          <p className="mt-4 max-w-2xl text-base leading-8 text-dark/65">
-            Discover refined Indian fashion with effortless silhouettes, mindful fabrics, and distinctive details.
-          </p>
+    <div className="bg-transparent">
+      {/* Tall red strip hero */}
+      <div className="w-full bg-[#7a0f0f] dark:bg-[#180707] text-white">
+        <div className="section-shell flex h-56 items-center justify-center sm:h-72 lg:h-96">
+          <div className="flex flex-col items-center justify-center gap-6 text-center">
+            <div className="flex items-center gap-6">
+              <img src="/logo.png" alt="WEदेसी" className="block dark:hidden h-16 w-auto" />
+              <img src="/logo%202.png" alt="WEदेसी" className="hidden dark:block h-16 w-auto" />
+            </div>
+            <div className="font-heading text-2xl font-bold sm:text-4xl">Where Tradition meets elegance</div>
+          </div>
         </div>
+      </div>
+
+      <div className="bg-transparent py-20">
+        <div className="section-shell">
+          <div className="max-w-4xl">
+            <p className="text-[11px] uppercase tracking-[0.35em] text-gold-dark">Shop</p>
+            <h1 className="mt-4 font-heading text-5xl leading-tight text-dark sm:text-6xl">The Collection</h1>
+            <p className="mt-4 max-w-2xl text-base leading-8 text-dark/65">
+              Discover refined Indian fashion with effortless silhouettes, mindful fabrics, and distinctive details.
+            </p>
+
+            <div className="mt-6 rounded-lg bg-white/60 p-6 shadow-sm dark:bg-[#0f0606]/60">
+              <h2 className="font-semibold text-lg text-dark">About WEदेसी</h2>
+              <p className="mt-2 text-sm text-dark/70">
+                WEदेसी curates handcrafted kurtis that blend timeless tradition with modern comfort. Each piece is thoughtfully designed
+                for everyday elegance — breathable fabrics, careful stitching, and vibrant prints. Shop confidently with easy returns,
+                secure payments, and attentive customer care.
+              </p>
+            </div>
+          </div>
 
         {categories.length > 0 && (
           <div className="mt-10 flex flex-wrap gap-3">

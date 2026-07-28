@@ -91,7 +91,7 @@ export default function ProductCard({ product }: { product: Product }) {
               <button
                 type="button"
                 onClick={handleQuickBuy}
-                className="flex-1 rounded-full bg-dark px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-gold/90"
+                className="flex-1 rounded-full bg-[#7a0f0f] dark:bg-dark px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#8f1a1a] dark:hover:bg-gold/90"
               >
                 Buy
               </button>
