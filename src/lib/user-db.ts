@@ -99,7 +99,7 @@ export async function deleteUserById(id: string): Promise<void> {
 export async function updateUserIsBlocked(id: string, isBlocked: boolean): Promise<void> {
   await ensureSupabaseSchema();
   const { error } = await supabaseAdmin
-    .from<UserRow, UserRow>("users")
+    .from("users")
     .update({ is_blocked: isBlocked, updated_at: new Date().toISOString() })
     .eq("id", id);
 

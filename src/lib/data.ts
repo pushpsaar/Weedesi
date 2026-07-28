@@ -1,5 +1,6 @@
 import { supabaseAdmin, ensureSupabaseSchema } from "./supabase";
 import { Coupon, Order, Product } from "./types";
+import type { Json } from "./database.types";
 
 interface ProductRow {
   id: string;
@@ -13,7 +14,7 @@ interface ProductRow {
   wash_care: string | null;
   mrp: number;
   sale_price: number;
-  variants: Product["variants"];
+  variants: Json;
   tags: string[];
   is_active: boolean;
   created_at: string;
@@ -22,8 +23,8 @@ interface ProductRow {
 interface OrderRow {
   id: string;
   user_id: string | null;
-  items: Order["items"];
-  customer: Order["customer"];
+  items:Json;
+  customer: Json;
   subtotal: number;
   gst: number;
   shipping: number;
@@ -31,7 +32,7 @@ interface OrderRow {
   total: number;
   coupon_code: string | null;
   status: string;
-  payment: Order["payment"];
+  payment: Json;
   created_at: string;
   updated_at: string;
 }
@@ -57,7 +58,9 @@ function parseProductRow(row: ProductRow): Product {
     washCare: row.wash_care ?? undefined,
     mrp: row.mrp,
     salePrice: row.sale_price,
-    variants: row.variants,
+  variants: Array.isArray(row.variants)
+  ? (row.variants as unknown as Product["variants"])
+  : [],
     tags: row.tags ?? [],
     isActive: row.is_active,
     createdAt: row.created_at,
@@ -68,8 +71,8 @@ function parseOrderRow(row: OrderRow): Order {
   return {
     id: row.id,
     userId: row.user_id ?? undefined,
-    items: row.items,
-    customer: row.customer,
+   items: (row.items ?? []) as unknown as Order["items"],
+    customer: (row.customer ?? {}) as unknown as Order["customer"],
     subtotal: row.subtotal,
     gst: row.gst,
     shipping: row.shipping,
@@ -77,7 +80,7 @@ function parseOrderRow(row: OrderRow): Order {
     total: row.total,
     couponCode: row.coupon_code ?? undefined,
     status: row.status as Order["status"],
-    payment: row.payment,
+    payment: (row.payment ?? {}) as unknown as Order["payment"],
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -106,7 +109,7 @@ function serializeProduct(product: Product) {
     wash_care: product.washCare ?? null,
     mrp: product.mrp,
     sale_price: product.salePrice,
-    variants: product.variants,
+    variants: product.variants as unknown as Json,
     tags: product.tags,
     is_active: product.isActive,
     created_at: product.createdAt,
@@ -117,8 +120,8 @@ function serializeOrder(order: Order) {
   return {
     id: order.id,
     user_id: order.userId ?? null,
-    items: order.items,
-    customer: order.customer,
+   items: order.items as unknown as Json,
+    customer: order.customer as unknown as Json,
     subtotal: order.subtotal,
     gst: order.gst,
     shipping: order.shipping,
@@ -126,7 +129,7 @@ function serializeOrder(order: Order) {
     total: order.total,
     coupon_code: order.couponCode ?? null,
     status: order.status,
-    payment: order.payment,
+    payment: order.payment as unknown as Json,
     created_at: order.createdAt,
     updated_at: order.updatedAt,
   };

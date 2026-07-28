@@ -1,12 +1,13 @@
 import { supabaseAdmin, ensureSupabaseSchema } from "./supabase";
 import { DEFAULT_SITE_CONTENT, type SiteContent } from "@/lib/site-content-config";
+import type { Json } from "./database.types";
 
 export async function getSiteContent(): Promise<SiteContent> {
   await ensureSupabaseSchema();
   const { data, error } = await supabaseAdmin.from("site_content").select("content").eq("id", "default").maybeSingle();
   if (error) throw error;
   if (!data || !data.content) return DEFAULT_SITE_CONTENT;
-  const parsed = data.content as Partial<SiteContent>;
+const parsed = data.content as unknown as Partial<SiteContent>;
   return {
     ...DEFAULT_SITE_CONTENT,
     ...parsed,
@@ -21,7 +22,10 @@ export async function getSiteContent(): Promise<SiteContent> {
 
 export async function saveSiteContent(content: SiteContent): Promise<SiteContent> {
   await ensureSupabaseSchema();
-  const { error } = await supabaseAdmin.from("site_content").upsert({ id: "default", content });
+  const { error } = await supabaseAdmin.from("site_content").upsert({
+  id: "default",
+  content: content as unknown as Json,
+});
   if (error) throw error;
   return content;
 }

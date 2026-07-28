@@ -1,5 +1,6 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { Pool } from "pg";
+import type { Database } from "./database.types";
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[];
 
@@ -82,21 +83,6 @@ export interface AdminCredsRow {
 export interface SiteContentRow {
   id: string;
   content: Json;
-}
-
-export interface Database {
-  public: {
-    Tables: {
-      users: SupabaseTable<UserRow>;
-      products: SupabaseTable<ProductRow>;
-      orders: SupabaseTable<OrderRow>;
-      coupons: SupabaseTable<CouponRow>;
-      admin_credentials: SupabaseTable<AdminCredsRow>;
-      site_content: SupabaseTable<SiteContentRow>;
-    };
-    Views: {};
-    Functions: {};
-  };
 }
 
 let pool: Pool | null = null;
@@ -334,17 +320,11 @@ export async function listSupabaseStorageFiles(prefix = ""): Promise<string[]> {
       return;
     }
 
-    for (const item of data) {
-      const itemPath = folder ? `${folder}/${item.name}` : item.name;
-      if (item.type === "folder") {
-        await walk(itemPath);
-      } else {
-        result.push(itemPath);
-      }
-    }
-  }
-
-  await walk(prefix);
-  return result;
+for (const item of data) {
+  result.push(folder ? `${folder}/${item.name}` : item.name);
 }
+} // <-- closes async function walk()
 
+await walk(prefix);
+return result;
+} // <-- closes listSupabaseStorageFiles()
