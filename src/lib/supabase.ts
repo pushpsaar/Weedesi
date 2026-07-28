@@ -125,12 +125,13 @@ export interface Database {
 let pool: Pool | null = null;
 let schemaInitialized = false;
 
-export const supabaseAdmin: SupabaseClient<Database> = createClient<Database, "public">(
+export const supabaseAdmin = createClient<Database>(
   process.env.SUPABASE_URL ?? "",
   process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
   {
     auth: { persistSession: false },
     global: { fetch },
+    db: { schema: "public" },
   }
 );
 
