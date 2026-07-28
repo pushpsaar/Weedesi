@@ -62,9 +62,11 @@ export default async function ShopPage({
           <div className="mt-10 flex flex-wrap gap-3">
             <a
               href="/shop"
-              className={`rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] transition ${
-                !category ? "border-dark bg-dark text-white" : "border-border bg-white text-dark/70"
-              }`}
+              className={
+                !category
+                  ? "rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] transition border-dark bg-dark text-white"
+                  : "rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] transition border-border bg-white text-dark/70"
+              }
             >
               All
             </a>
@@ -72,9 +74,11 @@ export default async function ShopPage({
               <a
                 key={c}
                 href={`/shop?category=${encodeURIComponent(c)}`}
-                className={`rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] transition ${
-                  category === c ? "border-dark bg-dark text-white" : "border-border bg-white text-dark/70"
-                }`}
+                className={
+                  category === c
+                    ? "rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] transition border-dark bg-dark text-white"
+                    : "rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] transition border-border bg-white text-dark/70"
+                }
               >
                 {c}
               </a>
