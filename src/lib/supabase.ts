@@ -11,10 +11,10 @@ export type SupabaseRelationship = {
   referencedColumns: string[];
 };
 
-type SupabaseTable<Row> = {
+type SupabaseTable<Row, Insert = Row, Update = Partial<Row>> = {
   Row: Row;
-  Insert: Row;
-  Update: Partial<Row>;
+  Insert: Insert;
+  Update: Update;
   Relationships: SupabaseRelationship[];
 };
 

@@ -7,3 +7,18 @@
 
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
   Creating an optimized production build ...
+✓ Compiled successfully in 26.9s
+  Running TypeScript ...
+Failed to type check.
+
+./src/lib/auth.ts:54:15
+Type error: Object literal may only specify known properties, and 'id' does not exist in type 'never[]'.
+
+  [90m52 |[0m   [36mconst[0m { error } = [36mawait[0m supabaseAdmin
+  [90m53 |[0m     .[36mfrom[0m([32m"admin_credentials"[0m)
+[31m[1m>[0m [90m54 |[0m     .upsert({ id: [32m"default"[0m, ...creds });
+  [90m   |[0m               [31m[1m^[0m
+  [90m55 |[0m
+  [90m56 |[0m   [36mif[0m (error) {
+  [90m57 |[0m     [36mthrow[0m error;
+Next.js build worker exited with code: 1 and signal: null
