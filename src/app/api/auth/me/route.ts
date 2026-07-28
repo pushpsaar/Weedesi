@@ -16,7 +16,7 @@ export async function GET() {
     return NextResponse.json({ user: null });
   }
 
-  const user = getUserById(payload.userId);
+  const user = await getUserById(payload.userId);
   if (!user || user.isBlocked) {
     store.delete(SESSION_COOKIE);
     return NextResponse.json({ user: null });

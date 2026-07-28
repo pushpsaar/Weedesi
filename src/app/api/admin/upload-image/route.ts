@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs/promises";
 import path from "path";
 import { getAdminSession } from "@/lib/auth";
+import { uploadSupabaseStorageFile, getSupabaseStorageBucketUrl } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   const session = await getAdminSession();
@@ -35,13 +35,12 @@ export async function POST(req: NextRequest) {
       ? replacementTarget.replace(/^\/+/, "")
       : `products/${fileName}`;
 
-    const filePath = path.join(process.cwd(), "public", relativePath);
-    await fs.mkdir(path.dirname(filePath), { recursive: true });
-
     const bytes = Buffer.from(await item.arrayBuffer());
-    await fs.writeFile(filePath, bytes);
+    const publicUrl = await uploadSupabaseStorageFile(relativePath, bytes, item.type || "image/jpeg");
 
-    uploaded.push(`/${relativePath}`);
+    // Supabase public storage returns URLs without leading slash; convert to existing app expectation
+    const urlPath = publicUrl.startsWith("/") ? publicUrl : new URL(publicUrl).pathname;
+    uploaded.push(urlPath);
   }
 
   return NextResponse.json({

@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
     }
 
-    const user = getUserByEmail(email);
+    const user = await getUserByEmail(email);
     if (!user) {
       return NextResponse.json({ error: "Account does not exist." }, { status: 404 });
     }
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     }
 
     const now = new Date().toISOString();
-    updateUserLastLogin(user.id, now);
+    await updateUserLastLogin(user.id, now);
 
     const token = createSessionToken({
       userId: user.id,

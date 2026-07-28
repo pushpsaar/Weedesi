@@ -1,9 +1,7 @@
 import crypto from "crypto";
-import fs from "fs/promises";
-import path from "path";
+import { supabaseAdmin, ensureSupabaseSchema } from "./supabase";
 import { cookies } from "next/headers";
 
-const DATA_DIR = path.join(process.cwd(), "data");
 const SESSION_COOKIE = "wedesi_admin_session";
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
@@ -31,16 +29,33 @@ function getSessionSecret(): string {
 }
 
 async function getAdminCreds(): Promise<AdminCreds> {
-  const raw = await fs.readFile(path.join(DATA_DIR, "admin.json"), "utf-8");
-  return JSON.parse(raw) as AdminCreds;
+  await ensureSupabaseSchema();
+  const { data, error } = await supabaseAdmin
+    .from<AdminCreds>("admin_credentials")
+    .select("username, salt, hash")
+    .eq("id", "default")
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    throw new Error("Admin credentials not configured.");
+  }
+
+  return data;
 }
 
 async function writeAdminCreds(creds: AdminCreds): Promise<void> {
-  await fs.writeFile(
-    path.join(DATA_DIR, "admin.json"),
-    JSON.stringify(creds, null, 2),
-    "utf-8"
-  );
+  await ensureSupabaseSchema();
+  const { error } = await supabaseAdmin
+    .from("admin_credentials")
+    .upsert({ id: "default", ...creds });
+
+  if (error) {
+    throw error;
+  }
 }
 
 function hashPassword(password: string, salt: string): string {

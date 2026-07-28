@@ -1,77 +1,37 @@
-
+﻿
 > vedesi@0.1.0 build
 > next build
 
-▲ Next.js 16.2.10 (Turbopack)
+Γû▓ Next.js 16.2.10 (Turbopack)
 - Environments: .env.local
 
-⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+npm.cmd : ΓÜá The "middleware" file convention is deprecated. Please use 
+"proxy" instead. Learn more: 
+https://nextjs.org/docs/messages/middleware-to-proxy
+At line:1 char:37
++ cd 'c:\Users\PRC\Downloads\vedesi'; npm.cmd run build 2>&1 | Out-File ...
++                                     ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ΓÜá The "middle...leware-to-proxy 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
   Creating an optimized production build ...
-✓ Compiled successfully in 19.2s
+Γ£ô Compiled successfully in 16.8s
   Running TypeScript ...
-  Finished TypeScript in 18.8s ...
-  Collecting page data using 3 workers ...
-  Generating static pages using 3 workers (0/46) ...
-  Generating static pages using 3 workers (11/46) 
-  Generating static pages using 3 workers (22/46) 
-  Generating static pages using 3 workers (34/46) 
-✓ Generating static pages using 3 workers (46/46) in 3.1s
-  Finalizing page optimization ...
+Failed to type check.
 
-Route (app)
-┌ ○ /
-├ ○ /_not-found
-├ ○ /about
-├ ○ /admin
-├ ○ /admin/content
-├ ○ /admin/login
-├ ○ /admin/orders
-├ ƒ /admin/orders/[id]
-├ ƒ /admin/payments
-├ ○ /admin/products
-├ ƒ /admin/products/[id]/edit
-├ ○ /admin/products/new
-├ ○ /admin/users
-├ ƒ /api/admin/change-password
-├ ƒ /api/admin/list-images
-├ ƒ /api/admin/login
-├ ƒ /api/admin/logout
-├ ƒ /api/admin/site-content
-├ ƒ /api/admin/upload-image
-├ ƒ /api/admin/users
-├ ƒ /api/auth/login
-├ ƒ /api/auth/logout
-├ ƒ /api/auth/me
-├ ƒ /api/auth/register
-├ ƒ /api/coupons/validate
-├ ƒ /api/orders
-├ ƒ /api/orders/[id]
-├ ƒ /api/products
-├ ƒ /api/products/[id]
-├ ƒ /api/razorpay/create-order
-├ ƒ /api/razorpay/fail
-├ ƒ /api/razorpay/verify
-├ ƒ /api/razorpay/webhook
-├ ƒ /api/track-order
-├ ○ /auth
-├ ○ /cart
-├ ○ /checkout
-├ ○ /collections
-├ ○ /contact
-├ ○ /order/failure
-├ ○ /order/success
-├ ƒ /product/[slug]
-├ ○ /profile
-├ ○ /robots.txt
-├ ○ /shipping-returns
-├ ƒ /shop
-├ ○ /sitemap.xml
-├ ○ /track-order
-└ ○ /wishlist
+./src/lib/data.ts:143:3
+Type error: Type '{ active: boolean; minOrderValue: number | undefined; code: 
+string; type: string; value: number; }' is not assignable to type 'Coupon'.
+  Types of property 'type' are incompatible.
+    Type 'string' is not assignable to type '"percent" | "flat"'.
 
-
-ƒ Proxy (Middleware)
-
-○  (Static)   prerendered as static content
-ƒ  (Dynamic)  server-rendered on demand
-
+  [90m141 |[0m
+  [90m142 |[0m [36mfunction[0m parseCouponRow(row: [33mCouponRow[0m): 
+[33mCoupon[0m {
+[31m[1m>[0m [90m143 |[0m   [36mreturn[0m {
+  [90m    |[0m   [31m[1m^[0m
+  [90m144 |[0m     ...row,
+  [90m145 |[0m     active: [33mBoolean[0m(row.active),
+  [90m146 |[0m     minOrderValue: row.minOrderValue ?? [36mundefined[0m,
+Next.js build worker exited with code: 1 and signal: null

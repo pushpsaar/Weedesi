@@ -37,7 +37,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Passwords do not match." }, { status: 400 });
     }
 
-    const existing = getUserByEmail(email);
+    const existing = await getUserByEmail(email);
     if (existing) {
       return NextResponse.json({ error: "An account with this email already exists." }, { status: 409 });
     }
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       isBlocked: false,
     };
 
-    createUser(user);
+    await createUser(user);
 
     const token = createSessionToken({
       userId: user.id,

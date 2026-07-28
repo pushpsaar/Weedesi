@@ -1,24 +1,14 @@
-import Database from "better-sqlite3";
-import fs from "fs";
-import path from "path";
-import os from "os";
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const USER_JSON_FILE = path.join(DATA_DIR, "users.json");
-const SQLITE_DB_PATH =
-  process.env.NODE_ENV === "production"
-    ? path.join(os.tmpdir(), "vedesi.sqlite")
-    : path.join(DATA_DIR, "vedesi.sqlite");
+import { supabaseAdmin, ensureSupabaseSchema } from "./supabase";
 
 export interface UserRow {
   id: string;
   name: string;
   email: string;
-  passwordHash: string;
-  createdAt: string;
-  updatedAt: string;
-  lastLoginAt: string | null;
-  isBlocked: number;
+  password_hash: string;
+  created_at: string;
+  updated_at: string;
+  last_login_at: string | null;
+  is_blocked: boolean;
 }
 
 export interface UserRecord {
@@ -32,152 +22,97 @@ export interface UserRecord {
   isBlocked: boolean;
 }
 
-let db: Database.Database | null = null;
-
-function getDb(): Database.Database {
-  if (db) {
-    return db;
-  }
-
-  const dir = path.dirname(SQLITE_DB_PATH);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-
-  db = new Database(SQLITE_DB_PATH);
-  db.pragma("journal_mode = WAL");
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY,
-      name TEXT NOT NULL,
-      email TEXT NOT NULL UNIQUE,
-      passwordHash TEXT NOT NULL,
-      createdAt TEXT NOT NULL,
-      updatedAt TEXT NOT NULL,
-      lastLoginAt TEXT,
-      isBlocked INTEGER NOT NULL DEFAULT 0
-    );
-  `);
-
-  migrateJsonUsers();
-  return db;
-}
-
-function migrateJsonUsers(): void {
-  if (!fs.existsSync(USER_JSON_FILE)) {
-    return;
-  }
-
-  try {
-    const countResult = getDb()
-      .prepare("SELECT COUNT(*) AS count FROM users")
-      .get() as { count: number };
-
-    if (countResult.count > 0) {
-      return;
-    }
-
-    const raw = fs.readFileSync(USER_JSON_FILE, "utf-8");
-    const users = JSON.parse(raw) as UserRecord[];
-    const insert = getDb().prepare(
-      `INSERT OR IGNORE INTO users
-      (id, name, email, passwordHash, createdAt, updatedAt, lastLoginAt, isBlocked)
-      VALUES (@id, @name, @email, @passwordHash, @createdAt, @updatedAt, @lastLoginAt, @isBlocked)`
-    );
-
-    const transaction = getDb().transaction((items: UserRecord[]) => {
-      for (const item of items) {
-        insert.run({
-          id: item.id,
-          name: item.name,
-          email: item.email.toLowerCase(),
-          passwordHash: item.passwordHash,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-          lastLoginAt: item.lastLoginAt ?? null,
-          isBlocked: item.isBlocked ? 1 : 0,
-        });
-      }
-    });
-
-    transaction(users);
-  } catch (error) {
-    console.error("User DB migration error:", error);
-  }
-}
-
 function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
 
-export function getUserByEmail(email: string): UserRecord | null {
-  const row = getDb()
-    .prepare<[string], UserRow>("SELECT * FROM users WHERE email = ?")
-    .get(normalizeEmail(email));
-  if (!row) return null;
+function mapRowToUser(row: UserRow): UserRecord {
   return {
-    ...row,
-    lastLoginAt: row.lastLoginAt ?? undefined,
-    isBlocked: Boolean(row.isBlocked),
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    passwordHash: row.password_hash,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    lastLoginAt: row.last_login_at ?? undefined,
+    isBlocked: row.is_blocked,
   };
 }
 
-export function getUserById(id: string): UserRecord | null {
-  const row = getDb().prepare<[string], UserRow>("SELECT * FROM users WHERE id = ?").get(id);
-  if (!row) return null;
-  return {
-    ...row,
-    lastLoginAt: row.lastLoginAt ?? undefined,
-    isBlocked: Boolean(row.isBlocked),
-  };
+export async function getUserByEmail(email: string): Promise<UserRecord | null> {
+  await ensureSupabaseSchema();
+  const { data, error } = await supabaseAdmin
+    .from<UserRow>("users")
+    .select("*")
+    .eq("email", normalizeEmail(email))
+    .maybeSingle();
+
+  if (error) throw error;
+  return data ? mapRowToUser(data) : null;
 }
 
-export function createUser(user: UserRecord): void {
-  getDb()
-    .prepare(
-      `INSERT INTO users
-      (id, name, email, passwordHash, createdAt, updatedAt, lastLoginAt, isBlocked)
-      VALUES (@id, @name, @email, @passwordHash, @createdAt, @updatedAt, @lastLoginAt, @isBlocked)`
-    )
-    .run({
-      ...user,
-      email: normalizeEmail(user.email),
-      lastLoginAt: user.lastLoginAt ?? null,
-      isBlocked: user.isBlocked ? 1 : 0,
-    });
+export async function getUserById(id: string): Promise<UserRecord | null> {
+  await ensureSupabaseSchema();
+  const { data, error } = await supabaseAdmin
+    .from<UserRow>("users")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data ? mapRowToUser(data) : null;
 }
 
-export function getAllUsers(): UserRecord[] {
-  const rows = getDb().prepare<[], UserRow>("SELECT * FROM users ORDER BY createdAt DESC").all();
-  return rows.map((row) => ({
-    ...row,
-    lastLoginAt: row.lastLoginAt ?? undefined,
-    isBlocked: Boolean(row.isBlocked),
-  }));
+export async function createUser(user: UserRecord): Promise<void> {
+  await ensureSupabaseSchema();
+  const { error } = await supabaseAdmin.from("users").insert({
+    id: user.id,
+    name: user.name,
+    email: normalizeEmail(user.email),
+    password_hash: user.passwordHash,
+    created_at: user.createdAt,
+    updated_at: user.updatedAt,
+    last_login_at: user.lastLoginAt ?? null,
+    is_blocked: user.isBlocked,
+  });
+
+  if (error) throw error;
 }
 
-export function deleteUserById(id: string): void {
-  getDb().prepare("DELETE FROM users WHERE id = ?").run(id);
+export async function getAllUsers(): Promise<UserRecord[]> {
+  await ensureSupabaseSchema();
+  const { data, error } = await supabaseAdmin
+    .from<UserRow>("users")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return (data ?? []).map(mapRowToUser);
 }
 
-export function updateUserIsBlocked(id: string, isBlocked: boolean): void {
-  getDb()
-    .prepare(
-      `UPDATE users
-      SET isBlocked = @isBlocked,
-          updatedAt = @updatedAt
-      WHERE id = @id`
-    )
-    .run({ id, isBlocked: isBlocked ? 1 : 0, updatedAt: new Date().toISOString() });
+export async function deleteUserById(id: string): Promise<void> {
+  await ensureSupabaseSchema();
+  const { error } = await supabaseAdmin.from("users").delete().eq("id", id);
+  if (error) throw error;
 }
 
-export function updateUserLastLogin(userId: string, timestamp: string): void {
-  getDb()
-    .prepare(
-      `UPDATE users
-      SET lastLoginAt = @lastLoginAt,
-          updatedAt = @updatedAt
-      WHERE id = @id`
-    )
-    .run({ id: userId, lastLoginAt: timestamp, updatedAt: timestamp });
+export async function updateUserIsBlocked(id: string, isBlocked: boolean): Promise<void> {
+  await ensureSupabaseSchema();
+  const { error } = await supabaseAdmin
+    .from("users")
+    .update({ is_blocked: isBlocked, updated_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (error) throw error;
 }
+
+export async function updateUserLastLogin(userId: string, timestamp: string): Promise<void> {
+  await ensureSupabaseSchema();
+  const { error } = await supabaseAdmin
+    .from("users")
+    .update({ last_login_at: timestamp, updated_at: timestamp })
+    .eq("id", userId);
+
+  if (error) throw error;
+}
+

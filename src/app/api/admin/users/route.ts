@@ -4,7 +4,7 @@ import { getAllUsers, deleteUserById, updateUserIsBlocked } from "@/lib/user-db"
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("q")?.toLowerCase() || "";
-  const users = getAllUsers();
+  const users = await getAllUsers();
   const filtered = users.filter((user) => {
     if (!query) return true;
     return [user.name, user.email].some((value) => value.toLowerCase().includes(query));
@@ -20,7 +20,7 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "User id is required." }, { status: 400 });
   }
 
-  deleteUserById(id);
+  await deleteUserById(id);
   return NextResponse.json({ ok: true });
 }
 
@@ -32,6 +32,6 @@ export async function PATCH(request: Request) {
   }
 
   const body = await request.json();
-  updateUserIsBlocked(id, Boolean(body?.isBlocked));
+  await updateUserIsBlocked(id, Boolean(body?.isBlocked));
   return NextResponse.json({ ok: true });
 }
