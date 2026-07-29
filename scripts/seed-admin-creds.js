@@ -14,7 +14,7 @@ async function main() {
   const databaseUrl = getDatabaseUrl();
   const pool = new Pool({ connectionString: databaseUrl, ssl: databaseUrl.includes("supabase.co") ? { rejectUnauthorized: false } : undefined });
 
-  const password = process.env.ADMIN_PASSWORD || "wedesi@123";
+  const password = process.env.ADMIN_PASSWORD || "wedesi@1234";
   const username = process.env.ADMIN_USERNAME || "WEदेसी";
 
   const salt = crypto.randomBytes(16).toString("hex");

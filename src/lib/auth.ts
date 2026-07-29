@@ -153,6 +153,22 @@ function unsign(signed: string): string | null {
   return value;
 }
 
+export async function createAdminSession(username: string): Promise<void> {
+  const payload = JSON.stringify({
+    username: username || DEFAULT_ADMIN_USERNAME,
+    exp: Date.now() + SESSION_MAX_AGE * 1000,
+  });
+  const token = sign(Buffer.from(payload).toString("base64url"));
+  const store = await cookies();
+  store.set(SESSION_COOKIE, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: SESSION_MAX_AGE,
+  });
+}
+
 export async function destroyAdminSession(): Promise<void> {
   const store = await cookies();
   store.delete(SESSION_COOKIE);

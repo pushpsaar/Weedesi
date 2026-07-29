@@ -252,7 +252,7 @@ async function migrateAdminCredentials(): Promise<void> {
 
   console.log("migrateAdminCredentials: creating default admin");
   const defaultUsername = process.env.ADMIN_USERNAME || "WEदेसी";
-  const defaultPassword = process.env.ADMIN_PASSWORD || "wedesi@123";
+  const defaultPassword = process.env.ADMIN_PASSWORD || "wedesi@1234";
 
   const salt = crypto.randomBytes(16).toString("hex");
   const hash = crypto.scryptSync(defaultPassword, salt, 64).toString("hex");
