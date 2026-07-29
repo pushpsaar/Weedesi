@@ -31,7 +31,6 @@ interface RazorpayOptions {
     color?: string;
   };
   method?: {
-    upi?: boolean;
     card?: boolean;
     netbanking?: boolean;
     wallet?: boolean;
@@ -197,7 +196,6 @@ function CheckoutPageInner() {
           orderId: orderData.orderId,
         },
         method: {
-          upi: true,
           card: true,
           netbanking: true,
           wallet: true,
@@ -299,13 +297,13 @@ function CheckoutPageInner() {
               Secure Razorpay checkout
             </div>
             <p className="mt-2 text-sm text-dark/60">
-              Pay with UPI, cards, net banking, wallets, or EMI. The payment is verified securely on the server before your order is confirmed.
+              Pay with cards, net banking, wallets, or EMI. The payment is verified securely on the server before your order is confirmed.
             </p>
             <div className="mt-3 inline-flex flex-wrap gap-2 text-xs font-medium uppercase tracking-[0.24em] text-gold-dark">
-              <span className="rounded-full border border-gold/20 bg-gold/10 px-3 py-1">UPI</span>
               <span className="rounded-full border border-gold/20 bg-gold/10 px-3 py-1">Cards</span>
               <span className="rounded-full border border-gold/20 bg-gold/10 px-3 py-1">Net banking</span>
               <span className="rounded-full border border-gold/20 bg-gold/10 px-3 py-1">Wallets</span>
+              <span className="rounded-full border border-gold/20 bg-gold/10 px-3 py-1">EMI</span>
             </div>
           </div>
 

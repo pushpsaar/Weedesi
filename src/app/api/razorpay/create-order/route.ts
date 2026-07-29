@@ -78,8 +78,9 @@ export async function POST(req: NextRequest) {
   const gst = Math.round((subtotal - discount) * GST_RATE);
   const total = subtotal - discount + gst + SHIPPING_FLAT;
 
+  const razorpayKeyId = (process.env.RAZORPAY_KEY_ID ?? process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID) as string;
   const razorpay = new Razorpay({
-    key_id: (process.env.RAZORPAY_KEY_ID ?? process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID) as string,
+    key_id: razorpayKeyId,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
   });
 
@@ -127,6 +128,6 @@ export async function POST(req: NextRequest) {
     razorpayOrderId: razorpayOrder.id,
     amount: razorpayOrder.amount,
     currency: razorpayOrder.currency,
-    keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+    keyId: razorpayKeyId,
   });
 }
