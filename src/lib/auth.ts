@@ -142,30 +142,71 @@ function unsign(signed: string): string | null {
   const idx = signed.lastIndexOf(".");
   if (idx === -1) return null;
   const value = signed.slice(0, idx);
-  const sig = signed.slice(idx + 1);
-  const expected = crypto
-    .createHmac("sha256", secret)
-    .update(value)
-    .digest("hex");
-  const a = Buffer.from(sig);
-  const b = Buffer.from(expected);
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
-  return value;
-}
+  const username = creds.username || "(unknown)";
+  console.log("verifyAdminPassword: username:", username);
+  console.log("verifyAdminPassword: stored salt length:", salt ? salt.length : "missing");
+  console.log("verifyAdminPassword: stored hash length:", storedHashRaw ? storedHashRaw.length : "missing");
 
-export async function createAdminSession(username: string): Promise<void> {
-  const payload = JSON.stringify({
-    username: username || DEFAULT_ADMIN_USERNAME,
-    exp: Date.now() + SESSION_MAX_AGE * 1000,
-  });
-  const token = sign(Buffer.from(payload).toString("base64url"));
-  const store = await cookies();
-  store.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: SESSION_MAX_AGE,
+  if (!salt || !storedHashRaw) {
+    throw new Error("Admin credentials are not properly configured.");
+  }
+
+  // Compute expected hash for the seed password to check for seeding mismatches.
+  const expectedSeedHex = crypto.scryptSync("wedesi@123", salt, 64).toString("hex");
+  if (expectedSeedHex === storedHashRaw || expectedSeedHex === storedHashRaw.toLowerCase()) {
+    console.log("verifyAdminPassword: stored hash matches expected seed hash (hex)");
+  } else {
+    // Try base64 decode to see if stored value is base64-encoded
+    let base64Match = false;
+    try {
+      const decoded = Buffer.from(storedHashRaw, "base64").toString("hex");
+      if (decoded === expectedSeedHex) base64Match = true;
+    } catch {
+      // ignore
+    }
+    if (base64Match) {
+      console.log("verifyAdminPassword: stored hash matches expected seed hash (base64)");
+    } else {
+      console.log("verifyAdminPassword: stored hash does not match expected seed hash");
+    }
+  }
+
+  // Now perform verification for the provided password.
+  const computedHex = crypto.scryptSync(password, salt, 64).toString("hex");
+
+  // Compare as hex first (case-insensitive)
+  if (computedHex === storedHashRaw || computedHex === storedHashRaw.toLowerCase() || computedHex === storedHashRaw.toUpperCase()) {
+    const a = Buffer.from(computedHex, "hex");
+    const b = Buffer.from(storedHashRaw.replace(/^0x/, ""), "hex");
+    if (a.length !== b.length) {
+      console.log("verifyAdminPassword: failing because buffer lengths differ");
+      return false;
+    }
+    const ok = crypto.timingSafeEqual(a, b);
+    if (!ok) console.log("verifyAdminPassword: failing at timingSafeEqual check");
+    return ok;
+  }
+
+  // Fallback: try interpreting stored hash as base64
+  try {
+    const decoded = Buffer.from(storedHashRaw, "base64").toString("hex");
+    if (decoded === computedHex) {
+      const a = Buffer.from(computedHex, "hex");
+      const b = Buffer.from(decoded, "hex");
+      if (a.length !== b.length) {
+        console.log("verifyAdminPassword: failing because buffer lengths differ after base64 decode");
+        return false;
+      }
+      const ok = crypto.timingSafeEqual(a, b);
+      if (!ok) console.log("verifyAdminPassword: failing at timingSafeEqual check after base64 decode");
+      return ok;
+    }
+  } catch {
+    // ignore decode errors
+  }
+
+  console.log("verifyAdminPassword: no matching encoding found; returning false");
+  return false;
   });
 }
 
