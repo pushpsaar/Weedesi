@@ -15,7 +15,8 @@
         "color": "Crimson",
         "colorHex": "#7b1518",
         "images": [
-          "/products/product-1.jpeg"
+          "/products/product-1.jpeg",
+          "/products/product-13.jpeg"
         ],
         "sizes": [
           { "size": "S", "stock": 8 },
@@ -44,7 +45,8 @@
         "color": "Burgundy",
         "colorHex": "#5b1315",
         "images": [
-          "/products/product-2.jpeg"
+          "/products/product-2.jpeg",
+          "/products/product-14.jpeg"
         ],
         "sizes": [
           { "size": "S", "stock": 12 },
@@ -73,7 +75,8 @@
         "color": "Saffron",
         "colorHex": "#b55f2a",
         "images": [
-          "/products/product-7.jpeg"
+          "/products/product-7.jpeg",
+          "/products/product-15.jpeg"
         ],
         "sizes": [
           { "size": "S", "stock": 10 },
@@ -102,7 +105,8 @@
         "color": "Verdant",
         "colorHex": "#4f7a34",
         "images": [
-          "/products/product-8.jpeg"
+          "/products/product-8.jpeg",
+          "/products/product-16.jpeg"
         ],
         "sizes": [
           { "size": "S", "stock": 11 },
@@ -131,7 +135,8 @@
         "color": "Midnight",
         "colorHex": "#1e1e22",
         "images": [
-          "/products/product-9.jpeg"
+          "/products/product-9.jpeg",
+          "/products/product-17.jpeg"
         ],
         "sizes": [
           { "size": "S", "stock": 9 },
@@ -160,7 +165,8 @@
         "color": "Onyx",
         "colorHex": "#18131a",
         "images": [
-          "/products/product-12.jpeg"
+          "/products/product-12.jpeg",
+          "/products/product-18.jpeg"
         ],
         "sizes": [
           { "size": "S", "stock": 10 },
@@ -172,5 +178,35 @@
     "tags": ["new", "sale"],
     "isActive": true,
     "createdAt": "2026-07-25T10:50:00.000Z"
+  },
+  {
+    "id": "c91dd57e-1ad2-4c98-a6c2-e2a9a8714c90",
+    "slug": "sunset-mirror-kurta",
+    "name": "Sunset Mirror Kurta",
+    "sku": "SUNS-07",
+    "category": "kurtas",
+    "description": "A sunset-toned kurta with mirrored prints and a graceful silhouette for modern celebrations.",
+    "fabric": "cotton sateen",
+    "washCare": "gentle wash",
+    "mrp": 2399,
+    "salePrice": 1799,
+    "variants": [
+      {
+        "color": "Sunset",
+        "colorHex": "#d76f30",
+        "images": [
+          "/products/product-19.jpeg",
+          "/products/product-20.jpeg"
+        ],
+        "sizes": [
+          { "size": "S", "stock": 12 },
+          { "size": "M", "stock": 12 },
+          { "size": "L", "stock": 11 }
+        ]
+      }
+    ],
+    "tags": ["sale"],
+    "isActive": true,
+    "createdAt": "2026-07-25T10:55:00.000Z"
   }
 ]

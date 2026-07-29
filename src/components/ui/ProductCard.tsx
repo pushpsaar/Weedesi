@@ -20,22 +20,22 @@ const FALLBACK_IMAGE_POOL = [
 export default function ProductCard({ product, imageIndex = 0 }: { product: Product; imageIndex?: number }) {
   const { toggleWishlist, wishlist, addToCart } = useStore();
   const variant = product.variants[0];
-  const cover = variant?.images[0] ?? "";
-  const secondary = variant?.images[1] ?? cover;
+  const mainImage = variant?.images[0] ?? ""; // primary product image
+  const hoverImage = variant?.images[1] ?? mainImage; // image shown on hover
   const fallbackImage = FALLBACK_IMAGE_POOL[imageIndex % FALLBACK_IMAGE_POOL.length] ?? FALLBACK_IMAGE_POOL[0];
-  const resolvedCover = cover || fallbackImage;
-  const resolvedSecondary = secondary || fallbackImage;
+  const resolvedMainImage = mainImage || fallbackImage;
+  const resolvedHoverImage = hoverImage || fallbackImage;
   const defaultSize = variant?.sizes[0]?.size as Size | undefined;
   const sizes = variant?.sizes.map((item) => item.size) ?? [];
   const isWishlisted = wishlist.includes(product.id);
   const discount = product.mrp > 0 ? Math.round(((product.mrp - product.salePrice) / product.mrp) * 100) : 0;
-  const [displayImage, setDisplayImage] = useState(resolvedCover);
+  const [displayImage, setDisplayImage] = useState(resolvedMainImage);
   const isSale = product.tags.includes("sale") || discount > 0;
   const isNew = product.tags.includes("new-arrival") || product.tags.includes("new");
 
   useEffect(() => {
-    setDisplayImage(resolvedCover);
-  }, [resolvedCover]);
+    setDisplayImage(resolvedMainImage);
+  }, [resolvedMainImage]);
 
   function handleQuickBuy(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -47,7 +47,7 @@ export default function ProductCard({ product, imageIndex = 0 }: { product: Prod
       productId: product.id,
       slug: product.slug,
       name: product.name,
-      image: cover ?? "",
+      image: mainImage ?? "",
       color: variant.color,
       size: defaultSize,
       price: product.salePrice,
@@ -65,12 +65,12 @@ export default function ProductCard({ product, imageIndex = 0 }: { product: Prod
         <div className="overflow-hidden rounded-[2rem] border border-border/70 bg-[#7a0000] shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_32px_90px_rgba(0,0,0,0.22)] dark:bg-[#200909]">
           <div
             className="relative aspect-[5/7] overflow-hidden bg-[#250606]"
-            onMouseEnter={() => setDisplayImage(resolvedSecondary || resolvedCover)}
-            onMouseLeave={() => setDisplayImage(resolvedCover)}
+            onMouseEnter={() => setDisplayImage(resolvedHoverImage)}
+            onMouseLeave={() => setDisplayImage(resolvedMainImage)}
           >
-            {resolvedCover ? (
+            {resolvedMainImage ? (
               <Image
-                src={displayImage || resolvedCover}
+                src={displayImage || resolvedMainImage}
                 alt={product.name}
                 fill
                 sizes="(max-width: 768px) 100vw, 300px"
