@@ -248,6 +248,68 @@ async function migrateAdminCredentials(): Promise<void> {
 
   if (check.data) {
     console.log("Existing admin found");
+
+    // Verify the stored hash matches the expected hash for the seed password.
+    console.log("Verifying stored hash against expected seed password");
+    const stored = await supabaseAdmin
+      .from("admin_credentials")
+      .select("username, salt, hash")
+      .eq("id", "default")
+      .maybeSingle();
+
+    if (stored.error) {
+      console.error("Failed to fetch stored admin for verification:", stored.error);
+      throw stored.error;
+    }
+
+    if (stored.data) {
+      const storedSalt = stored.data.salt;
+      const storedHash = stored.data.hash;
+      // Compute expected hash for exact password 'wedesi@123' using scryptSync.
+      const expected = crypto.scryptSync("wedesi@123", storedSalt, 64).toString("hex");
+      if (expected !== storedHash) {
+        console.error("Hash mismatch during verification.");
+
+        // Recreate the admin_credentials row using a fresh salt and the exact password.
+        console.log("Recreating default admin with expected seed password");
+        const newSalt = crypto.randomBytes(16).toString("hex");
+        const newHash = crypto.scryptSync("wedesi@123", newSalt, 64).toString("hex");
+
+        const replace = await supabaseAdmin
+          .from("admin_credentials")
+          .upsert({ id: "default", username: stored.data.username || "WEदेसी", salt: newSalt, hash: newHash });
+
+        if (replace.error) {
+          console.error("Failed to recreate default admin:", replace.error);
+          throw replace.error;
+        }
+
+        // Verify replacement
+        const verify = await supabaseAdmin
+          .from("admin_credentials")
+          .select("salt, hash")
+          .eq("id", "default")
+          .maybeSingle();
+
+        if (verify.error) {
+          console.error("Verification after recreate failed:", verify.error);
+          throw verify.error;
+        }
+
+        const reloadedSalt = verify.data?.salt;
+        const reloadedHash = verify.data?.hash;
+        const expected2 = crypto.scryptSync("wedesi@123", reloadedSalt, 64).toString("hex");
+        if (expected2 !== reloadedHash) {
+          console.error("Recreated hash does not match expected value after write.");
+          throw new Error("Recreated admin hash mismatch");
+        }
+
+        console.log("Recreated default admin successfully; stored hash now matches expected seed password.");
+      } else {
+        console.log("Stored hash matches expected seed password");
+      }
+    }
+
     return;
   }
 

@@ -67,6 +67,22 @@ export async function verifyAdminPassword(
   password: string
 ): Promise<boolean> {
   const creds = await getAdminCreds();
+  // Temporary diagnostics (do not log secrets):
+  try {
+    console.log("verifyAdminPassword: stored salt length:", creds.salt ? creds.salt.length : "missing");
+    console.log("verifyAdminPassword: stored hash length:", creds.hash ? creds.hash.length : "missing");
+
+    // Compute expected hash for the exact seed password and compare lengths
+    const expectedForSeed = crypto.scryptSync("wedesi@123", creds.salt, 64).toString("hex");
+    if (expectedForSeed === creds.hash) {
+      console.log("verifyAdminPassword: Hashes match");
+    } else {
+      console.log("verifyAdminPassword: Hashes do not match");
+    }
+  } catch (err) {
+    console.error("verifyAdminPassword: diagnostic check failed:", err instanceof Error ? err.message : err);
+  }
+
   const hash = hashPassword(password, creds.salt);
   const a = Buffer.from(hash, "hex");
   const b = Buffer.from(creds.hash, "hex");
