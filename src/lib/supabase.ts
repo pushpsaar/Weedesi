@@ -1,4 +1,5 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import crypto from "crypto";
 import { Pool } from "pg";
 import type { Database } from "./database.types";
 
@@ -132,11 +133,22 @@ function getStorageBucket() {
 export async function ensureSupabaseSchema(): Promise<void> {
   if (schemaInitialized) return;
 
-  // If no database connection is configured locally (e.g., no SUPABASE_DATABASE_URL
-  // or DATABASE_URL), skip schema creation during build. Runtime will require a
-  // properly configured Supabase/Database for full functionality.
-  const hasDatabase = Boolean(process.env.DATABASE_URL ?? process.env.SUPABASE_DATABASE_URL);
-  if (!hasDatabase) {
+  // Check required environment variables and provide clear diagnostics.
+  const dbUrl = process.env.DATABASE_URL ?? process.env.SUPABASE_DATABASE_URL;
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  const missingVars: string[] = [];
+  if (!dbUrl) missingVars.push("DATABASE_URL or SUPABASE_DATABASE_URL");
+  if (!supabaseUrl) missingVars.push("SUPABASE_URL");
+  if (!supabaseServiceKey) missingVars.push("SUPABASE_SERVICE_ROLE_KEY");
+
+  if (missingVars.length > 0) {
+    console.error(
+      "Supabase schema initialization skipped: missing environment variables:",
+      missingVars.join(", ")
+    );
+    // Mark initialized to avoid repeated noisy checks during runtime when DB is absent.
     schemaInitialized = true;
     return;
   }
@@ -220,20 +232,107 @@ export async function ensureSupabaseSchema(): Promise<void> {
 }
 
 async function migrateAdminCredentials(): Promise<void> {
-  const { data, error } = await supabaseAdmin
+  console.log("Starting migrateAdminCredentials");
+
+  console.log("Checking existing admin");
+  const check = await supabaseAdmin
     .from("admin_credentials")
     .select("id")
     .eq("id", "default")
     .maybeSingle();
 
-  if (error) {
-    console.error("Supabase admin credentials check failed:", error);
+  if (check.error) {
+    console.error("Checking existing admin failed:", check.error);
+    throw check.error;
+  }
+
+  if (check.data) {
+    console.log("Existing admin found");
     return;
   }
 
-  // Skip seeding from local JSON files in runtime. Admin credentials should be
-  // created via environment or migration tooling outside of runtime.
-  if (data) return;
+  console.log("Creating default admin");
+  const defaultUsername = process.env.ADMIN_USERNAME || "WEदेसी";
+  const defaultPassword = process.env.ADMIN_PASSWORD || "wedesi@123";
+
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = crypto.scryptSync(defaultPassword, salt, 64).toString("hex");
+
+  // Try upsert first, fall back to insert on specific errors. Retry until the row is visible.
+  const maxAttempts = 10;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    console.log(`Attempt ${attempt}: performing upsert for default admin`);
+    const upsertResult = await supabaseAdmin
+      .from("admin_credentials")
+      .upsert({ id: "default", username: defaultUsername, salt, hash });
+
+    if (upsertResult.error) {
+      console.error("Insert failed:", upsertResult.error);
+
+      // If the error suggests ON CONFLICT/primary key issues, try a plain insert.
+      const msg = String(upsertResult.error.message || "").toLowerCase();
+      if (msg.includes("on conflict") || msg.includes("syntax") || msg.includes("column \"id\"")) {
+        console.log("Upsert failed due to schema/primary-key issue; attempting insert instead");
+        const insertResult = await supabaseAdmin.from("admin_credentials").insert([
+          { id: "default", username: defaultUsername, salt, hash },
+        ]);
+
+        if (insertResult.error) {
+          console.error("Insert failed:", insertResult.error);
+          // If this was the last attempt, throw the error.
+          if (attempt === maxAttempts) throw insertResult.error;
+        } else {
+          console.log("Insert successful");
+        }
+      } else {
+        // For other errors, don't silently swallow them. Throw so they appear in logs.
+        if (attempt === maxAttempts) throw upsertResult.error;
+      }
+    } else {
+      console.log("Insert successful");
+    }
+
+    // Verify the row exists now.
+    console.log("Verifying default admin exists after write");
+    const verify = await supabaseAdmin
+      .from("admin_credentials")
+      .select("id")
+      .eq("id", "default")
+      .maybeSingle();
+
+    if (verify.error) {
+      console.error("Verification query failed:", verify.error);
+      if (attempt === maxAttempts) throw verify.error;
+    }
+
+    if (verify.data) {
+      console.log("Default admin is present in admin_credentials");
+
+      // Ensure there is exactly one row with id='default'.
+      const countCheck = await supabaseAdmin
+        .from("admin_credentials")
+        .select("id", { count: "exact", head: false })
+        .eq("id", "default");
+
+      if (countCheck.error) {
+        console.error("Count check failed:", countCheck.error);
+        if (attempt === maxAttempts) throw countCheck.error;
+      } else {
+        // countCheck.data will be an array; length should be 1
+        const rows = Array.isArray(countCheck.data) ? countCheck.data.length : 0;
+        console.log(`Rows with id='default': ${rows}`);
+      }
+
+      return;
+    }
+
+    // Wait before retrying.
+    const delayMs = Math.min(1000 * attempt, 5000);
+    console.log(`Row not visible yet, retrying after ${delayMs}ms`);
+    await new Promise((res) => setTimeout(res, delayMs));
+  }
+
+  throw new Error("migrateAdminCredentials: failed to ensure default admin after retries");
 }
 
 async function migrateSiteContent(): Promise<void> {
