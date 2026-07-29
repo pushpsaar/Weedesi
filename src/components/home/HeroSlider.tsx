@@ -146,7 +146,7 @@ export default function HeroSlider({
   }
 
   return (
-    <section className="relative h-[100vh] w-full overflow-hidden bg-white dark:bg-[radial-gradient(circle_at_top_left,rgba(210,74,74,0.18),transparent_25%),linear-gradient(180deg,#5f0b0b,#190404)]">
+    <section className="relative h-[100vh] w-full overflow-hidden bg-[#fffdf9] dark:bg-[radial-gradient(circle_at_top_left,rgba(210,74,74,0.18),transparent_25%),linear-gradient(180deg,#5f0b0b,#190404)]">
       {slides.map((slide, index) => (
         <div
           key={slide.image}
@@ -169,14 +169,14 @@ export default function HeroSlider({
       ))}
 
       <div className="relative z-10 flex h-full items-end px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
-        <div className="w-full max-w-lg rounded-[1.5rem] border border-[#8c1b1b]/20 bg-white p-5 shadow-[0_24px_60px_rgba(0,0,0,0.08)] sm:p-6 lg:p-7 text-[#2a0d0d] backdrop-blur-md dark:bg-transparent dark:text-white">
+        <div className="w-full max-w-lg rounded-[1.5rem] border border-white/10 bg-transparent p-5 shadow-none text-[#2a0d0d] backdrop-blur-none sm:p-6 lg:p-7 dark:border-white/10 dark:bg-transparent dark:text-white">
           <div className="inline-flex rounded-full bg-[#2a0707] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-white shadow-sm">
             WEदेसी Collection
           </div>
-          <h1 className="mt-5 font-heading text-3xl leading-[1.02] text-white sm:text-4xl lg:text-5xl">
+          <h1 className="mt-5 font-heading text-3xl leading-[1.02] text-[#2a0d0d] sm:text-4xl lg:text-5xl dark:text-white">
             {slides[activeIndex].title}
           </h1>
-          <p className="mt-4 max-w-lg text-sm leading-7 text-white sm:text-base">
+          <p className="mt-4 max-w-lg text-sm leading-7 text-[#2a0d0d] sm:text-base dark:text-white">
             {slides[activeIndex].description}
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -201,7 +201,7 @@ export default function HeroSlider({
           type="button"
           aria-label="Previous slide"
           onClick={previousSlide}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-dark shadow-sm transition hover:bg-white sm:h-12 sm:w-12"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#1a1a1a] text-white shadow-sm transition hover:bg-[#7d1313] sm:h-12 sm:w-12 dark:bg-white/90 dark:text-[#2a0d0d] dark:hover:bg-white"
         >
           <ArrowLeft size={20} />
         </button>
@@ -224,7 +224,7 @@ export default function HeroSlider({
           type="button"
           aria-label="Next slide"
           onClick={nextSlide}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-dark shadow-sm transition hover:bg-white sm:h-12 sm:w-12"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#1a1a1a] text-white shadow-sm transition hover:bg-[#7d1313] sm:h-12 sm:w-12 dark:bg-white/90 dark:text-[#2a0d0d] dark:hover:bg-white"
         >
           <ArrowRight size={20} />
         </button>

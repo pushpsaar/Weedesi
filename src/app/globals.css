@@ -149,6 +149,35 @@ html:not(.dark) [class*="bg-white/"] {
   background-color: rgba(255, 255, 255, 0.96) !important;
 }
 
+html:not(.dark) header.navbar-shell {
+  background-color: #ffffff !important;
+  color: #2a0d0d !important;
+}
+
+html:not(.dark) header.navbar-shell .navbar-action {
+  background-color: #7d1313 !important;
+  border-color: #7d1313 !important;
+  color: #ffffff !important;
+}
+
+html.dark header.navbar-shell {
+  background-color: #330404 !important;
+  color: #fff1ee !important;
+}
+
+html.dark header.navbar-shell .navbar-action {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+html:not(.dark) header.navbar-shell .logo-mark,
+html:not(.dark) header.navbar-shell [aria-label="WEदेसी home"] {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
 html.dark {
   --color-bg: #470000;
   --color-surface: #5a0a0a;

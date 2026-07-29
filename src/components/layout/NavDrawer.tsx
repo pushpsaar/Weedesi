@@ -54,7 +54,7 @@ export default function NavDrawer() {
               <button
                 aria-label="Close menu"
                 onClick={() => setDrawerOpen(false)}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white transition hover:bg-white/20"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#7d1313] bg-[#7d1313] text-white shadow-[0_4px_12px_rgba(125,19,19,0.35)] transition hover:bg-[#940c0c]"
               >
                 <X size={18} />
               </button>
@@ -77,8 +77,8 @@ export default function NavDrawer() {
                         onClick={() => setDrawerOpen(false)}
                         className={`mb-3 flex items-center justify-between rounded-[1.5rem] border px-5 py-4 text-sm font-medium tracking-[0.02em] transition ${
                           link.label === "Cart"
-                            ? "border-[#7d1313] bg-[#7d1313] text-white hover:bg-[#940c0c]"
-                            : "border-white/20 bg-white/10 text-white hover:border-white/30 hover:bg-white/15"
+                            ? "border-[#7d1313] bg-[#7d1313] text-white shadow-[0_4px_12px_rgba(125,19,19,0.35)] hover:bg-[#940c0c]"
+                            : "border-[#7d1313] bg-[#7d1313] text-white shadow-[0_4px_12px_rgba(125,19,19,0.35)] hover:bg-[#940c0c]"
                         }`}
                       >
                         <span className="flex items-center gap-3">
@@ -97,8 +97,8 @@ export default function NavDrawer() {
               </nav>
 
               <div className="border-t border-border/80 px-6 py-5">
-                <div className="mb-4 flex items-center justify-between rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-[#ffffff]">
-                  <span className="text-[10px] uppercase tracking-[0.28em] text-[rgba(255,255,255,0.72)]">Theme</span>
+                <div className="mb-4 flex items-center justify-between rounded-[1.5rem] border border-[#7d1313] bg-[#7d1313] px-4 py-3 text-white shadow-[0_4px_12px_rgba(125,19,19,0.35)]">
+                  <span className="text-[10px] uppercase tracking-[0.28em] text-white/90">Theme</span>
                   <ThemeToggle />
                 </div>
                 <Link
