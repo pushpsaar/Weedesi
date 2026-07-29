@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { SiteContent } from "@/lib/site-content-config";
 
 const DEFAULT_GALLERY_IMAGES = [
@@ -37,12 +36,10 @@ export default function InstagramGallery({ content }: { content?: SiteContent })
             key={src}
             className="group relative aspect-square overflow-hidden rounded-[1rem] border border-border/70 bg-white shadow-[0_10px_30px_rgba(43,43,43,0.06)]"
           >
-            <Image
+            <img
               src={src}
               alt={`Gallery image ${i + 1}`}
-              fill
-              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw"
-              className="object-cover transition duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
           </div>

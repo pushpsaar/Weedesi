@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { SiteContent } from "@/lib/site-content-config";
 
@@ -29,12 +28,10 @@ export default function Categories({ content }: { content: SiteContent }) {
             className="group relative overflow-hidden rounded-[2rem] border border-border/70 bg-surface shadow-[0_20px_80px_rgba(29,26,22,0.06)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_26px_90px_rgba(29,26,22,0.1)]"
           >
             <div className="relative aspect-[4/5] overflow-hidden">
-              <Image
+              <img
                 src={card.image}
                 alt={card.name}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover transition duration-500 group-hover:scale-105"
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             </div>

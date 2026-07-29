@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -154,14 +153,10 @@ export default function HeroSlider({
             index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
         >
-          <Image
+          <img
             src={slide.image}
             alt={`Slider image ${index + 1}`}
-            fill
-            sizes="100vw"
-            priority={index === 0}
-            quality={92}
-            className="object-cover"
+            className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,3,3,0.88)_0%,rgba(17,3,3,0.5)_45%,rgba(17,3,3,0.24)_100%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.14),transparent_45%)]" />
