@@ -14,6 +14,7 @@ export default function AdminLoginPage() {
 function AdminLoginInner() {
   const searchParams = useSearchParams();
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -58,14 +59,23 @@ function AdminLoginInner() {
             <label className="mb-1.5 block text-xs font-medium text-dark/60">
               Password
             </label>
-            <input
-              required
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-border bg-bg px-4 py-3 text-[15px] focus:border-gold focus:outline-none"
-              placeholder="Enter admin password"
-            />
+            <div className="relative">
+              <input
+                required
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-border bg-bg px-4 py-3 pr-14 text-[15px] focus:border-gold focus:outline-none"
+                placeholder="Enter admin password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((state) => !state)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-dark/60"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
           </div>
 
           {error && (
