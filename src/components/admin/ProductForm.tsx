@@ -195,10 +195,10 @@ export default function ProductForm({ initial }: Props) {
       </div>
 
       <Field label="Product Images">
-        <div className="space-y-3 rounded-[1.4rem] border border-border/70 bg-[#fffaf5] p-4">
+        <div className="space-y-3 rounded-[1.4rem] border border-border/70 bg-[#7a0000] p-4 text-white">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-dark/70">Upload, replace, preview, and reorder images for this product.</p>
-            <button type="button" onClick={addImageSlot} className="rounded-full border border-border/70 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-dark/70">
+            <p className="text-sm text-white/80">Upload, replace, preview, and reorder images for this product.</p>
+            <button type="button" onClick={addImageSlot} className="rounded-full border border-white/30 bg-white/10 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-white transition hover:bg-white/15">
               Add image
             </button>
           </div>
