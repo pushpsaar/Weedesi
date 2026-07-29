@@ -64,7 +64,7 @@ export default function ProductCard({ product, imageIndex = 0 }: { product: Prod
       <Link href={`/product/${product.slug}`} className="block">
         <div className="overflow-hidden rounded-[2rem] border border-border/70 bg-[#7a0000] shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_32px_90px_rgba(0,0,0,0.22)] dark:bg-[#200909]">
           <div
-            className="relative aspect-[5/7] overflow-hidden bg-[#250606]"
+            className="relative aspect-[5/7] overflow-hidden bg-white dark:bg-[#7a0000]"
             onMouseEnter={() => setDisplayImage(resolvedHoverImage)}
             onMouseLeave={() => setDisplayImage(resolvedMainImage)}
           >
