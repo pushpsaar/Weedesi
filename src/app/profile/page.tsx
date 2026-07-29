@@ -30,7 +30,7 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:px-8">
-      <div className="rounded-[2rem] border border-border/70 bg-white/80 p-6 shadow-[0_18px_70px_rgba(43,43,43,0.08)] sm:p-8">
+      <div className="rounded-[2rem] border border-border/70 bg-transparent p-6 shadow-[0_18px_70px_rgba(43,43,43,0.08)] sm:p-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-dark text-white">

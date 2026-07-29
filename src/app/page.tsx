@@ -2,119 +2,64 @@ import { getActiveProducts } from "@/lib/data";
 import { getSiteContent } from "@/lib/site-content";
 import Hero from "@/components/home/Hero";
 import ProductRail from "@/components/home/ProductRail";
-import Categories from "@/components/home/Categories";
-import Testimonials from "@/components/home/Testimonials";
-import InstagramGallery from "@/components/home/InstagramGallery";
-import Newsletter from "@/components/home/Newsletter";
 
 export default async function HomePage() {
   const [products, siteContent] = await Promise.all([getActiveProducts(), getSiteContent()]);
-  const newArrivals = products.filter((p) => p.tags.includes("new-arrival"));
-  const bestSellers = products.filter((p) => p.tags.includes("best-seller"));
-  const trending = products.slice(0, 8);
-  const banners = Array.isArray(siteContent?.banners) ? siteContent.banners : [];
-  const promos = Array.isArray(siteContent?.promoSections) ? siteContent.promoSections : [];
-  const enabledBanners = banners.filter((banner) => banner?.enabled);
-  const enabledPromos = promos.filter((promo) => promo?.enabled);
+  const newArrivalsAll = products.filter((p) => p.tags.includes("new-arrival") || p.tags.includes("new"));
+  const bestSellersAll = products.filter((p) => p.tags.includes("best-seller") || p.tags.includes("sale"));
+
+  const maxSectionSize = 4;
+  const sectionLimit = Math.min(Math.ceil(products.length / 2), maxSectionSize);
+  const newArrivals = newArrivalsAll.slice(0, sectionLimit);
+  const newArrivalIds = new Set(newArrivals.map((p) => p.id));
+  let bestSellers = bestSellersAll.filter((p) => !newArrivalIds.has(p.id)).slice(0, sectionLimit);
+
+  if (bestSellers.length < sectionLimit) {
+    const usedIds = new Set(bestSellers.map((p) => p.id));
+    for (const product of products) {
+      if (bestSellers.length >= sectionLimit) break;
+      if (newArrivalIds.has(product.id) || usedIds.has(product.id)) continue;
+      bestSellers.push(product);
+      usedIds.add(product.id);
+    }
+  }
 
   return (
     <>
       <Hero content={siteContent} />
-      {enabledBanners.length > 0 && (
-        <section className="section-shell py-5 sm:py-6 lg:py-8">
-          <div className="grid gap-4 md:grid-cols-2">
-            {enabledBanners.map((banner) => (
-              <a
-                key={banner.id}
-                href={banner.link}
-                className="group relative flex min-h-[240px] items-end overflow-hidden rounded-[1.6rem] border border-border/70 bg-white p-6 shadow-[0_10px_35px_rgba(43,43,43,0.06)]"
-                style={{
-                  backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.74), rgba(0,0,0,0.18)), url(${banner.image})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <div className="max-w-sm">
-                  <h3 className="font-heading text-2xl text-white">{banner.title}</h3>
-                  <p className="mt-2 text-sm leading-7 text-white/85">{banner.description}</p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
-      <Categories content={siteContent} />
-      {enabledPromos.length > 0 && (
-        <section className="section-shell py-2 sm:py-3">
-          <div className="grid gap-4 md:grid-cols-2">
-            {enabledPromos.map((promo) => (
-              <div key={promo.id} className="overflow-hidden rounded-[1.6rem] border border-border/70 bg-white/80 shadow-[0_12px_42px_rgba(43,43,43,0.06)]">
-                <div className="grid md:grid-cols-[1.1fr_0.9fr]">
-                  <div className="min-h-[220px] bg-cover bg-center" style={{ backgroundImage: `url(${promo.image})` }} />
-                  <div className="p-6">
-                    <h3 className="font-heading text-2xl text-dark">{promo.title}</h3>
-                    <p className="mt-3 text-sm leading-7 text-dark/65">{promo.description}</p>
-                    <a href={promo.buttonLink} className="mt-5 inline-flex rounded-full bg-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1f1a17]">
-                      {promo.buttonText}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+
       <ProductRail
         title="New Arrivals"
         subtitle="Fresh off the atelier"
         products={newArrivals}
         viewAllHref="/shop?tag=new-arrival"
       />
+
       <ProductRail
         title="Best Sellers"
-        subtitle="What everyone's wearing"
+        subtitle="The pieces our clients return to again and again"
         products={bestSellers}
         viewAllHref="/shop?tag=best-seller"
       />
-      <section className="section-shell px-4 py-10 sm:px-6 md:px-8 lg:py-14">
-        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-gold-dark">Best seller styling</p>
-            <h2 className="mt-3 font-heading text-4xl leading-tight text-dark sm:text-5xl">Shop the imagery</h2>
-            <p className="mt-3 max-w-2xl text-base leading-8 text-dark/65">
-              A rich visual mix from our slider, collection and promo images to inspire the way you wear WEदेसी.
-            </p>
+
+      <section className="section-shell px-3 py-10 sm:px-4 lg:py-16">
+        <div className="rounded-[2rem] border border-border/70 bg-[#fffaf5] p-8 shadow-[0_24px_90px_rgba(29,26,22,0.08)] sm:p-10 lg:p-14 dark:bg-[#240d0d] dark:shadow-[0_24px_90px_rgba(0,0,0,0.28)]">
+          <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[#7a0000]">About WEदेसी</p>
+              <h2 className="mt-4 font-heading text-3xl leading-tight text-dark sm:text-4xl dark:text-[#fff1ee]">Quiet luxury, designed for everyday grace.</h2>
+              <p className="mt-4 max-w-2xl text-base leading-8 text-dark/65 dark:text-[#f8e5dd]">
+                WEदेसी pairs handcrafted silhouettes with modern comfort so every piece feels elevated, effortless, and timeless.
+              </p>
+            </div>
+            <div className="rounded-[1.6rem] border border-[#7a0000]/30 bg-[#7a0000] p-6 text-sm font-semibold leading-8 text-white shadow-sm dark:border-[#ffb8a2]/25 dark:bg-[#4b0606]">
+              <p>• Premium fabrics and thoughtful detailing</p>
+              <p>• Contemporary silhouettes rooted in heritage</p>
+              <p>• A wardrobe designed to be worn beautifully</p>
+            </div>
           </div>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {Array.from(
-            new Set([
-              ...siteContent.hero.images,
-              ...siteContent.banners.map((item) => item.image),
-              ...siteContent.collections.map((item) => item.image),
-              ...siteContent.promoSections.map((item) => item.image),
-              ...siteContent.categoryImages.map((item) => item.image),
-            ])
-          ).map((src) => (
-            <div key={src} className="relative overflow-hidden rounded-[1.75rem] border border-border/70 bg-white shadow-[0_16px_45px_rgba(43,43,43,0.08)]">
-              <img
-                src={src}
-                alt="Decorative product image"
-                className="h-64 w-full object-cover transition duration-500 hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
-            </div>
-          ))}
-        </div>
       </section>
-      <ProductRail
-        title="Trending Now"
-        products={trending}
-        viewAllHref="/shop"
-      />
-      <Testimonials />
-      <InstagramGallery content={siteContent} />
-      <Newsletter />
     </>
   );
 }

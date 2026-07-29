@@ -103,6 +103,17 @@ h6 {
   animation: float-soft 8s ease-in-out infinite;
 }
 
+.panel-surface,
+.backdrop-blur,
+.backdrop-blur-sm,
+.backdrop-blur-md,
+.backdrop-blur-lg,
+.backdrop-blur-xl,
+.backdrop-blur-2xl {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -132,10 +143,6 @@ html:not(.dark) [class~="text-dark"] {
 
 html:not(.dark) [class*="text-dark/"] {
   color: rgba(34, 22, 17, 0.72) !important;
-}
-
-html:not(.dark) [class~="text-white"] {
-  color: #221611 !important;
 }
 
 html:not(.dark) [class*="bg-white/"] {

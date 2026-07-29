@@ -9,7 +9,7 @@ export default function Newsletter() {
   return (
     <section className="bg-dark/95 py-20 sm:py-24">
       <div className="section-shell px-4 text-center sm:px-6 md:px-8">
-        <div className="mx-auto max-w-2xl rounded-[2rem] border border-white/10 bg-white/8 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-sm sm:p-10">
+        <div className="mx-auto max-w-2xl rounded-[2rem] border border-white/10 bg-transparent p-8 shadow-[0_20px_60px_rgba(0,0,0,0.18)] sm:p-10">
           <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-gold">Exclusive access</p>
           <h2 className="mt-3 font-heading text-3xl text-white sm:text-[2rem]">Join the List</h2>
           <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-white/70">

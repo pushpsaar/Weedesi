@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Product, Size } from "@/lib/types";
 
@@ -19,6 +20,7 @@ export default function ProductForm({ initial }: Props) {
   const [uploadMessage, setUploadMessage] = useState("");
 
   const [name, setName] = useState(initial?.name ?? "");
+  const [slug, setSlug] = useState(initial?.slug ?? "");
   const [sku, setSku] = useState(initial?.sku ?? "");
   const [category, setCategory] = useState(initial?.category ?? "");
   const [description, setDescription] = useState(initial?.description ?? "");
@@ -28,17 +30,14 @@ export default function ProductForm({ initial }: Props) {
   const [salePrice, setSalePrice] = useState(initial?.salePrice?.toString() ?? "");
   const [color, setColor] = useState(initial?.variants[0]?.color ?? "Default");
   const [colorHex, setColorHex] = useState(initial?.variants[0]?.colorHex ?? "#C8A96A");
-  const [images, setImages] = useState(
-    initial?.variants[0]?.images.join(", ") ?? ""
-  );
-  const [sizes, setSizes] = useState<Size[]>(
-    initial?.variants[0]?.sizes.map((s) => s.size) ?? ["S", "M", "L"]
-  );
-  const [stock, setStock] = useState(
-    initial?.variants[0]?.sizes[0]?.stock?.toString() ?? "10"
-  );
+  const [imageEntries, setImageEntries] = useState<string[]>(initial?.variants[0]?.images ?? []);
+  const [sizes, setSizes] = useState<Size[]>(initial?.variants[0]?.sizes.map((s) => s.size) ?? ["S", "M", "L"]);
+  const [stock, setStock] = useState(initial?.variants[0]?.sizes[0]?.stock?.toString() ?? "10");
   const [tags, setTags] = useState<string[]>(initial?.tags ?? []);
   const [isActive, setIsActive] = useState(initial?.isActive ?? true);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+
+  const previewImages = useMemo(() => imageEntries.filter(Boolean), [imageEntries]);
 
   function toggleSize(s: Size) {
     setSizes((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
@@ -48,9 +47,17 @@ export default function ProductForm({ initial }: Props) {
     setTags((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
   }
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
+  function addImageSlot() {
+    setImageEntries((prev) => [...prev, ""]);
+  }
+
+  function removeImageSlot(index: number) {
+    setImageEntries((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+  }
+
+  async function uploadImageForSlot(index: number, event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
 
     setUploadingImages(true);
     setError("");
@@ -58,7 +65,7 @@ export default function ProductForm({ initial }: Props) {
 
     try {
       const fd = new FormData();
-      Array.from(files).forEach((file) => fd.append("files", file));
+      fd.append("files", file);
 
       const res = await fetch("/api/admin/upload-image", {
         method: "POST",
@@ -71,20 +78,23 @@ export default function ProductForm({ initial }: Props) {
         return;
       }
 
-      const uploaded = data.images ?? [];
-      const existing = images
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean);
+      const uploaded = data.images?.[0];
+      if (!uploaded) {
+        setError("The image could not be saved.");
+        return;
+      }
 
-      const merged = Array.from(new Set([...existing, ...uploaded]));
-      setImages(merged.join(", "));
-      setUploadMessage(`${uploaded.length} image${uploaded.length > 1 ? "s" : ""} added to the product.`);
+      setImageEntries((prev) => {
+        const next = [...prev];
+        next[index] = uploaded;
+        return next;
+      });
+      setUploadMessage("Image uploaded and linked to the product.");
     } catch {
       setError("Image upload failed. Please try again.");
     } finally {
       setUploadingImages(false);
-      e.target.value = "";
+      event.target.value = "";
     }
   }
 
@@ -95,6 +105,7 @@ export default function ProductForm({ initial }: Props) {
 
     const payload = {
       name,
+      slug: slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
       sku,
       category,
       description,
@@ -108,24 +119,18 @@ export default function ProductForm({ initial }: Props) {
         {
           color,
           colorHex,
-          images: images
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean),
+          images: imageEntries.filter(Boolean),
           sizes: sizes.map((s) => ({ size: s, stock: Number(stock) || 0 })),
         },
       ],
     };
 
     try {
-      const res = await fetch(
-        initial ? `/api/products/${initial.id}` : "/api/products",
-        {
-          method: initial ? "PUT" : "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(initial ? `/api/products/${initial.id}` : "/api/products", {
+        method: initial ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
       if (!res.ok) {
         const data = await res.json();
         setError(data.error ?? "Something went wrong.");
@@ -139,36 +144,30 @@ export default function ProductForm({ initial }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 max-w-2xl space-y-6">
-      <div className="grid grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit} className="mt-6 max-w-4xl space-y-6">
+      <div className="grid gap-4 md:grid-cols-2">
         <Field label="Product Name">
           <input required value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
         </Field>
-        <Field label="SKU">
-          <input required value={sku} onChange={(e) => setSku(e.target.value)} className={inputClass} />
+        <Field label="Slug">
+          <input value={slug} onChange={(e) => setSlug(e.target.value)} className={inputClass} placeholder="e.g. crimson-silk-kurta" />
         </Field>
       </div>
 
-      <Field label="Category">
-        <input
-          required
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          placeholder="e.g. sarees, kurtas"
-          className={inputClass}
-        />
-      </Field>
+      <div className="grid gap-4 md:grid-cols-2">
+        <Field label="SKU">
+          <input required value={sku} onChange={(e) => setSku(e.target.value)} className={inputClass} />
+        </Field>
+        <Field label="Category">
+          <input required value={category} onChange={(e) => setCategory(e.target.value)} placeholder="e.g. kurtas" className={inputClass} />
+        </Field>
+      </div>
 
       <Field label="Description">
-        <textarea
-          rows={4}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className={inputClass}
-        />
+        <textarea rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className={inputClass} />
       </Field>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 md:grid-cols-2">
         <Field label="Fabric">
           <input value={fabric} onChange={(e) => setFabric(e.target.value)} className={inputClass} />
         </Field>
@@ -177,23 +176,16 @@ export default function ProductForm({ initial }: Props) {
         </Field>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 md:grid-cols-2">
         <Field label="MRP (₹)">
           <input type="number" min="0" value={mrp} onChange={(e) => setMrp(e.target.value)} className={inputClass} />
         </Field>
         <Field label="Sale Price (₹)">
-          <input
-            required
-            type="number"
-            min="0"
-            value={salePrice}
-            onChange={(e) => setSalePrice(e.target.value)}
-            className={inputClass}
-          />
+          <input required type="number" min="0" value={salePrice} onChange={(e) => setSalePrice(e.target.value)} className={inputClass} />
         </Field>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 md:grid-cols-2">
         <Field label="Color Name">
           <input value={color} onChange={(e) => setColor(e.target.value)} className={inputClass} />
         </Field>
@@ -202,28 +194,65 @@ export default function ProductForm({ initial }: Props) {
         </Field>
       </div>
 
-      <Field label="Product Showcase Images">
-        <div className="space-y-3">
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm file:mr-3 file:rounded-full file:border-0 file:bg-dark file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
-          />
-          <input
-            value={images}
-            onChange={(e) => setImages(e.target.value)}
-            className={inputClass}
-            placeholder="/products/hero.jpg, /products/hero-2.jpg"
-          />
+      <Field label="Product Images">
+        <div className="space-y-3 rounded-[1.4rem] border border-border/70 bg-[#fffaf5] p-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-dark/70">Upload, replace, preview, and reorder images for this product.</p>
+            <button type="button" onClick={addImageSlot} className="rounded-full border border-border/70 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-dark/70">
+              Add image
+            </button>
+          </div>
+
+          {previewImages.length === 0 && (
+            <div className="rounded-[1rem] border border-dashed border-border/70 p-6 text-center text-sm text-dark/45">
+              No images yet. Add a primary image to start.
+            </div>
+          )}
+
+          <div className="grid gap-3 md:grid-cols-2">
+            {imageEntries.map((image, index) => (
+              <div
+                key={`${image}-${index}`}
+                draggable
+                onDragStart={() => setDraggedIndex(index)}
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={() => {
+                  if (draggedIndex === null || draggedIndex === index) return;
+                  const next = [...imageEntries];
+                  const [moved] = next.splice(draggedIndex, 1);
+                  next.splice(index, 0, moved);
+                  setImageEntries(next);
+                  setDraggedIndex(null);
+                }}
+                className="rounded-[1rem] border border-border/70 bg-white p-3 shadow-sm"
+              >
+                {image ? (
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-[0.8rem]">
+                    <Image src={image} alt={`Product image ${index + 1}`} fill className="object-cover" sizes="240px" />
+                  </div>
+                ) : (
+                  <div className="flex aspect-[4/5] items-center justify-center rounded-[0.8rem] border border-dashed border-border/70 text-sm text-dark/45">
+                    Empty slot
+                  </div>
+                )}
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <label className="inline-flex cursor-pointer rounded-full bg-[#7a0000] px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white">
+                    <span>Replace</span>
+                    <input type="file" accept="image/*" className="hidden" onChange={(event) => uploadImageForSlot(index, event)} />
+                  </label>
+                  <button type="button" onClick={() => removeImageSlot(index)} className="rounded-full border border-border/70 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-dark/70">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </Field>
-      <p className="-mt-4 text-xs text-dark/40">
-        Upload images directly from this admin form. They will be saved under <code>/public/products/</code> and added to the product gallery paths.
-      </p>
-      {uploadingImages && <p className="-mt-4 text-xs text-gold-dark">Uploading images…</p>}
-      {uploadMessage && <p className="-mt-4 text-xs text-gold-dark">{uploadMessage}</p>}
+
+      {uploadingImages && <p className="-mt-4 text-xs text-[#7a0000]">Uploading images…</p>}
+      {uploadMessage && <p className="-mt-4 text-xs text-[#7a0000]">{uploadMessage}</p>}
 
       <Field label="Available Sizes">
         <div className="flex flex-wrap gap-2">
@@ -233,9 +262,7 @@ export default function ProductForm({ initial }: Props) {
               key={s}
               onClick={() => toggleSize(s)}
               className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors ${
-                sizes.includes(s)
-                  ? "border-dark bg-dark text-white"
-                  : "border-border text-dark/60 hover:border-dark/40"
+                sizes.includes(s) ? "border-[#7a0000] bg-[#7a0000] text-white" : "border-border text-dark/60 hover:border-[#7a0000]/40"
               }`}
             >
               {s}
@@ -256,9 +283,7 @@ export default function ProductForm({ initial }: Props) {
               key={t}
               onClick={() => toggleTag(t)}
               className={`rounded-full border px-3.5 py-1.5 text-xs font-medium capitalize transition-colors ${
-                tags.includes(t)
-                  ? "border-gold bg-gold/15 text-gold-dark"
-                  : "border-border text-dark/60 hover:border-dark/40"
+                tags.includes(t) ? "border-[#7a0000] bg-[#7a0000]/10 text-[#7a0000]" : "border-border text-dark/60 hover:border-[#7a0000]/40"
               }`}
             >
               {t.replace("-", " ")}
@@ -272,18 +297,10 @@ export default function ProductForm({ initial }: Props) {
         Visible on storefront
       </label>
 
-      {error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-          {error}
-        </p>
-      )}
+      {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 
       <div className="flex gap-3 pt-2">
-        <button
-          type="submit"
-          disabled={saving}
-          className="rounded-full bg-dark px-7 py-3 text-sm font-medium text-white hover:scale-[1.02] transition-transform disabled:opacity-50"
-        >
+        <button type="submit" disabled={saving} className="rounded-full bg-dark px-7 py-3 text-sm font-medium text-white hover:scale-[1.02] transition-transform disabled:opacity-50">
           {saving ? "Saving…" : initial ? "Save Changes" : "Add Product"}
         </button>
       </div>
@@ -291,8 +308,7 @@ export default function ProductForm({ initial }: Props) {
   );
 }
 
-const inputClass =
-  "w-full rounded-lg border border-border bg-white px-4 py-2.5 text-sm focus:border-gold focus:outline-none";
+const inputClass = "w-full rounded-lg border border-border bg-white px-4 py-2.5 text-sm focus:border-[#7a0000] focus:outline-none";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (

@@ -43,25 +43,25 @@ export default function ProductBuyBox({ product }: { product: Product }) {
 
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-dark">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
         {product.category}
       </p>
-      <h1 className="mt-2 font-heading text-3xl text-dark">{product.name}</h1>
+      <h1 className="mt-2 font-heading text-3xl text-white">{product.name}</h1>
 
       <div className="mt-4 flex items-baseline gap-3">
-        <span className="text-2xl font-medium text-dark">
+        <span className="text-2xl font-medium text-white">
           ₹{product.salePrice.toLocaleString("en-IN")}
         </span>
         {product.mrp > product.salePrice && (
           <>
-            <span className="text-base text-dark/40 line-through">
+            <span className="text-base text-white/60 line-through">
               ₹{product.mrp.toLocaleString("en-IN")}
             </span>
             <span className="text-sm font-medium text-green-600">{discount}% off</span>
           </>
         )}
       </div>
-      <p className="mt-1 text-xs text-dark/40">Inclusive of all taxes</p>
+      <p className="mt-1 text-xs text-white/70">Inclusive of all taxes</p>
 
       <div className="mt-8">
         <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-dark/60">
@@ -134,7 +134,7 @@ export default function ProductBuyBox({ product }: { product: Product }) {
           <button
             onClick={() => setTab("description")}
             className={`pb-2 border-b-2 transition-colors ${
-              tab === "description" ? "border-gold text-dark" : "border-transparent text-dark/40"
+              tab === "description" ? "border-gold text-white" : "border-transparent text-white/70"
             }`}
           >
             Description
@@ -142,7 +142,7 @@ export default function ProductBuyBox({ product }: { product: Product }) {
           <button
             onClick={() => setTab("shipping")}
             className={`pb-2 border-b-2 transition-colors ${
-              tab === "shipping" ? "border-gold text-dark" : "border-transparent text-dark/40"
+              tab === "shipping" ? "border-gold text-white" : "border-transparent text-white/70"
             }`}
           >
             Shipping &amp; Returns
@@ -150,13 +150,13 @@ export default function ProductBuyBox({ product }: { product: Product }) {
         </div>
 
         {tab === "description" ? (
-          <div className="mt-4 space-y-2 text-sm leading-relaxed text-dark/70">
+          <div className="mt-4 space-y-2 text-sm leading-relaxed text-white/70">
             <p>{product.description || "No description added yet."}</p>
             {product.fabric && <p><strong>Fabric:</strong> {product.fabric}</p>}
             {product.washCare && <p><strong>Wash Care:</strong> {product.washCare}</p>}
           </div>
         ) : (
-          <div className="mt-4 space-y-2 text-sm leading-relaxed text-dark/70">
+          <div className="mt-4 space-y-2 text-sm leading-relaxed text-white/70">
             <p>Ships within 2-4 business days across India.</p>
             <p>Easy 7-day returns on unused items with tags intact.</p>
           </div>

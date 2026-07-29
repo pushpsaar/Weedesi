@@ -1,6 +1,6 @@
+import Image from "next/image";
 import { getActiveProducts } from "@/lib/data";
 import ProductCard from "@/components/ui/ProductCard";
-import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = { title: "Shop" };
@@ -12,7 +12,6 @@ export default async function ShopPage({
 }) {
   const { tag, category, q } = await searchParams;
 
-  // load products once and derive views from that
   let products = await getActiveProducts();
 
   if (tag) products = products.filter((p) => p.tags?.includes(tag));
@@ -20,53 +19,39 @@ export default async function ShopPage({
   if (q) {
     const query = q.toLowerCase();
     products = products.filter((p) => {
-      return (
-        p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query)
-      );
+      return p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query);
     });
   }
 
   const categories = Array.from(new Set(products.map((p) => p.category))).filter(Boolean);
+  const displayProducts = products.slice(0, 15);
 
   return (
     <div className="bg-transparent">
-      <section className="w-full">
-        <div className="mx-auto max-w-screen-xl">
-          <div className="flex h-64 items-center justify-center bg-[#7a0f0f] text-white dark:bg-[#180707]">
-            <div className="text-center">
-              <div className="mx-auto mb-4 flex items-center justify-center gap-6">
-                <Image src="/logo.png" alt="WEदेसी" width={160} height={60} className="block dark:hidden" />
-                <Image src="/logo%202.png" alt="WEदेसी" width={160} height={60} className="hidden dark:block" />
-              </div>
-              <h2 className="font-heading text-3xl font-bold">Where Tradition meets elegance</h2>
+      <section className="section-shell px-3 py-8 sm:px-4 lg:py-12">
+        <div className="rounded-[2.2rem] border border-border/70 bg-[#fffaf5] px-6 py-10 shadow-[0_24px_90px_rgba(29,26,22,0.08)] sm:px-10 lg:px-14 lg:py-14 dark:bg-[#240d0d] dark:shadow-[0_24px_90px_rgba(0,0,0,0.28)]">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[#7a0000]">Shop</p>
+              <h1 className="mt-4 font-heading text-4xl leading-tight text-dark sm:text-5xl">The Collection</h1>
+              <p className="mt-4 text-base leading-8 text-dark/65">
+                Discover premium kurtis and contemporary Indian staples, crafted for everyday elegance and effortless wear.
+              </p>
+            </div>
+            <div className="flex items-center gap-3 rounded-full border border-white/20 bg-[#7a0000] px-4 py-3 text-sm font-semibold text-white shadow-sm dark:bg-[#4b0606]">
+              <Image src="/logo.png" alt="WEदेसी logo" width={64} height={64} className="h-16 w-auto object-contain" />
             </div>
           </div>
         </div>
       </section>
 
-      <main className="py-20">
+      <main className="pb-20">
         <div className="section-shell">
-          <header className="max-w-4xl">
-            <p className="text-[11px] uppercase tracking-[0.35em] text-gold-dark">Shop</p>
-            <h1 className="mt-4 font-heading text-5xl leading-tight text-dark sm:text-6xl">The Collection</h1>
-            <p className="mt-4 max-w-2xl text-base leading-8 text-dark/65">
-              A carefully selected range of kurtis and Indian wear crafted for everyday elegance.
-            </p>
-
-            <div className="mt-6 rounded-lg bg-white/70 p-6 shadow-sm dark:bg-[#0f0606]/60">
-              <h3 className="font-semibold text-lg text-dark">About WEदेसी</h3>
-              <p className="mt-2 text-sm text-dark/70">
-                Handcrafted pieces, breathable fabrics, and thoughtful details. Weदेसी brings together tradition and contemporary
-                comfort for a wardrobe that lasts.
-              </p>
-            </div>
-          </header>
-
           {categories.length > 0 && (
-            <div className="mt-10 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/shop"
-                className={!category ? "rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] bg-dark text-white" : "rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] bg-white text-dark/70"}
+                className={!category ? "rounded-full border border-[#7a0000] bg-[#7a0000] px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-white" : "rounded-full border border-border/70 bg-white px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-dark/70"}
               >
                 All
               </Link>
@@ -75,7 +60,7 @@ export default async function ShopPage({
                 <Link
                   key={c}
                   href={`/shop?category=${encodeURIComponent(c)}`}
-                  className={category === c ? "rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] bg-dark text-white" : "rounded-full border px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] bg-white text-dark/70"}
+                  className={category === c ? "rounded-full border border-[#7a0000] bg-[#7a0000] px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-white" : "rounded-full border border-border/70 bg-white px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-dark/70"}
                 >
                   {c}
                 </Link>
@@ -85,13 +70,13 @@ export default async function ShopPage({
 
           <section className="mt-12">
             {products.length === 0 ? (
-              <div className="rounded-[2rem] border border-dashed border-border/70 bg-surface/80 py-24 text-center text-sm text-dark/45">
+              <div className="rounded-[2rem] border border-dashed border-border/70 bg-[#fffaf5] py-24 text-center text-sm text-dark/45">
                 No products found. Add products from the admin panel.
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-4 xl:gap-7">
-                {products.map((p) => (
-                  <ProductCard key={p.id} product={p} />
+                {displayProducts.map((p, index) => (
+                  <ProductCard key={`${p.id}-${index}`} product={p} imageIndex={index} />
                 ))}
               </div>
             )}

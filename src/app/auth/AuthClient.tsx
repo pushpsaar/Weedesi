@@ -73,7 +73,7 @@ export default function AuthPage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-5xl overflow-hidden rounded-[2rem] border border-border/70 bg-white/80 shadow-[0_24px_90px_rgba(43,43,43,0.12)] backdrop-blur-sm"
+        className="w-full max-w-5xl overflow-hidden rounded-[2rem] border border-border/70 bg-transparent shadow-[0_24px_90px_rgba(43,43,43,0.12)]"
       >
         <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
           <div className="hidden bg-[radial-gradient(circle_at_top_left,rgba(200,169,106,0.24),transparent_45%),linear-gradient(135deg,#fdf8ef_0%,#f3e7d7_100%)] p-10 lg:flex lg:flex-col lg:justify-between">

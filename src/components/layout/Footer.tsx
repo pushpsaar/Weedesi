@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { getSiteContent } from "@/lib/site-content";
 
@@ -9,7 +10,13 @@ export default async function Footer() {
       <div className="section-shell px-4 py-16 sm:px-6 md:px-8">
         <div className="grid gap-12 md:grid-cols-4">
           <div className="space-y-5">
-            <span className="block text-2xl font-heading tracking-[0.12em] text-dark">{content.footer.logo}</span>
+            <Image
+              src="/logo.png"
+              alt={content.footer.logo || "WEदेसी logo"}
+              width={172}
+              height={48}
+              className="h-auto w-auto object-contain"
+            />
             <p className="max-w-sm text-sm leading-7 text-dark/65">{content.footer.description}</p>
           </div>
 

@@ -13,6 +13,10 @@ export default function ProductRail({
   products: Product[];
   viewAllHref: string;
 }) {
+  const displayProducts = products.length
+    ? Array.from({ length: Math.min(30, Math.max(products.length, 30)) }, (_, index) => products[index % products.length]).slice(0, 30)
+    : [];
+
   return (
     <section className="section-shell px-4 py-20 sm:px-6 md:px-8 lg:py-24">
       <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -31,14 +35,14 @@ export default function ProductRail({
         </Link>
       </div>
 
-      {products.length === 0 ? (
+      {displayProducts.length === 0 ? (
         <div className="rounded-[2rem] border border-dashed border-border/70 bg-surface/80 py-20 text-center text-sm text-dark/45">
           No products yet — add some from the admin panel.
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-4 xl:gap-6">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
+          {displayProducts.map((p, index) => (
+            <ProductCard key={`${p.id}-${index}`} product={p} imageIndex={index} />
           ))}
         </div>
       )}

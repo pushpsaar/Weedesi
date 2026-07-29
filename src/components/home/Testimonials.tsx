@@ -17,7 +17,7 @@ const REVIEWS = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-white/70 py-16 backdrop-blur-sm sm:py-20">
+    <section className="bg-transparent py-16 sm:py-20">
       <div className="section-shell px-4 sm:px-6 md:px-8">
         <div className="mb-10 text-center">
           <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-gold-dark">Client love</p>

@@ -36,7 +36,7 @@ export default function AdminLayout({
             <Link
               key={item.href}
               href={item.href}
-              className="shrink-0 rounded-full border border-border bg-white/80 px-3 py-2 text-sm text-dark/70 transition-colors hover:bg-dark hover:text-white md:block md:rounded-lg md:border-0 md:bg-transparent md:px-3 md:py-2"
+              className="shrink-0 rounded-full border border-border bg-transparent px-3 py-2 text-sm text-dark/70 transition-colors hover:bg-dark hover:text-white md:block md:rounded-lg md:border-0 md:bg-transparent md:px-3 md:py-2"
             >
               {item.label}
             </Link>

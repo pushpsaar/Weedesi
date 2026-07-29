@@ -51,7 +51,7 @@ export default function AdminUsersPage() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-[24px] border border-border bg-white/80 p-5 shadow-sm">
+      <div className="rounded-[24px] border border-border bg-transparent p-5 shadow-sm">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <h1 className="font-heading text-2xl text-dark">Customer Users</h1>
@@ -64,7 +64,7 @@ export default function AdminUsersPage() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-[24px] border border-border bg-white/80 shadow-sm">
+      <div className="overflow-hidden rounded-[24px] border border-border bg-transparent shadow-sm">
         {loading ? (
           <div className="p-8 text-sm text-dark/55">Loading users…</div>
         ) : filtered.length === 0 ? (
