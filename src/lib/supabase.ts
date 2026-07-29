@@ -138,24 +138,27 @@ export async function ensureSupabaseSchema(): Promise<void> {
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  const missingVars: string[] = [];
-  if (!dbUrl) missingVars.push("DATABASE_URL or SUPABASE_DATABASE_URL");
-  if (!supabaseUrl) missingVars.push("SUPABASE_URL");
-  if (!supabaseServiceKey) missingVars.push("SUPABASE_SERVICE_ROLE_KEY");
+  const missingSupabaseVars: string[] = [];
+  if (!supabaseUrl) missingSupabaseVars.push("SUPABASE_URL");
+  if (!supabaseServiceKey) missingSupabaseVars.push("SUPABASE_SERVICE_ROLE_KEY");
 
-  if (missingVars.length > 0) {
+  if (missingSupabaseVars.length > 0) {
     console.error(
       "Supabase schema initialization skipped: missing environment variables:",
-      missingVars.join(", ")
+      missingSupabaseVars.join(", ")
     );
-    // Mark initialized to avoid repeated noisy checks during runtime when DB is absent.
     schemaInitialized = true;
     return;
   }
 
-  const client = getPool();
+  if (!dbUrl) {
+    console.warn(
+      "Supabase schema initialization: DATABASE_URL / SUPABASE_DATABASE_URL missing. Skipping raw table creation and only running migrations against existing schema."
+    );
+  } else {
+    const client = getPool();
 
-  await client.query(`
+    await client.query(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
@@ -222,6 +225,7 @@ export async function ensureSupabaseSchema(): Promise<void> {
       content JSONB NOT NULL
     );
   `);
+  }
 
   await migrateAdminCredentials();
   await migrateSiteContent();
@@ -232,7 +236,7 @@ export async function ensureSupabaseSchema(): Promise<void> {
 }
 
 async function migrateAdminCredentials(): Promise<void> {
-  console.log("migrateAdminCredentials: checking for default admin credentials (id=default)");
+  console.log("migrateAdminCredentials started");
 
   const check = await supabaseAdmin
     .from("admin_credentials")
@@ -246,11 +250,11 @@ async function migrateAdminCredentials(): Promise<void> {
   }
 
   if (check.data) {
-    console.log("migrateAdminCredentials: default admin already exists (id=default)");
+    console.log("existing row found");
     return;
   }
 
-  console.log("migrateAdminCredentials: creating default admin");
+  console.log("creating default admin");
   const defaultUsername = process.env.ADMIN_USERNAME || "WEदेसी";
   const defaultPassword = process.env.ADMIN_PASSWORD || "wedesi@1234";
 
@@ -266,7 +270,6 @@ async function migrateAdminCredentials(): Promise<void> {
     throw upsertError;
   }
 
-  // Verify the row was written and contains required fields.
   const verify = await supabaseAdmin
     .from("admin_credentials")
     .select("salt, hash")
@@ -376,11 +379,11 @@ export async function listSupabaseStorageFiles(prefix = ""): Promise<string[]> {
       return;
     }
 
-for (const item of data) {
-  result.push(folder ? `${folder}/${item.name}` : item.name);
-}
-} // <-- closes async function walk()
+    for (const item of data) {
+      result.push(folder ? `${folder}/${item.name}` : item.name);
+    }
+  }
 
-await walk(prefix);
-return result;
-} // <-- closes listSupabaseStorageFiles()
+  await walk(prefix);
+  return result;
+}

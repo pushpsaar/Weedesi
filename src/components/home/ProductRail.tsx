@@ -13,9 +13,7 @@ export default function ProductRail({
   products: Product[];
   viewAllHref: string;
 }) {
-  const displayProducts = products.length
-    ? Array.from({ length: Math.min(30, Math.max(products.length, 30)) }, (_, index) => products[index % products.length]).slice(0, 30)
-    : [];
+  const displayProducts = products.length ? products.slice(0, 30) : [];
 
   return (
     <section className="section-shell px-4 py-20 sm:px-6 md:px-8 lg:py-24">
