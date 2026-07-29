@@ -150,8 +150,8 @@ export default function HeroSlider({
       {slides.map((slide, index) => (
         <div
           key={slide.image}
-          className={`absolute inset-0 transition-all duration-1000 ${
-            index === activeIndex ? "dark:opacity-100 opacity-0" : "dark:opacity-0 opacity-0"
+          className={`absolute inset-0 transition-opacity duration-1000 ${
+            index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
         >
           <Image
