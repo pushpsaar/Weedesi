@@ -232,9 +232,8 @@ export async function ensureSupabaseSchema(): Promise<void> {
 }
 
 async function migrateAdminCredentials(): Promise<void> {
-  console.log("Starting migrateAdminCredentials");
+  console.log("migrateAdminCredentials: checking for default admin credentials (id=default)");
 
-  console.log("Checking existing admin");
   const check = await supabaseAdmin
     .from("admin_credentials")
     .select("id")
@@ -242,159 +241,55 @@ async function migrateAdminCredentials(): Promise<void> {
     .maybeSingle();
 
   if (check.error) {
-    console.error("Checking existing admin failed:", check.error);
+    console.error("migrateAdminCredentials: check failed:", check.error);
     throw check.error;
   }
 
   if (check.data) {
-    console.log("Existing admin found");
-
-    // Verify the stored hash matches the expected hash for the seed password.
-    console.log("Verifying stored hash against expected seed password");
-    const stored = await supabaseAdmin
-      .from("admin_credentials")
-      .select("username, salt, hash")
-      .eq("id", "default")
-      .maybeSingle();
-
-    if (stored.error) {
-      console.error("Failed to fetch stored admin for verification:", stored.error);
-      throw stored.error;
-    }
-
-    if (stored.data) {
-      const storedSalt = stored.data.salt;
-      const storedHash = stored.data.hash;
-      // Compute expected hash for exact password 'wedesi@123' using scryptSync.
-      const expected = crypto.scryptSync("wedesi@123", storedSalt, 64).toString("hex");
-      if (expected !== storedHash) {
-        console.error("Hash mismatch during verification.");
-
-        // Recreate the admin_credentials row using a fresh salt and the exact password.
-        console.log("Recreating default admin with expected seed password");
-        const newSalt = crypto.randomBytes(16).toString("hex");
-        const newHash = crypto.scryptSync("wedesi@123", newSalt, 64).toString("hex");
-
-        const replace = await supabaseAdmin
-          .from("admin_credentials")
-          .upsert({ id: "default", username: stored.data.username || "WEदेसी", salt: newSalt, hash: newHash });
-
-        if (replace.error) {
-          console.error("Failed to recreate default admin:", replace.error);
-          throw replace.error;
-        }
-
-        // Verify replacement
-        const verify = await supabaseAdmin
-          .from("admin_credentials")
-          .select("salt, hash")
-          .eq("id", "default")
-          .maybeSingle();
-
-        if (verify.error) {
-          console.error("Verification after recreate failed:", verify.error);
-          throw verify.error;
-        }
-
-        const reloadedSalt = verify.data?.salt;
-        const reloadedHash = verify.data?.hash;
-        const expected2 = crypto.scryptSync("wedesi@123", reloadedSalt, 64).toString("hex");
-        if (expected2 !== reloadedHash) {
-          console.error("Recreated hash does not match expected value after write.");
-          throw new Error("Recreated admin hash mismatch");
-        }
-
-        console.log("Recreated default admin successfully; stored hash now matches expected seed password.");
-      } else {
-        console.log("Stored hash matches expected seed password");
-      }
-    }
-
+    console.log("migrateAdminCredentials: default admin already exists (id=default)");
     return;
   }
 
-  console.log("Creating default admin");
+  console.log("migrateAdminCredentials: creating default admin");
   const defaultUsername = process.env.ADMIN_USERNAME || "WEदेसी";
   const defaultPassword = process.env.ADMIN_PASSWORD || "wedesi@123";
 
   const salt = crypto.randomBytes(16).toString("hex");
   const hash = crypto.scryptSync(defaultPassword, salt, 64).toString("hex");
 
-  // Try upsert first, fall back to insert on specific errors. Retry until the row is visible.
-  const maxAttempts = 10;
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    console.log(`Attempt ${attempt}: performing upsert for default admin`);
-    const upsertResult = await supabaseAdmin
-      .from("admin_credentials")
-      .upsert({ id: "default", username: defaultUsername, salt, hash });
+  const { error: upsertError } = await supabaseAdmin
+    .from("admin_credentials")
+    .upsert({ id: "default", username: defaultUsername, salt, hash });
 
-    if (upsertResult.error) {
-      console.error("Insert failed:", upsertResult.error);
-
-      // If the error suggests ON CONFLICT/primary key issues, try a plain insert.
-      const msg = String(upsertResult.error.message || "").toLowerCase();
-      if (msg.includes("on conflict") || msg.includes("syntax") || msg.includes("column \"id\"")) {
-        console.log("Upsert failed due to schema/primary-key issue; attempting insert instead");
-        const insertResult = await supabaseAdmin.from("admin_credentials").insert([
-          { id: "default", username: defaultUsername, salt, hash },
-        ]);
-
-        if (insertResult.error) {
-          console.error("Insert failed:", insertResult.error);
-          // If this was the last attempt, throw the error.
-          if (attempt === maxAttempts) throw insertResult.error;
-        } else {
-          console.log("Insert successful");
-        }
-      } else {
-        // For other errors, don't silently swallow them. Throw so they appear in logs.
-        if (attempt === maxAttempts) throw upsertResult.error;
-      }
-    } else {
-      console.log("Insert successful");
-    }
-
-    // Verify the row exists now.
-    console.log("Verifying default admin exists after write");
-    const verify = await supabaseAdmin
-      .from("admin_credentials")
-      .select("id")
-      .eq("id", "default")
-      .maybeSingle();
-
-    if (verify.error) {
-      console.error("Verification query failed:", verify.error);
-      if (attempt === maxAttempts) throw verify.error;
-    }
-
-    if (verify.data) {
-      console.log("Default admin is present in admin_credentials");
-
-      // Ensure there is exactly one row with id='default'.
-      const countCheck = await supabaseAdmin
-        .from("admin_credentials")
-        .select("id", { count: "exact", head: false })
-        .eq("id", "default");
-
-      if (countCheck.error) {
-        console.error("Count check failed:", countCheck.error);
-        if (attempt === maxAttempts) throw countCheck.error;
-      } else {
-        // countCheck.data will be an array; length should be 1
-        const rows = Array.isArray(countCheck.data) ? countCheck.data.length : 0;
-        console.log(`Rows with id='default': ${rows}`);
-      }
-
-      return;
-    }
-
-    // Wait before retrying.
-    const delayMs = Math.min(1000 * attempt, 5000);
-    console.log(`Row not visible yet, retrying after ${delayMs}ms`);
-    await new Promise((res) => setTimeout(res, delayMs));
+  if (upsertError) {
+    console.error("migrateAdminCredentials: failed to create default admin:", upsertError);
+    throw upsertError;
   }
 
-  throw new Error("migrateAdminCredentials: failed to ensure default admin after retries");
+  // Verify the row was written and contains required fields.
+  const verify = await supabaseAdmin
+    .from("admin_credentials")
+    .select("salt, hash")
+    .eq("id", "default")
+    .maybeSingle();
+
+  if (verify.error) {
+    console.error("migrateAdminCredentials: verification failed:", verify.error);
+    throw verify.error;
+  }
+
+  if (!verify.data) {
+    throw new Error("Failed to reload admin credentials after write.");
+  }
+
+  const reloadedSalt = verify.data.salt;
+  const reloadedHash = verify.data.hash;
+
+  if (!reloadedSalt || !reloadedHash) {
+    throw new Error("Failed to reload admin credentials after write.");
+  }
+
+  console.log("migrateAdminCredentials: created default admin (id=default)");
 }
 
 async function migrateSiteContent(): Promise<void> {
