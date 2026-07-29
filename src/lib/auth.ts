@@ -67,27 +67,41 @@ export async function verifyAdminPassword(
   password: string
 ): Promise<boolean> {
   const creds = await getAdminCreds();
-  // Temporary diagnostics (do not log secrets):
-  try {
-    console.log("verifyAdminPassword: stored salt length:", creds.salt ? creds.salt.length : "missing");
-    console.log("verifyAdminPassword: stored hash length:", creds.hash ? creds.hash.length : "missing");
+  const salt = creds.salt;
+  const storedHashRaw = creds.hash;
 
-    // Compute expected hash for the exact seed password and compare lengths
-    const expectedForSeed = crypto.scryptSync("wedesi@123", creds.salt, 64).toString("hex");
-    if (expectedForSeed === creds.hash) {
-      console.log("verifyAdminPassword: Hashes match");
-    } else {
-      console.log("verifyAdminPassword: Hashes do not match");
-    }
-  } catch (err) {
-    console.error("verifyAdminPassword: diagnostic check failed:", err instanceof Error ? err.message : err);
+  if (!salt || !storedHashRaw) {
+    // Defensive: getAdminCreds should guarantee these, but fail safe.
+    throw new Error("Admin credentials are not properly configured.");
   }
 
-  const hash = hashPassword(password, creds.salt);
-  const a = Buffer.from(hash, "hex");
-  const b = Buffer.from(creds.hash, "hex");
-  if (a.length !== b.length) return false;
-  return crypto.timingSafeEqual(a, b);
+  // Compute expected hash (hex) using the same algorithm used during seeding.
+  const expectedHex = crypto.scryptSync(password, salt, 64).toString("hex");
+
+  // Direct hex comparison (case-insensitive to tolerate hex casing differences).
+  if (expectedHex === storedHashRaw || expectedHex === storedHashRaw.toLowerCase() || expectedHex === storedHashRaw.toUpperCase()) {
+    const a = Buffer.from(expectedHex, "hex");
+    const b = Buffer.from(storedHashRaw.replace(/^0x/, ""), "hex");
+    if (a.length !== b.length) return false;
+    return crypto.timingSafeEqual(a, b);
+  }
+
+  // Fallback: stored hash may be base64-encoded. Try decoding stored hash from base64
+  // and compare the resulting hex to the expected hex.
+  try {
+    const decoded = Buffer.from(storedHashRaw, "base64").toString("hex");
+    if (decoded === expectedHex) {
+      const a = Buffer.from(expectedHex, "hex");
+      const b = Buffer.from(decoded, "hex");
+      if (a.length !== b.length) return false;
+      return crypto.timingSafeEqual(a, b);
+    }
+  } catch {
+    // ignore decode errors and fall through to final false
+  }
+
+  // No match
+  return false;
 }
 
 export async function changeAdminPassword(
