@@ -27,7 +27,7 @@ export default function Faq() {
 
         <div className="mt-6 grid gap-4">
           {faqs.map((f) => (
-            <details key={f.q} className="rounded-lg border border-border/60 bg-white p-4 dark:bg-[#120808]/60">
+            <details key={f.q} className="rounded-lg border border-border/60 bg-surface p-4 dark:bg-surface-soft">
               <summary className="cursor-pointer list-none text-lg font-medium text-dark">{f.q}</summary>
               <div className="mt-3 text-sm text-dark/70">{f.a}</div>
             </details>

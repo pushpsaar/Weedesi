@@ -177,13 +177,13 @@ export default function HeroSlider({
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link
               href={primaryHref}
-              className="inline-flex items-center justify-center rounded-full border border-[#7d1313] bg-[#7d1313] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#940c0c] dark:border-white/25 dark:bg-white dark:text-[#7d1313] dark:hover:bg-white/90"
+              className="inline-flex items-center justify-center rounded-full border border-[#7d1313] bg-[#7d1313] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#b30c0c]"
             >
               Shop Now
             </Link>
             <Link
               href={secondaryHref}
-              className="inline-flex items-center justify-center rounded-full border border-[#7d1313] bg-[#7d1313] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#940c0c] dark:border-white/25 dark:bg-white dark:text-[#7d1313] dark:hover:bg-white/90"
+              className="inline-flex items-center justify-center rounded-full border border-[#7d1313] bg-[#7d1313] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#b30c0c]"
             >
               Our Story
             </Link>
@@ -196,7 +196,7 @@ export default function HeroSlider({
           type="button"
           aria-label="Previous slide"
           onClick={previousSlide}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#1a1a1a] text-white shadow-sm transition hover:bg-[#7d1313] sm:h-12 sm:w-12 dark:bg-white/90 dark:text-[#2a0d0d] dark:hover:bg-white"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#1a1a1a] text-white shadow-sm transition hover:bg-[#7d1313] sm:h-12 sm:w-12"
         >
           <ArrowLeft size={20} />
         </button>
@@ -219,7 +219,7 @@ export default function HeroSlider({
           type="button"
           aria-label="Next slide"
           onClick={nextSlide}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#1a1a1a] text-white shadow-sm transition hover:bg-[#7d1313] sm:h-12 sm:w-12 dark:bg-white/90 dark:text-[#2a0d0d] dark:hover:bg-white"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#1a1a1a] text-white shadow-sm transition hover:bg-[#7d1313] sm:h-12 sm:w-12"
         >
           <ArrowRight size={20} />
         </button>

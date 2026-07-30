@@ -44,7 +44,7 @@ export default function NavDrawer() {
           >
             <div className="flex items-center justify-between border-b border-border/80 px-6 py-5">
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/30 bg-white shadow-sm">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/30 bg-white/10 shadow-sm">
                   <Image src="/logo.png" alt="WEदेसी logo" width={28} height={28} className="h-7 w-auto object-contain" />
                 </div>
                 <div>

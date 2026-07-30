@@ -8,6 +8,7 @@
   --color-gold: #c38e68;
   --color-gold-dark: #a26c4b;
   --color-dark: #221611;
+  --color-text: #221611;
   --color-muted: #7b6459;
   --color-border: rgba(34, 22, 17, 0.11);
   --color-shadow: rgba(0, 0, 0, 0.08);
@@ -23,6 +24,7 @@
   --color-gold-dark: var(--color-gold-dark);
   --color-dark: var(--color-dark);
   --color-border: var(--color-border);
+  --color-text: var(--color-text);
   --font-heading: var(--font-heading);
   --font-body: var(--font-body);
 }
@@ -42,7 +44,7 @@ body {
   background:
     radial-gradient(circle at top left, rgba(195, 102, 96, 0.12), transparent 28%),
     linear-gradient(135deg, var(--color-bg) 0%, #f4e8df 100%);
-  color: var(--color-dark);
+  color: var(--color-text);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   text-rendering: optimizeLegibility;
 }
@@ -60,7 +62,7 @@ h6 {
 
 ::selection {
   background: rgba(184, 143, 91, 0.3);
-  color: var(--color-dark);
+  color: var(--color-text);
 }
 
 ::-webkit-scrollbar {
@@ -129,10 +131,6 @@ html:not(.dark) body {
     linear-gradient(135deg, #fffdf9 0%, #f5e9de 100%);
 }
 
-html:not(.dark) [class*="bg-dark"] {
-  background-color: #ffffff !important;
-}
-
 html:not(.dark) [class*="border-dark"] {
   border-color: rgba(34, 22, 17, 0.14) !important;
 }
@@ -161,13 +159,13 @@ html:not(.dark) header.navbar-shell .navbar-action {
 }
 
 html.dark header.navbar-shell {
-  background-color: #330404 !important;
-  color: #fff1ee !important;
+  background-color: #090909 !important;
+  color: #ffffff !important;
 }
 
 html.dark header.navbar-shell .navbar-action {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  background-color: rgba(139, 0, 0, 0.18) !important;
+  border-color: rgba(139, 0, 0, 0.35) !important;
   color: #ffffff !important;
 }
 
@@ -179,21 +177,23 @@ html:not(.dark) header.navbar-shell [aria-label="WEदेसी home"] {
 }
 
 html.dark {
-  --color-bg: #470000;
-  --color-surface: #5a0a0a;
-  --color-surface-soft: #2b0b0b;
-  --color-white: #f7ede4;
-  --color-gold: #d89c72;
-  --color-gold-dark: #f4b07a;
-  --color-dark: #fff1ee;
-  --color-muted: #f6d9ca;
-  --color-border: rgba(255, 241, 238, 0.16);
+  --color-bg: #0f0f0f;
+  --color-surface: #181818;
+  --color-surface-soft: #242424;
+  --color-white: #ffffff;
+  --color-gold: #8b0000;
+  --color-gold-dark: #b30c0c;
+  --color-dark: #8b0000;
+  --color-text: #f8f8f8;
+  --color-muted: #c7c7c7;
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-shadow: rgba(0, 0, 0, 0.45);
 }
 
 html.dark body {
   background:
-    radial-gradient(circle at top left, rgba(244, 176, 122, 0.17), transparent 26%),
-    linear-gradient(135deg, var(--color-bg) 0%, #3d0404 100%);
+    radial-gradient(circle at top left, rgba(139, 0, 0, 0.18), transparent 26%),
+    linear-gradient(135deg, var(--color-bg) 0%, #090909 100%);
 }
 
 html.dark ::-webkit-scrollbar-thumb {
@@ -214,15 +214,48 @@ html.dark .panel-surface {
 }
 
 html.dark .bg-dark {
-  background-color: #1a0707 !important;
+  background-color: #8b0000 !important;
 }
 
 html.dark [class~="bg-white"] {
-  background-color: #2b0707 !important;
+  background-color: var(--color-surface) !important;
+}
+
+html.dark [class*="bg-white/"] {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+html.dark [class*="bg-[#fffaf5]"],
+html.dark [class*="bg-[#fffdf9]"],
+html.dark [class*="bg-[#fff8f2]"] {
+  background-color: var(--color-surface) !important;
+}
+
+html.dark [class*="bg-[#fffaf5]/"],
+html.dark [class*="bg-[#fffdf9]/"],
+html.dark [class*="bg-[#fff8f2]/"] {
+  background-color: rgba(255, 255, 255, 0.06) !important;
 }
 
 html.dark [class~="bg-bg"] {
-  background-color: #250606 !important;
+  background-color: #0f0f0f !important;
+}
+
+html.dark [class~="bg-surface-soft"] {
+  background-color: var(--color-surface-soft) !important;
+}
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: var(--color-text) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: rgba(255, 255, 255, 0.65) !important;
 }
 
 html.dark [class~="border-border"] {
@@ -230,7 +263,7 @@ html.dark [class~="border-border"] {
 }
 
 html.dark [class~="text-dark"] {
-  color: #f7edea !important;
+  color: var(--color-text) !important;
 }
 
 html.dark [class*="text-dark/"] {
