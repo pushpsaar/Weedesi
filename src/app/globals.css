@@ -142,6 +142,38 @@ html:not(.dark) header.navbar-shell .navbar-action {
   color: #ffffff !important;
 }
 
+/* Ensure any element with a dark-red background shows white text in light theme */
+html:not(.dark) [class*="bg-[#7a0000]"],
+html:not(.dark) [class*="bg-[#8b0000]"],
+html:not(.dark) [class*="bg-[#7d1313]"],
+html:not(.dark) [class*="bg-[#960101]"],
+html:not(.dark) [class*="bg-[#330404]"],
+html:not(.dark) [class*="bg-[#3d0404]"],
+html:not(.dark) [class*="bg-[#4b0606]"],
+html:not(.dark) [class*="bg-[#200909]"] {
+  color: #ffffff !important;
+}
+
+html:not(.dark) [class*="bg-[#7a0000]"] svg,
+html:not(.dark) [class*="bg-[#8b0000]"] svg,
+html:not(.dark) [class*="bg-[#7d1313]"] svg,
+html:not(.dark) [class*="bg-[#960101]"] svg,
+html:not(.dark) [class*="bg-[#330404]"] svg,
+html:not(.dark) [class*="bg-[#3d0404]"] svg,
+html:not(.dark) [class*="bg-[#4b0606]"] svg,
+html:not(.dark) [class*="bg-[#200909]"] svg,
+html:not(.dark) [class*="bg-[#7a0000]"] svg *,
+html:not(.dark) [class*="bg-[#8b0000]"] svg *,
+html:not(.dark) [class*="bg-[#7d1313]"] svg *,
+html:not(.dark) [class*="bg-[#960101]"] svg *,
+html:not(.dark) [class*="bg-[#330404]"] svg *,
+html:not(.dark) [class*="bg-[#3d0404]"] svg *,
+html:not(.dark) [class*="bg-[#4b0606]"] svg *,
+html:not(.dark) [class*="bg-[#200909]"] svg * {
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
 html.dark header.navbar-shell {
   background-color: #090909 !important;
   color: #ffffff !important;
