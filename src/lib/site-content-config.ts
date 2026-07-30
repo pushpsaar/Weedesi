@@ -158,7 +158,7 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     logo: "WEदेसी",
     description: "Timeless Indian craftsmanship, made modern. Considered pieces for a considered life.",
     email: "hello@WEदेसी.com",
-    phone: "+91 98765 43210",
+    phone: "+91 88712 40186",
     instagram: "@WEदेसी",
     copyright: "© 2026 WEदेसी. All rights reserved.",
   },
