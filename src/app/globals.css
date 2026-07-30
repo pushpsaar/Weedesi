@@ -121,7 +121,6 @@ html.dark [class*="bg-surface-soft"] {
 html.dark [class*="border-dark"] {
   border-color: rgba(255, 255, 255, 0.12) !important;
 }
-}
 
 html:not(.dark) [class*="text-dark/"] {
   color: rgba(34, 22, 17, 0.72) !important;
