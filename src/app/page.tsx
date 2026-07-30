@@ -46,9 +46,9 @@ export default async function HomePage() {
         <div className="rounded-[2rem] border border-border/70 bg-[#fffaf5] p-8 shadow-[0_24px_90px_rgba(29,26,22,0.08)] sm:p-10 lg:p-14 dark:bg-[#240d0d] dark:shadow-[0_24px_90px_rgba(0,0,0,0.28)]">
           <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[#7a0000]">About WEदेसी</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white">About WEदेसी</p>
               <h2 className="mt-4 font-heading text-3xl leading-tight text-white sm:text-4xl dark:text-[#fff1ee]">Quiet luxury, designed for everyday grace.</h2>
-              <p className="mt-4 max-w-2xl text-base leading-8 text-dark/65 dark:text-[#f8e5dd]">
+              <p className="mt-4 max-w-2xl text-base leading-8 text-white dark:text-[#f8e5dd]">
                 WEदेसी pairs handcrafted silhouettes with modern comfort so every piece feels elevated, effortless, and timeless.
               </p>
             </div>
