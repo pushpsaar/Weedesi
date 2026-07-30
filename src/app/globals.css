@@ -1,142 +1,126 @@
 @import "tailwindcss";
+html.dark header.navbar-shell .navbar-action {
+  background-color: rgba(195, 142, 104, 0.10) !important;
+  border-color: rgba(195, 142, 104, 0.22) !important;
+  color: #ffffff !important;
+}
 
-:root {
-  --color-bg: #fdf7f2;
-  --color-surface: #fff8f2;
-  --color-surface-soft: #f5ebe2;
+html:not(.dark) header.navbar-shell .logo-mark,
+html:not(.dark) header.navbar-shell [aria-label="WEदेसी home"] {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+html.dark {
+  --color-bg: #0f0f12;
+  --color-surface: #121217;
+  --color-surface-soft: #1f1f23;
   --color-white: #ffffff;
   --color-gold: #c38e68;
   --color-gold-dark: #a26c4b;
-  --color-dark: #221611;
-  --color-text: #221611;
-  --color-muted: #7b6459;
-  --color-border: rgba(34, 22, 17, 0.11);
-  --color-shadow: rgba(0, 0, 0, 0.08);
-  --font-heading: var(--font-cormorant);
-  --font-body: var(--font-inter);
+  --color-dark: #eae6e2;
+  --color-text: #f8f8f8;
+  --color-muted: #bdb8b4;
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-shadow: rgba(0, 0, 0, 0.45);
 }
 
-@theme inline {
-  --color-bg: var(--color-bg);
-  --color-surface: var(--color-surface);
-  --color-white: var(--color-white);
-  --color-gold: var(--color-gold);
-  --color-gold-dark: var(--color-gold-dark);
-  --color-dark: var(--color-dark);
-  --color-border: var(--color-border);
-  --color-text: var(--color-text);
-  --font-heading: var(--font-heading);
-  --font-body: var(--font-body);
-}
-
-* {
-  box-sizing: border-box;
-  border-color: var(--color-border);
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  min-height: 100vh;
-  margin: 0;
+html.dark body {
   background:
-    radial-gradient(circle at top left, rgba(195, 102, 96, 0.12), transparent 28%),
-    linear-gradient(135deg, var(--color-bg) 0%, #f4e8df 100%);
-  color: var(--color-text);
-  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  text-rendering: optimizeLegibility;
+    radial-gradient(circle at top left, rgba(0, 0, 0, 0.30), transparent 26%),
+    linear-gradient(135deg, var(--color-bg) 0%, #0a0a0a 100%);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-heading), ui-serif, Georgia, serif;
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-}
-
-::selection {
-  background: rgba(184, 143, 91, 0.3);
-  color: var(--color-text);
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-thumb {
+html.dark ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
-  border-radius: 999px;
 }
 
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.4);
+html.dark .glass {
+  background: rgba(18, 18, 20, 0.84);
 }
 
-.section-shell {
-  width: min(100%, 1440px);
-  margin-inline: auto;
-  padding-inline: clamp(1rem, 2vw, 2.5rem);
+html.dark .glass-dark {
+  background: rgba(12, 12, 14, 0.9);
 }
 
-.panel-surface {
-  background: rgba(255, 255, 255, 0.83);
-  border: 1px solid var(--color-border);
-  box-shadow: 0 24px 70px var(--color-shadow);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+html.dark .panel-surface {
+  background: rgba(18, 18, 20, 0.86);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.32);
 }
 
-.soft-shadow {
-  box-shadow: 0 28px 90px rgba(30, 24, 18, 0.08);
+html.dark .bg-dark {
+  background-color: var(--color-surface) !important;
 }
 
-@keyframes float-soft {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+html.dark [class~="bg-white"] {
+  background-color: var(--color-surface) !important;
 }
 
-.animate-float-soft {
-  animation: float-soft 8s ease-in-out infinite;
+html.dark [class*="bg-white/"] {
+  background-color: rgba(255, 255, 255, 0.04) !important;
 }
 
-.panel-surface,
-.backdrop-blur,
-.backdrop-blur-sm,
-.backdrop-blur-md,
-.backdrop-blur-lg,
-.backdrop-blur-xl,
-.backdrop-blur-2xl {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+html.dark [class*="bg-[#fffaf5]"],
+html.dark [class*="bg-[#fffdf9]"],
+html.dark [class*="bg-[#fff8f2]"] {
+  background-color: var(--color-surface) !important;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+html.dark [class*="bg-[#fffaf5]/"],
+html.dark [class*="bg-[#fffdf9]/"],
+html.dark [class*="bg-[#fff8f2]/"] {
+  background-color: rgba(255, 255, 255, 0.03) !important;
 }
 
-html:not(.dark) body {
-  background:
-    radial-gradient(circle at top left, rgba(195, 102, 96, 0.12), transparent 28%),
-    linear-gradient(135deg, #fffdf9 0%, #f5e9de 100%);
+html.dark [class~="bg-bg"] {
+  background-color: var(--color-bg) !important;
 }
 
-html:not(.dark) [class*="border-dark"] {
-  border-color: rgba(34, 22, 17, 0.14) !important;
+html.dark [class~="bg-surface-soft"] {
+  background-color: var(--color-surface-soft) !important;
 }
 
-html:not(.dark) [class~="text-dark"] {
-  color: #221611 !important;
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  color: var(--color-text) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+html.dark [class~="border-border"] {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark [class~="text-dark"] {
+  color: var(--color-text) !important;
+}
+
+html.dark [class*="text-dark/"] {
+  color: rgba(247, 237, 234, 0.85) !important;
+}
+
+html.dark [class~="text-white"] {
+  color: #FFFFFF !important;
+}
+
+html.dark [class*="bg-surface/"] {
+  background-color: rgba(18, 18, 20, 0.24) !important;
+}
+
+html.dark [class*="bg-surface-soft"] {
+  background-color: var(--color-surface-soft) !important;
+}
+
+html.dark [class*="border-dark"] {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
 }
 
 html:not(.dark) [class*="text-dark/"] {
