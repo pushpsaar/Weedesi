@@ -28,8 +28,8 @@ html.dark {
 
 html.dark body {
   background:
-    radial-gradient(circle at top left, rgba(0, 0, 0, 0.30), transparent 26%),
-    linear-gradient(135deg, var(--color-bg) 0%, #0a0a0a 100%);
+    radial-gradient(circle at top left, rgba(61, 4, 4, 0.30), transparent 26%),
+    linear-gradient(135deg, var(--color-bg) 0%, #0b0303 100%);
 }
 
 html.dark ::-webkit-scrollbar-thumb {
@@ -174,13 +174,13 @@ html:not(.dark) [class*="bg-[#200909]"] svg * {
 }
 
 html.dark header.navbar-shell {
-  background-color: #090909 !important;
+  background-color: #330404 !important;
   color: #ffffff !important;
 }
 
 html.dark header.navbar-shell .navbar-action {
-  background-color: rgba(139, 0, 0, 0.18) !important;
-  border-color: rgba(139, 0, 0, 0.35) !important;
+  background-color: rgba(61, 4, 4, 0.95) !important;
+  border-color: rgba(61, 4, 4, 0.65) !important;
   color: #ffffff !important;
 }
 
@@ -207,8 +207,8 @@ html.dark {
 
 html.dark body {
   background:
-    radial-gradient(circle at top left, rgba(139, 0, 0, 0.18), transparent 26%),
-    linear-gradient(135deg, var(--color-bg) 0%, #090909 100%);
+    radial-gradient(circle at top left, rgba(61, 4, 4, 0.30), transparent 26%),
+    linear-gradient(135deg, var(--color-bg) 0%, #0b0303 100%);
 }
 
 html.dark ::-webkit-scrollbar-thumb {

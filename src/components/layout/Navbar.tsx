@@ -38,7 +38,7 @@ export default function Navbar() {
   }, []);
 
   const headerClass = isDarkTheme
-    ? "navbar-shell sticky top-0 z-40 border-b border-white/10 bg-[#090909] text-white shadow-[0_10px_30px_rgba(0,0,0,0.2)]"
+    ? "navbar-shell sticky top-0 z-40 border-b border-white/10 bg-[#330404] text-white shadow-[0_10px_30px_rgba(0,0,0,0.2)]"
     : "navbar-shell sticky top-0 z-40 border-b border-[#7a0000]/10 bg-white text-[#2a0d0d] shadow-[0_10px_30px_rgba(0,0,0,0.08)]";
 
   const actionClass = "navbar-action rounded-full border border-[#8b0000] bg-[#8b0000] text-white shadow-[0_4px_12px_rgba(139,0,0,0.25)] transition-all duration-200 hover:bg-[#b30c0c]";
